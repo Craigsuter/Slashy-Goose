@@ -65,6 +65,7 @@ IDForServer = int(os.getenv('IDForServer'))
 
 
 
+
 @client.event
 async def on_ready():
     print("We have logged in as {0.user}.format(client)")
@@ -267,15 +268,13 @@ async def on_message(message):
       return
   guild = message.guild
   channelDataID = message.channel.id
-  new-member-support OG Main Discord
+  author = message.author
+  nexttrans = message.content
+  
+  #new-member-support OG Main Discord
   if (channelDataID == 736505679354921092):
-      embed = discord.Embed(title="Welcome to the Flowerhouse!",
-                            color=0xff8800)
-      embed.add_field(
-          name="You seem to be lost, let me help",
-          value=
-          "Do be sure to go through <#829738571010277406> to check out the rules of the server! Follow this up in <#832198110204919848> to get access to the rest of the server! See you in there!",
-          inline=True)
+      embed = discord.Embed(title="Welcome to the Flowerhouse!",color=0xff8800)
+      embed.add_field(name="You seem to be lost, let me help",value="Do be sure to go through <#829738571010277406> to check out the rules of the server! Follow this up in <#832198110204919848> to get access to the rest of the server! See you in there!",inline=True)
       embed.set_image(url="https://i.imgur.com/zr9Hp7C.png")
 
       data = download_file('/droplastmessage.txt', 'lastmessage.txt')

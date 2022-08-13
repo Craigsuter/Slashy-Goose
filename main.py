@@ -1,4 +1,6 @@
 import discord
+from apscheduler.triggers.cron import CronTrigger
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
 from discord.ui import Select, View
 import requests
@@ -22,6 +24,7 @@ from dropboxUploader import upload_file
 from dropboxUploader import download_file
 from tournamentcheckers import DotaCheckTourni
 from tournamentchecker2 import DotaCheckTourni2
+from translation import translations
 from csgoscoreboarding import scoreboarding
 from csgoscoreboarding import scoreboardreader
 from csgoscoreboarding import scoreboardadder
@@ -58,6 +61,92 @@ client = aclient()
 tree = app_commands.CommandTree(client)
 ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
 IDForServer = int(os.getenv('IDForServer'))
+
+
+
+
+@client.event
+async def on_ready():
+    print("We have logged in as {0.user}.format(client)")
+    #Sets presence
+    await client.change_presence(activity=discord.Game(
+        name="with ducks (use !goosehelp)"))
+
+    #Starts schedule
+    scheduler = AsyncIOScheduler()
+    #Post on the day of a game
+    try:
+        scheduler.add_job(testingspam, CronTrigger(minute="5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 0"))
+        print("Daily announcement success")
+    except:
+        print("Daily announced schedule failed")
+    #Opens the file checking the new member support to delete the old bot message
+    try:
+        scheduler.add_job(openingfile, CronTrigger(minute="0, 20, 40"))
+        print("Opening file schedule success")
+    except:
+        print("Opening file to delete the last message failed")
+
+    try:
+        scheduler.add_job(cleanreminders, CronTrigger(minute="0, 30"))
+        print("Clean reminder file success")
+    except:
+        print("Clear reminders file schedule failed")
+    scheduler.start()
+
+    #data = download_file('/dropreminders.txt', 'reminders.txt')
+    #a_file = open("reminders.txt", "r")
+    #list_of_lines = a_file.readlines()
+    #i = 0
+
+    #reminders = []
+    #while (i < len(list_of_lines)):
+
+       # base_reminder = list_of_lines[i]
+        #splitUpValues = base_reminder.rsplit(", ")
+
+        #checkIfSent = splitUpValues[4]
+        #checkIfSent = checkIfSent[0:2]
+
+        #if (checkIfSent == "no"):
+         #   reminders.append(base_reminder + ", " + str(i))
+
+      #  i = i + 1
+
+   # i = 0
+
+    #tasks = []
+
+   # while i < len(reminders):
+    #    tasks.append(asyncio.create_task(reminder(reminders[i])))
+
+     #   i = i + 1
+    #print("There were: " + str(i) + " reminders started up")
+    #await asyncio.gather(*tasks)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #Will delete the latest message from a user
@@ -172,6 +261,95 @@ async def on_member_update(before, after):
 
 
 
+@client.event
+async def on_message(message):
+  if message.author == client.user:
+      return
+  guild = message.guild
+  channelDataID = message.channel.id
+  new-member-support OG Main Discord
+  if (channelDataID == 736505679354921092):
+      embed = discord.Embed(title="Welcome to the Flowerhouse!",
+                            color=0xff8800)
+      embed.add_field(
+          name="You seem to be lost, let me help",
+          value=
+          "Do be sure to go through <#829738571010277406> to check out the rules of the server! Follow this up in <#832198110204919848> to get access to the rest of the server! See you in there!",
+          inline=True)
+      embed.set_image(url="https://i.imgur.com/zr9Hp7C.png")
+
+      data = download_file('/droplastmessage.txt', 'lastmessage.txt')
+      g = open("lastmessage.txt", "r")
+      g2 = g.read()
+      g.close()
+
+      try:
+          print("Tried to delete message: " + g2)
+
+      except:
+          print("Failed to delete any message")
+      try:
+          await client.http.delete_message(736505679354921092, g2)
+      except:
+          print("Failed to delete any message")
+      message = await message.reply(embed=embed)
+      f = open("lastmessage.txt", "w")
+      f.write(str(message.id))
+      f.close()
+      upload_file('/droplastmessage.txt', 'lastmessage.txt')
+
+
+
+  #Spanish Translations - Main OG Discord
+  if (channelDataID == 818793950965006357):
+      channel = message.guild.get_channel(832296821119647755)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
+
+  #Finnis Translations - Jerax Discord
+  if (channelDataID == 825328809854238731):
+      channel = message.guild.get_channel(835434616000872448)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
+
+  #Testing translation - test channel personal discord
+  if (channelDataID == 810893610496426024):
+      #Channel to send too
+      channel = message.guild.get_channel(810893610496426024)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
+
+  #Rus translation - N0tail Discord
+  if (channelDataID == 808362012849340416):
+      channel = message.guild.get_channel(834445890235138133)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
+
+  #Russain Translation - Main Discord
+  if (channelDataID == 697447277647626297):
+      channel = message.guild.get_channel(832296883887407146)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
 
 
 
@@ -2143,6 +2321,505 @@ async def self(interaction: discord.Interaction):
   embed.add_field(name="Streams", value=streamlinks, inline=True)
   embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
   await interaction.followup.send(embed=embed)
+
+
+
+#Cleans out reminder file if no reminders are left
+async def cleanreminders():
+    data = download_file('/dropreminders.txt', 'reminders.txt')
+    a_file = open("reminders.txt", "r")
+    list_of_lines = a_file.readlines()
+    i = 0
+
+    reminders = []
+    while (i < len(list_of_lines)):
+
+        base_reminder = list_of_lines[i]
+        splitUpValues = base_reminder.rsplit(", ")
+
+        checkIfSent = splitUpValues[4]
+        checkIfSent = checkIfSent[0:2]
+
+        if (checkIfSent == "no"):
+            reminders.append(base_reminder + ", " + str(i))
+
+        i = i + 1
+
+    print(len(reminders))
+    if (len(reminders) == 0):
+        file = open("reminders.txt", "r+")
+        file.truncate(0)
+        file.close()
+        upload_file('/dropreminders.txt', 'reminders.txt')
+
+
+#Opening the file with last message every 5 mins
+async def openingfile():
+    data = download_file('/droplastmessage.txt', 'lastmessage.txt')
+    g = open("lastmessage.txt", "r")
+    g2 = g.read()
+    g.close()
+    print("File opened, value = " + g2)
+
+
+
+  
+
+
+
+
+#Daily posts
+async def testingspam():
+    
+    c = client.get_channel(839466348970639391)
+    currenttime = datetime.datetime.now()
+   
+    #Dota daily
+    try:
+      emote = client.get_emoji(730890894814740541)
+      channel = client.get_channel(964298402089275462)
+      channel2 = client.get_channel(973130064667484170)
+      value = DotaCheck(0, False)
+      Teams = value[1]
+      name = "Dota 2 game: " + Teams
+      time=datetime.datetime.now().astimezone() + value[3]
+      end_time=time+datetime.timedelta(minutes=10)
+      linktogame = value[7]
+      tourniname = value[6]
+      serieslength=value[8]
+      epoch=value[9]
+      streaminfo = DotaStreams()
+      if(serieslength == "Bo1"):
+        cover=2
+      if(serieslength == "Bo2"):
+        cover =3
+      if(serieslength=="Bo3"):
+        cover=4
+      if(serieslength=="Bo5"):
+        cover="Determined by series length"
+      
+      flagMessage = streaminfo[2]
+      description = tourniname +"\n" + flagMessage + "\n:mega: https://twitter.com/OGesports\n"
+      guild = client.get_guild(689865753662455829)
+      linetocheck = Teams+","+linktogame
+      gardenerinfo = "Hey <@&720253636797530203>\n\nI need up to four moderators to work the Dota game - " +  Teams + " , at <t:" + str(epoch) + ">\n\nPlease react below with a <:OGpeepoYes:730890894814740541> to sign up!\n\nAs this is a " + str(serieslength) +", you will be able to add " + str(cover) +" hours of work to your invoice for the month."
+
+      try:
+        download_file('/dotaevent.txt', 'dotaevent.txt')
+        f=open('dotaevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines="empty"
+
+      try:
+        if lines[0] == linetocheck:
+          
+          pass
+        else:
+          if(Teams == "OG vs TBD" or Teams == "TBD vs OG"):
+            print("TBD")
+          else:
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            data2= await guild.fetch_scheduled_event(eventdata.id)
+            await channel.send(data2.url)
+            test = await channel2.send(str(gardenerinfo))
+            await test.add_reaction(emote)
+            f=open("dotaeventsign.txt", "w")
+            f.write(str(test.id))
+            f.close()
+            upload_file('/dotaeventsignup.txt', 'dotaeventsign.txt')
+            
+          f = open("dotaevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          upload_file('/dotaevent.txt', 'dotaevent.txt')
+          
+          
+          
+      except:
+        if(Teams == "OG vs TBD" or Teams == "TBD vs OG"):
+            print("TBD")
+        else:
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            data2= await guild.fetch_scheduled_event(eventdata.id)
+            await channel.send(data2.url)
+            test = await channel2.send(str(gardenerinfo))
+            await test.add_reaction(emote)
+            f=open("dotaeventsign.txt", "w")
+            f.write(str(test.id))
+            f.close()
+            upload_file('/dotaeventsignup.txt', 'dotaeventsign.txt')
+        
+        f = open("dotaevent.txt", "w")
+        f.write(linetocheck)
+        f.close()
+        upload_file('/dotaevent.txt', 'dotaevent.txt')
+        
+        pass
+
+      
+    
+      
+    except Exception as e:
+      print(e)
+
+    #Valo daily - regular OG
+    try:
+      emote = client.get_emoji(730890894814740541)
+      channel = client.get_channel(964298835453169664)
+      channel2 = client.get_channel(973130064667484170)
+      value = ValoCheck(0, 'https://www.vlr.gg/team/2965/og', False)
+      teams = value[1]
+      enemyteam = value[10]
+      time = datetime.datetime.now().astimezone() + value[3]
+      streaminfo = ValoStreams('https://www.vlr.gg/team/2965/og')
+      linktogame = value[4]
+      linktogame = "https://www.vlr.gg/team/2965/og"
+      gamepos = value[6]
+      serieslength = value[8]
+      epoch = value[9]
+      if(serieslength == "Bo1"):
+        cover=2
+      if(serieslength == "Bo2"):
+        cover =3
+      if(serieslength=="Bo3"):
+        cover=4
+      if(serieslength=="Bo5"):
+        cover="Determined by series length"
+      gardenerinfo = "Hey <@&720253636797530203>\n\nI need up to two moderators to work the Valorant game - " +  teams + " , at <t:" + str(epoch) + ">\n\nPlease react below with a <:OGpeepoYes:730890894814740541> to sign up!\n\nAs this is a " + str(serieslength) +", you will be able to add " + str(cover) +" hours of work to your invoice for the month."
+      name= "Valorant game: " + teams
+      tourniname = value[7]
+      description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
+      end_time=time+datetime.timedelta(minutes=10)
+      guild = client.get_guild(689865753662455829)
+      linetocheck = teams + "," + gamepos +"," +tourniname
+      try:
+        download_file('/valoevent.txt', 'valoevent.txt')
+        f=open('valoevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines="empty"
+      
+      try:
+        if lines[0] == linetocheck:
+          
+          pass
+        else:
+          if(str(enemyteam) != "TBD"):
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            f = open("valoevent.txt", "w")
+            f.write(linetocheck)
+            f.close()
+            upload_file('/valoevent.txt', 'valoevent.txt')
+            data2= await guild.fetch_scheduled_event(eventdata.id)
+            await channel.send(data2.url)
+            test = await channel2.send(str(gardenerinfo))
+            await test.add_reaction(emote)
+          else:
+            print("Valo Enemy = TBD")
+          
+      except:
+        if(str(enemyteam) != "TBD"):
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+          f = open("valoevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          upload_file('/valoevent.txt', 'valoevent.txt')
+          data2= await guild.fetch_scheduled_event(eventdata.id)
+          await channel.send(data2.url)
+          test = await channel2.send(str(gardenerinfo))
+          await test.add_reaction(emote)
+          pass
+        else:
+          print("Valo enemy = TBD")
+
+      
+      
+    except Exception as e:
+      print(e)
+
+    #Get events for ldn utd OG
+    try:
+      emote = client.get_emoji(730890894814740541)
+      channel = client.get_channel(964298835453169664)
+      channel2 = client.get_channel(973130064667484170)
+      value = ValoCheck(0, 'https://www.vlr.gg/team/8903/og-ldn-utd', False)
+      teams = value[1]
+      enemyteam = value[10]
+      time = datetime.datetime.now().astimezone() + value[3]
+      streaminfo = ValoStreams('https://www.vlr.gg/team/8903/og-ldn-utd')
+      linktogame = value[4]
+      linktogame = "https://www.vlr.gg/team/8903/og-ldn-utd"
+      gamepos = value[6]
+      name= "Valorant game: " + teams
+      tourniname = value[7]
+      serieslength = value[8]
+      epoch = value[9]
+      if(serieslength == "Bo1"):
+        cover=2
+      if(serieslength == "Bo2"):
+        cover =3
+      if(serieslength=="Bo3"):
+        cover=4
+      if(serieslength=="Bo5"):
+        cover="Determined by series length"
+      gardenerinfo = "Hey <@&720253636797530203>\n\nI need up to two moderators to work the Valorant game - " +  teams + " , at <t:" + str(epoch) + ">\n\nPlease react below with a <:OGpeepoYes:730890894814740541> to sign up!\n\nAs this is a " + str(serieslength) +", you will be able to add " + str(cover) +" hours of work to your invoice for the month."
+      description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
+      end_time=time+datetime.timedelta(minutes=10)
+      guild = client.get_guild(689865753662455829)
+      linetocheck = teams + "," + gamepos +"," +tourniname
+      try:
+        download_file('/ldnvaloevent.txt', 'ldnvaloevent.txt')
+        f=open('ldnvaloevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines="empty"
+      
+      try:
+        if lines[0] == linetocheck:
+          
+          pass
+        else:
+          if(str(enemyteam) != "TBD"):
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            f = open("ldnvaloevent.txt", "w")
+            f.write(linetocheck)
+            f.close()
+            upload_file('/ldnvaloevent.txt', 'ldnvaloevent.txt')
+            data2= await guild.fetch_scheduled_event(eventdata.id)
+            await channel.send(data2.url)
+            test = await channel2.send(str(gardenerinfo))
+            await test.add_reaction(emote)
+            f=open("valoeventsign.txt", "w")
+            f.write(str(test.id))
+            f.close()
+            upload_file('/valoeventsignup.txt', 'valoeventsign.txt')
+          else:
+            print("TBD - Valo Ldn Team")
+                              
+          
+      except:
+        if(str(enemyteam) != "TBD"):
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+          f = open("ldnvaloevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          upload_file('/ldnvaloevent.txt', 'ldnvaloevent.txt')
+          data2= await guild.fetch_scheduled_event(eventdata.id)
+          await channel.send(data2.url)
+          test = await channel2.send(str(gardenerinfo))
+          await test.add_reaction(emote)
+          f=open("valoeventsign.txt", "w")
+          f.write(str(test.id))
+          f.close()
+          upload_file('/valoeventsignup.txt', 'valoeventsign.txt')
+          pass
+        else:
+          print("TBD - Valo LDN Team")
+
+      
+      
+    except Exception as e:
+      print(e)
+
+
+  #csgoacad
+    try:
+      emote = client.get_emoji(730890894814740541)
+      channel = client.get_channel(964298754968649748)
+      channel2 = client.get_channel(973130064667484170)
+      value = CSGOCheck(0, 'https://www.hltv.org/team/11672/og-academy#tab-matchesBox', False)
+      teams = value[0]
+      gamepage = value[4]
+      tourniname = value[8]
+      serieslength = value[9]
+      epoch = value[10]
+      name = "OG CSGO Academy game: " + teams
+      time=datetime.datetime.now().astimezone() + datetime.timedelta(seconds=int(value[7]))
+      end_time = time+datetime.timedelta(minutes=10)
+      streaminfo = CSGOStreams('https://www.hltv.org/team/11672/og-academy#tab-matchesBox')
+      streamdata = streaminfo[3]
+      description = tourniname + "\n" + streamdata + "\n:mega: https://twitter.com/OGcsgo\n"
+      guild = client.get_guild(689865753662455829)
+      linetocheck= teams+","+gamepage
+
+      if(str(serieslength) == "1"):
+        cover=2
+      if(str(serieslength) == "2"):
+        cover =3
+      if(str(serieslength)=="3"):
+        cover=4
+      if(str(serieslength)=="5"):
+        cover="Determined by series length"
+
+      gardenerinfo = "Hey <@&720253636797530203>\n\nI need up to two moderators to work the OG CSGO Academy - " +  teams + " , at <t:" + str(epoch) + ">\n\nPlease react below with a <:OGpeepoYes:730890894814740541> to sign up!\n\nAs this is a Bo" + str(serieslength) +", you will be able to add " + str(cover) +" hours of work to your invoice for the month."
+
+
+      
+      try:
+        download_file('/csgoaevent.txt', 'csgoaevent.txt')
+        f=open('csgoaevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines= "empty"
+
+      try:
+        counter = teams.count('/')
+        if lines[0] == linetocheck or counter > 0:
+          pass
+        else:
+          try:
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+          except:
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/11672/og-academy")
+          f = open("csgoaevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          upload_file('/csgoaevent.txt', 'csgoaevent.txt')
+          data2= await guild.fetch_scheduled_event(eventdata.id)
+          await channel.send(data2.url)
+          test = await channel2.send(str(gardenerinfo))
+          await test.add_reaction(emote)
+          f=open("csgoaeventsign.txt", "w")
+          f.write(str(test.id))
+          f.close()
+          upload_file('/csgoaeventsignup.txt', 'csgoaeventsign.txt')
+          
+      except:
+        try:
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+        except:
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/11672/og-academy")
+        f = open("csgoaevent.txt", "w")
+        f.write(linetocheck)
+        f.close()
+        upload_file('/csgoaevent.txt', 'csgoaevent.txt')
+        data2= await guild.fetch_scheduled_event(eventdata.id)
+        await channel.send(data2.url)
+        test = await channel2.send(str(gardenerinfo))
+        await test.add_reaction(emote)
+        f=open("csgoaeventsign.txt", "w")
+        f.write(str(test.id))
+        f.close()
+        upload_file('/csgoaeventsignup.txt', 'csgoaeventsign.txt')
+        pass
+
+        
+        
+    
+     
+    except Exception as e:
+      print(e)
+
+
+#CSGO daily
+    try:
+      emote = client.get_emoji(730890894814740541)
+      channel = client.get_channel(964298754968649748)
+      channel2 = client.get_channel(973130064667484170)
+      value = CSGOCheck(0, 'https://www.hltv.org/team/10503/og#tab-matchesBox', False)
+      teams = value[0]
+      gamepage = value[4]
+      tourniname = value[8]
+      serieslength = value[9]
+      epoch = value[10]
+      name = "CSGO game: " + teams
+      time=datetime.datetime.now().astimezone() + datetime.timedelta(seconds=int(value[7]))
+      end_time = time+datetime.timedelta(minutes=10)
+      streaminfo = CSGOStreams('https://www.hltv.org/team/10503/og#tab-matchesBox')
+      streamdata = streaminfo[3]
+      description = tourniname + "\n" + streamdata + "\n:mega: https://twitter.com/OGcsgo\n"
+      guild = client.get_guild(689865753662455829)
+      linetocheck= teams+","+gamepage
+
+
+      if(str(serieslength) == "1"):
+        cover=2
+      if(str(serieslength) == "2"):
+        cover =3
+      if(str(serieslength)=="3"):
+        cover=4
+      if(str(serieslength)=="5"):
+        cover="Determined by series length"
+
+      gardenerinfo = "Hey <@&720253636797530203>\n\nI need up to three moderators to work the OG CSGO - " +  teams + " , at <t:" + str(epoch) + ">\n\nPlease react below with a <:OGpeepoYes:730890894814740541> to sign up!\n\nAs this is a Bo" + str(serieslength) +", you will be able to add " + str(cover) +" hours of work to your invoice for the month."
+      try:
+        download_file('/csgoevent.txt', 'csgoevent.txt')
+        f=open('csgoevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines= "empty"
+
+      try:
+        counter = teams.count('/')
+        if lines[0] == linetocheck or counter > 0:
+          pass
+        else:
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+          f = open("csgoevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          upload_file('/csgoevent.txt', 'csgoevent.txt')
+          data2= await guild.fetch_scheduled_event(eventdata.id)
+          await channel.send(data2.url)
+          test = await channel2.send(str(gardenerinfo))
+          await test.add_reaction(emote)
+          f=open("csgoeventsign.txt", "w")
+          f.write(str(test.id))
+          f.close()
+          upload_file('/csgoeventsignup.txt', 'csgoeventsign.txt')
+          
+      except:
+        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+        f = open("csgoevent.txt", "w")
+        f.write(linetocheck)
+        f.close()
+        upload_file('/csgoevent.txt', 'csgoevent.txt')
+        data2= await guild.fetch_scheduled_event(eventdata.id)
+        await channel.send(data2.url)
+        test = await channel2.send(str(gardenerinfo))
+        await test.add_reaction(emote)
+        f=open("csgoeventsign.txt", "w")
+        f.write(str(test.id))
+        f.close()
+        upload_file('/csgoeventsignup.txt', 'csgoeventsign.txt')
+        pass
+
+        
+        
+    
+     
+    except Exception as e:
+      print(e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 
 
 

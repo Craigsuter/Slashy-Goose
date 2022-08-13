@@ -10,6 +10,7 @@ import datetime
 from dotenv import load_dotenv
 load_dotenv()
 from gamecheckers import DotaCheck
+import asyncio
 from gamecheckers import CSGOCheck
 from gamecheckers import ValoCheck
 from streamcollection import DotaStreams
@@ -56,19 +57,6 @@ class aclient(discord.Client):
       await tree.sync(guild=discord.Object(id = int(os.getenv('IDForServer'))))
       self.synced = True
     print(f"We have logged in as {self.user}")
-
-client = aclient()
-tree = app_commands.CommandTree(client)
-ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
-IDForServer = int(os.getenv('IDForServer'))
-
-
-
-
-
-@client.event
-async def on_ready():
-    print("We have logged in as {0.user}.format(client)")
     #Sets presence
     await client.change_presence(activity=discord.Game(
         name="with ducks (use !goosehelp)"))
@@ -95,38 +83,36 @@ async def on_ready():
         print("Clear reminders file schedule failed")
     scheduler.start()
 
-    #data = download_file('/dropreminders.txt', 'reminders.txt')
-    #a_file = open("reminders.txt", "r")
-    #list_of_lines = a_file.readlines()
-    #i = 0
+    data = download_file('/dropreminders.txt', 'reminders.txt')
+    a_file = open("reminders.txt", "r")
+    list_of_lines = a_file.readlines()
+    i = 0
 
-    #reminders = []
-    #while (i < len(list_of_lines)):
+    reminders = []
+    while (i < len(list_of_lines)):
 
-       # base_reminder = list_of_lines[i]
-        #splitUpValues = base_reminder.rsplit(", ")
+      base_reminder = list_of_lines[i]
+      splitUpValues = base_reminder.rsplit(", ")
 
-        #checkIfSent = splitUpValues[4]
-        #checkIfSent = checkIfSent[0:2]
+      checkIfSent = splitUpValues[4]
+      checkIfSent = checkIfSent[0:2]
 
-        #if (checkIfSent == "no"):
-         #   reminders.append(base_reminder + ", " + str(i))
+      if (checkIfSent == "no"):
+          reminders.append(base_reminder + ", " + str(i))
 
-      #  i = i + 1
+      i = i + 1
 
-   # i = 0
+    i = 0
 
-    #tasks = []
+    tasks = []
 
-   # while i < len(reminders):
-    #    tasks.append(asyncio.create_task(reminder(reminders[i])))
+    while i < len(reminders):
+      tasks.append(asyncio.create_task(reminder(reminders[i])))
+      i = i + 1
+    print("There were: " + str(i) + " reminders started up")
+    await asyncio.gather(*tasks)
 
-     #   i = i + 1
-    #print("There were: " + str(i) + " reminders started up")
-    #await asyncio.gather(*tasks)
-
-
-
+    
 
 
 
@@ -134,6 +120,11 @@ async def on_ready():
 
 
 
+
+client = aclient()
+tree = app_commands.CommandTree(client)
+ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
+IDForServer = int(os.getenv('IDForServer'))
 
 
 
@@ -369,10 +360,6 @@ async def self(interaction: discord.Interaction, ping: typing.Optional[discord.U
     await interaction.followup.send(interaction.user.avatar)
 
 
-@tree.command(name="testing", description = "testing", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction, ping: typing.Optional[discord.Role]):
-  await interaction.response.defer()
-  print(ping.id)
 
 
 
@@ -423,6 +410,222 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send("An error was hit during this process - there may be no game available")
     print(e)
                 
+
+
+@tree.command(name="reminder", description = "Create a reminder - using time format xdxhxmxs - day/hour/minute/second", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, delay: str, remindertosave: str):
+  await interaction.response.defer()
+  guild = interaction.guild
+  channel = interaction.channel
+  data = download_file('/dropreminders.txt', 'reminders.txt')
+  currenttime = datetime.datetime.now()
+  #day
+  currentd = currenttime.strftime("%d")
+  #hour [UK time - 1]
+  currentH = currenttime.strftime("%H")
+  #Minute
+  currentM = currenttime.strftime("%M")
+  #Month
+  currentmonth = currenttime.strftime("%m")
+  #year
+  currentyear = currenttime.strftime("%y")
+  #second
+  currentsecond = currenttime.strftime("%S")
+  reminder=delay
+  timevalue = delay.strip()
+  timevalue = reminder[-1]
+  
+  #Saves user info for pinging
+  userID = interaction.user.id
+  userID = str(userID)
+  #Create embed
+  embed = discord.Embed(title="Reminder command initiated",
+                        color=0x55a7f7)
+  embed2 = discord.Embed(title="Your reminder... has arrived!",
+                         color=0x55a7f7)
+  currentyear = "20" + str(currentyear)
+  currentyear = int(currentyear)
+  date_and_time = datetime.datetime(int(currentyear),
+                                    int(currentmonth),
+                                    int(currentd), int(currentH),
+                                    int(currentM),
+                                    int(currentsecond))
+  timechecker = 0
+  counter = 0
+
+  i = 2
+  #Gets the reminder to save
+  remindertosave = remindertosave
+
+  try:
+      timevaluechecker = ['d', 'h', 'm', 's']
+
+      #Tells user how to set a reminder if tiem value not given
+      if reminder == "none" or (timevalue
+                                not in timevaluechecker):
+          embed.add_field(
+              name="Command used no time set",
+              value=
+              "To set the time for this command, please set it using 'days' / 'hours' / 'minutes' / 'seconds'\n\nTo format this you use d / h / m / s, at the end of the time wanted\n\nExample - !reminder 10h This is a reminder\nThis will remind you in 10 hours!"
+          )
+      timetoadd = ""
+      new_time = date_and_time
+      i = 0
+      #Sets reminder if time value is set
+      if (reminder != "none"
+              and (timevalue in timevaluechecker)):
+          while (i < len(reminder)):
+              if (reminder[i] == "s" or reminder[i] == "m"
+                      or reminder[i] == "h"
+                      or reminder[i] == "d"):
+                  if (reminder[i] == "s"):
+                      timetillremidningyou = timetoadd
+                      timechecker = timechecker + int(timetoadd)
+                      timetoadd = ""
+                      counter = counter + 1
+                      if (i == len(reminder) - 1):
+                          embed.add_field(
+                              name="Reminder set, reminding in - "
+                              + reminder,
+                              value=remindertosave,
+                              inline=True)
+                          embed2.add_field(name="Your reminder!",
+                                           value=remindertosave,
+                                           inline=True)
+                      #calculate time for reminder
+                      time_change = datetime.timedelta(
+                          seconds=int(timetillremidningyou))
+                      new_time = new_time + time_change
+
+                  if (reminder[i] == "m"):
+                      timetillremidningyou = timetoadd
+                      timechecker = timechecker + (
+                          int(timetoadd) * 60)
+                      timetoadd = ""
+                      counter = counter + 1
+                      if (i == len(reminder) - 1):
+                          embed.add_field(
+                              name="Reminder set, reminding in - "
+                              + reminder,
+                              value=remindertosave,
+                              inline=True)
+                          embed2.add_field(name="Your reminder!",
+                                           value=remindertosave,
+                                           inline=True)
+                      timetillremidningyou = int(
+                          timetillremidningyou) * 60
+                      #calculate time for reminder
+                      time_change = datetime.timedelta(
+                          seconds=int(timetillremidningyou))
+                      new_time = new_time + time_change
+
+                  if (reminder[i] == "h"):
+                      timetillremidningyou = timetoadd
+                      timechecker = timechecker + (
+                          int(timetoadd) * 60 * 60)
+                      timetoadd = ""
+                      counter = counter + 1
+                      if (i == len(reminder) - 1):
+                          embed.add_field(
+                              name="Reminder set, reminding in - "
+                              + reminder,
+                              value=remindertosave,
+                              inline=True)
+                          embed2.add_field(name="Your reminder!",
+                                           value=remindertosave,
+                                           inline=True)
+                      timetillremidningyou = int(
+                          timetillremidningyou) * 60 * 60
+                      #calculate time for reminder
+                      time_change = datetime.timedelta(
+                          seconds=int(timetillremidningyou))
+                      new_time = new_time + time_change
+
+                  if (reminder[i] == "d"):
+                      timetillremidningyou = timetoadd
+                      timechecker = timechecker + (
+                          int(timetoadd) * 60 * 60 * 24)
+                      timetoadd = ""
+                      counter = counter + 1
+                      if (i == len(reminder) - 1):
+                          embed.add_field(
+                              name="Reminder set, reminding in - "
+                              + reminder,
+                              value=remindertosave,
+                              inline=True)
+                          embed2.add_field(name="Your reminder!",
+                                           value=remindertosave,
+                                           inline=True)
+
+                      timetillremidningyou = int(
+                          timetillremidningyou) * 60 * 60 * 24
+                      #calculate time for reminder
+
+                      time_change = datetime.timedelta(
+                          seconds=int(timetillremidningyou))
+
+                      new_time = new_time + time_change
+              else:
+                  timetoadd = timetoadd + str(reminder[i])
+              i = i + 1
+
+      #Adding reminder to the text file
+      userID = interaction.user.id
+      userID = str(userID)
+      channelToSend = str(interaction.channel.id)
+      textToSend = str(remindertosave)
+
+      if (counter > 0):
+          f = open("reminders.txt", "a")
+          f.write(userID + ", " + channelToSend + ", " +
+                  textToSend + ", " + str(new_time) + ", not\n")
+          f.close()
+          upload_file('/dropreminders.txt', 'reminders.txt')
+
+          LineOfReminder = sum(1
+                               for line in open('reminders.txt'))
+
+      await interaction.followup.send(embed=embed)
+
+  #catches time error
+  except:
+      embed2 = discord.Embed(title="Reminder command initiated",
+                             color=0x55a7f7)
+      embed2.add_field(
+          name="Command used no time set",
+          value=
+          "To set the time for this command, please set it using 'days' / 'hours' / 'minutes' / 'seconds'\n\nTo format this you use d / h / m / s, at the end of the time wanted\n\nExample - !reminder 10h This is a reminder\nThis will remind you in 10 hours!"
+      )
+      await interaction.channel.send(embed=embed2)
+
+  try:
+      if (counter > 0):
+          timetosleep = int(timechecker)
+          await asyncio.sleep(timetosleep)
+
+          #Will update the file to make sure reminders get saved
+          data = download_file('/dropreminders.txt',
+                               'reminders.txt')
+          a_file = open("reminders.txt", "r")
+          list_of_lines = a_file.readlines()
+          list_of_lines[int(LineOfReminder) -
+                        1] = (userID + ", " + channelToSend +
+                              ", " + textToSend + ", " +
+                              str(new_time) + ", sent\n")
+
+          a_file = open("reminders.txt", "w")
+          a_file.writelines(list_of_lines)
+          a_file.close()
+          upload_file('/dropreminders.txt', 'reminders.txt')
+
+          await interaction.channel.send("<@" + userID + ">")
+          await interaction.channel.send(embed=embed2)
+  except:
+      pass
+
+
+
+
 
 @tree.command(name="valoldndiscordevent", description = "Create a discord event for the next Valorant game", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
@@ -998,6 +1201,162 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+@tree.command(name="deletereminder", description = "Delete 1 of your reminders - use /myreminders to get a list", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, remindertodelete: int):
+  await interaction.response.defer()
+  data = download_file('/dropreminders.txt', 'reminders.txt')
+  a_file = open("reminders.txt", "r")
+  list_of_lines = a_file.readlines()
+
+  remindertodelete = remindertodelete
+  author = interaction.user.id
+
+  i = 0
+  j = 1
+  k = 0
+  datatosave = []
+  try:
+      while (i < len(list_of_lines)):
+          reminderdata = list_of_lines[i]
+          remindersplitup = reminderdata.rsplit(", ")
+          text = remindersplitup[0]
+          text = text.strip()
+          checksent = remindersplitup[len(remindersplitup) - 1]
+          checksent = checksent.strip()
+
+          if (text == str(author) and checksent != "sent"):
+              if (j == int(remindertodelete)):
+                  print("we are here")
+                  user = remindersplitup[0]
+
+                  channel = remindersplitup[1]
+                  reminder = remindersplitup[2]
+                  timetosend = remindersplitup[3]
+                  issent = "sent"
+                  remindersaved = reminder + ", to be sent on - " + timetosend
+                  linetosave = user + ", " + channel + ", " + reminder + ", " + timetosend + ", " + issent + "\n"
+                  embed = discord.Embed(title="Reminder removed",
+                                        color=0x55a7f7)
+                  embed.add_field(name="The deleted reminder",
+                                  value=remindersaved,
+                                  inline=True)
+                  datatosave.append(linetosave)
+                  j = j + 1
+                  k = k + 1
+              else:
+                  datatosave.append(reminderdata)
+                  print(j)
+                  j = j + 1
+          else:
+              datatosave.append(reminderdata)
+          i = i + 1
+
+      a_file = open("reminders.txt", "w")
+      a_file.writelines(datatosave)
+      a_file.close()
+      upload_file('/dropreminders.txt', 'reminders.txt')
+      if (k != 0):
+          await interaction.followup.send(embed=embed)
+      else:
+          embed = discord.Embed(title="Reminder deletion error",
+                                color=0x55a7f7)
+          embed.add_field(
+              name="Suggestion",
+              value=
+              "To use this find your reminders via !myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - !deletereminder 1",
+              inline=True)
+          await interaction.followup.send(embed=embed)
+  except:
+      embed = discord.Embed(title="Reminder deletion error",
+                            color=0x55a7f7)
+      embed.add_field(
+          name="Suggestion",
+          value=
+          "To use this find your reminders via !myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - !deletereminder 1",
+          inline=True)
+      await interaction.followup.send(embed=embed)
+
+
+
+
+
+
+
+@tree.command(name="myreminders", description = "Get a list of your reminders", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = download_file('/dropreminders.txt', 'reminders.txt')
+  a_file = open("reminders.txt", "r")
+  list_of_lines = a_file.readlines()
+  i = 0
+  userID = interaction.user.id
+  userID = str(userID)
+
+  reminders = []
+  timeofreminders = []
+  dayofreminding = []
+  monthofreminding = []
+  yearofreminding = []
+  timetosendreminder = []
+  channeltosend = []
+  while (i < len(list_of_lines)):
+      base_reminder = list_of_lines[i]
+      splitUpValues = base_reminder.rsplit(", ")
+      checkIfSent = splitUpValues[4]
+      dateOfSend = splitUpValues[3]
+      textofreminder = splitUpValues[2]
+      channelToSend = splitUpValues[1]
+      userToSend = splitUpValues[0]
+      checkifSent = checkIfSent[0:2]
+
+      dateofremindbsplit = dateOfSend.rsplit(" ")
+      datesplitup = dateofremindbsplit[0].rsplit("-")
+      dayofreminder = datesplitup[2]
+      monthofsend = datesplitup[1]
+      yearofsend = datesplitup[0]
+      timeofsend = dateofremindbsplit[1]
+
+      if (checkifSent == "no"):
+          if (userID == str(userToSend)):
+              reminders.append(textofreminder)
+              timeofreminders.append(dateOfSend)
+              dayofreminding.append(dayofreminder)
+              monthofreminding.append(monthofsend)
+              yearofreminding.append(yearofsend)
+              timetosendreminder.append(timeofsend)
+              channeltosend.append(channelToSend)
+
+      i = i + 1
+  j = 0
+  textToSend = ""
+  if (len(reminders) > 0):
+      while (j < len(reminders)):
+          textToSend = textToSend + str(
+              j + 1) + " - " + reminders[j] + " - " + str(
+                  dayofreminding[j]
+              ) + "/" + str(monthofreminding[j]) + "/" + str(
+                  yearofreminding[j]) + " at " + str(
+                      timetosendreminder[j]) + " UTC - <#" + str(
+                          channeltosend[j]) + ">\n"
+          #textToSend = textToSend + reminders[j] + " - " + timeofreminders[j] + "\n"
+          j = j + 1
+
+      embed = discord.Embed(
+          title="Your currently saved reminders", color=0x55a7f7)
+      embed.add_field(name="Reminders",
+                      value=textToSend,
+                      inline=True)
+
+      embed.add_field(
+          name="Note",
+          value=
+          "If you see #deleted-channel, you are unable to access the channel tagged / or it is deleted",
+          inline=False)
+
+      await interaction.followup.send(embed=embed)
+
+  else:
+      await interaction.followup.send("You currently have no saved reminders")
 
 
 @tree.command(name="valoadd", description = "Add 1 point to the Valo scoreboard", guild = discord.Object(id = IDForServer))
@@ -1145,7 +1504,25 @@ async def self(interaction: discord.Interaction):
   upload_file('/csgoevent.txt', 'csgoevent.txt')
   await interaction.followup.send("Event cleared")
 
+@tree.command(name="clearcsgoboard", description = "This will clear the CSGO leaderboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  scoreboarding()
+  await interaction.followup.send("The CSGO Leaderboard is reset")
 
+
+@tree.command(name="cleardotaboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  dotascoreboarding()
+  await interaction.followup.send("The Dota leaderboard has been reset")
+
+
+@tree.command(name="clearvaloboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  valoscoreboarding()
+  await interaction.followup.send("The Valorant leaderboard has been reset")
 
 @tree.command(name="clearcsgoaevent", description = "This will clear the event file for CSGO Academy", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
@@ -2802,6 +3179,110 @@ async def testingspam():
 
 
 
+async def reminder(reminderData):
+  #Time Values for checking difference
+  currenttime = datetime.datetime.now()
+  #day
+  currentd = currenttime.strftime("%d")
+  #hour [UK time - 1]
+  currentH = currenttime.strftime("%H")
+  #Minute
+  currentM = currenttime.strftime("%M")
+  #Month
+  currentmonth = currenttime.strftime("%m")
+  #year
+  currentyear = currenttime.strftime("%y")
+  currentyear = "20" + str(currentyear)
+  currentyear = int(currentyear)
+  #second
+  currentsecond = currenttime.strftime("%S")
+  currentDandT = datetime.datetime(int(currentyear), int(currentmonth),
+                                   int(currentd), int(currentH),
+                                   int(currentM), int(currentsecond))
+
+  #reminder data
+  reminderinfo = reminderData
+  #Splitting up the reminder
+  splitUpValues = reminderinfo.rsplit(", ")
+  userID = splitUpValues[0]
+  channelToSend = splitUpValues[1]
+  textToSend = splitUpValues[2]
+  timeToSend = splitUpValues[3]
+  lineOfFile = splitUpValues[5]
+
+  #Splitting date values
+  timesplitting = timeToSend.rsplit(" ")
+  dateToSend = timesplitting[0]
+  timeToSend = timesplitting[1]
+  #Date splitting
+  datesplitting = dateToSend.rsplit("-")
+  timesplitting = timeToSend.rsplit(":")
+  #day values
+  yearToSend = datesplitting[0]
+  monthToSend = datesplitting[1]
+  dayToSend = datesplitting[2]
+  #time values
+  hourToSend = timesplitting[0]
+  minuteToSend = timesplitting[1]
+  secondToSend = timesplitting[2]
+
+  sendonDandT = datetime.datetime(int(yearToSend), int(monthToSend),
+                                  int(dayToSend), int(hourToSend),
+                                  int(minuteToSend), int(secondToSend))
+  time_delta = (sendonDandT - currentDandT)
+
+  timeLeftInSeconds = time_delta.total_seconds()
+  channel = client.get_channel(int(channelToSend))
+  if timeLeftInSeconds < 0:
+      #Creating the embed
+      embed = discord.Embed(
+          title=
+          "Your reminder time had already arrived! - While I was offline",
+          color=0x55a7f7)
+      embed.add_field(name="Your reminder, scheduled at - " +
+                      str(sendonDandT),
+                      value=textToSend,
+                      inline=True)
+
+      #Overwrites the file with tagging the line as sent
+      a_file = open("reminders.txt", "r")
+      list_of_lines = a_file.readlines()
+      list_of_lines[int(lineOfFile)] = (userID + ", " + channelToSend +
+                                        ", " + textToSend + ", " +
+                                        str(sendonDandT) + ", sent\n")
+
+      a_file = open("reminders.txt", "w")
+      a_file.writelines(list_of_lines)
+      a_file.close()
+      upload_file('/dropreminders.txt', 'reminders.txt')
+      #Sends to user
+      await channel.send("<@" + userID + ">")
+      await channel.send(embed=embed)
+
+  else:
+      #Forces bot to wait till the reminder is set
+      await asyncio.sleep(timeLeftInSeconds)
+      embed = discord.Embed(title="Your reminder time has arrived!",
+                            color=0x55a7f7)
+      embed.add_field(name="Your reminder, scheduled at - " +
+                      str(sendonDandT),
+                      value=textToSend,
+                      inline=True)
+
+      #Overwrites the file with tagging the line as sent
+      a_file = open("reminders.txt", "r")
+      list_of_lines = a_file.readlines()
+      list_of_lines[int(lineOfFile)] = (userID + ", " + channelToSend +
+                                        ", " + textToSend + ", " +
+                                        str(sendonDandT) + ", sent\n")
+
+      a_file = open("reminders.txt", "w")
+      a_file.writelines(list_of_lines)
+      a_file.close()
+      upload_file('/dropreminders.txt', 'reminders.txt')
+      #Sends to user
+      await channel.send("<@" + userID + ">")
+      await channel.send(embed=embed)
 
 
 

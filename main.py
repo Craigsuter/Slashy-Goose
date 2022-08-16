@@ -738,11 +738,11 @@ async def self(interaction: discord.Interaction, minimumscore: int):
         except:
           print("User no longer in server")
       
-    await interaction.followup.send("I have removed the CSGO AWPacle role from - " + str(j) + " people\n\nI have added the Operation Predict role to - " + str(i) + " people - you can use !getuserlist @ Operation Predict, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
+    await interaction.followup.send("I have removed the CSGO AWPacle role from - " + str(j) + " people\n\nI have added the Operation Predict role to - " + str(i) + " people - you can use /getuserlist @ Operation Predict, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
 
   except Exception as e: 
     print(e)
-    await interaction.followup.send("There was an error in command usage, to use command use !valowinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
+    await interaction.followup.send("There was an error in command usage, to use command use /valowinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
 
 
 
@@ -806,10 +806,10 @@ async def self(interaction: discord.Interaction, minimumscore: int):
         except:
           print("User no longer in server")
       
-    await interaction.followup.send("I have removed the CSGO AWPacle role from - " + str(j) + " people\n\nI have added the CSGO AWPacle role to - " + str(i) + " people - you can use !getuserlist @ CSGO AWPacle, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
+    await interaction.followup.send("I have removed the CSGO AWPacle role from - " + str(j) + " people\n\nI have added the CSGO AWPacle role to - " + str(i) + " people - you can use /getuserlist @ CSGO AWPacle, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
   except Exception as e: 
     print(e)
-    await interaction.followup.send("There was an error in command usage, to use command use !csgowinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
+    await interaction.followup.send("There was an error in command usage, to use command use /csgowinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
   
 
 
@@ -872,10 +872,10 @@ async def self(interaction: discord.Interaction, minimumscore: int):
         except:
           print("User no longer in server")
       
-    await interaction.followup.send("I have removed the Dota Oracle role from - " + str(j) + " people\n\nI have added the Dota Oracle role to - " + str(i) + " people - you can use !getuserlist @ dota 2 oracle, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
+    await interaction.followup.send("I have removed the Dota Oracle role from - " + str(j) + " people\n\nI have added the Dota Oracle role to - " + str(i) + " people - you can use /getuserlist @ dota 2 oracle, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
   except Exception as e: 
     print(e)
-    await interaction.followup.send("There was an error in command usage, to use command use !dotawinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
+    await interaction.followup.send("There was an error in command usage, to use command use /dotawinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
   
 
 
@@ -1118,7 +1118,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         upload_file('/valoscoreboard.csv', 'scoreboard9.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !valoremove @V9-0")
+    await interaction.followup.send("You need to tag the winning role: example /valoremove @V9-0")
 
 
 
@@ -1157,7 +1157,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         upload_file('/csgoscoreboard.csv', 'scoreboard3.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !csgoremove @cs9-0")
+    await interaction.followup.send("You need to tag the winning role: example /csgoremove @cs9-0")
 
 
 
@@ -1197,7 +1197,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !dotaremove @D9-0")
+    await interaction.followup.send("You need to tag the winning role: example /dotaremove @D9-0")
 
 
 
@@ -1263,7 +1263,7 @@ async def self(interaction: discord.Interaction, remindertodelete: int):
           embed.add_field(
               name="Suggestion",
               value=
-              "To use this find your reminders via !myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - !deletereminder 1",
+              "To use this find your reminders via /myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - /deletereminder 1",
               inline=True)
           await interaction.followup.send(embed=embed)
   except:
@@ -1272,7 +1272,7 @@ async def self(interaction: discord.Interaction, remindertodelete: int):
       embed.add_field(
           name="Suggestion",
           value=
-          "To use this find your reminders via !myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - !deletereminder 1",
+          "To use this find your reminders via /myreminders, and choose the reminder based on the value to the left of your reminder!\n E.G - /deletereminder 1",
           inline=True)
       await interaction.followup.send(embed=embed)
 
@@ -1393,7 +1393,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         upload_file('/valoscoreboard.csv', 'scoreboard9.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !valoadd @v9-0")
+    await interaction.followup.send("You need to tag the winning role: example /valoadd @v9-0")
 
 
 @tree.command(name="csgoadd", description = "Add 1 point to the CSGO scoreboard", guild = discord.Object(id = IDForServer))
@@ -1430,7 +1430,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         upload_file('/csgoscoreboard.csv', 'scoreboard3.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !csgoadd @cs9-0")
+    await interaction.followup.send("You need to tag the winning role: example /csgoadd @cs9-0")
 
 
 
@@ -1470,7 +1470,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
       upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
       await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
-    await interaction.followup.send("You need to tag the winning role: example !dotaadd @D9-0" )
+    await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
 
 
 @tree.command(name="clearvaloldnevent", description = "This will clear the event file for Valo LDN", guild = discord.Object(id = IDForServer))
@@ -1720,7 +1720,7 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     test = dotascoreboardreader("none")
     embed = discord.Embed(title="Dota 2 prediction leaderboard", color=0x55a7f7)
     embed.add_field(name="Dota 2 Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
-    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use !show dota @*yourself* to see where you stand!",inline=False)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show dota @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
     
 
@@ -1737,7 +1737,7 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     test = scoreboardreader("none")
     embed = discord.Embed(title="CSGO prediction leaderboard",color=0x55a7f7)
     embed.add_field(name="CSGO Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
-    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use !show csgo @*yourself* to see where you stand!",inline=False)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show csgo @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
 
 
@@ -1752,7 +1752,7 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     test = valoscoreboardreader("none")
     embed = discord.Embed(title="Valorant prediction leaderboard",color=0x55a7f7)
     embed.add_field(name="Valorant prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
-    embed.add_field(name="Can't see yourself?",value= "Can't see yourself on the table? use !show valo @*yourself* to see where you stand!",inline=False)
+    embed.add_field(name="Can't see yourself?",value= "Can't see yourself on the table? use /show valo @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
 
   
@@ -2646,7 +2646,7 @@ async def self(interaction: discord.Interaction, liquipediaurl: str):
   f.write(newlink)
   f.close()
   upload_file('/dropdotatournament.txt', 'dotatournament.txt')
-  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use !verifydturl to check the link or try changing again!")
+  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
 
 
 

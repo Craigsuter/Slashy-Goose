@@ -1835,8 +1835,8 @@ async def self(interaction: discord.Interaction):
         #await message.reply(embed=embed)
   except:
     if(channelDataID in ShortList):
-      #await message.reply("No games planned currently - For more information use !nextdota in <#721391448812945480>")
-      await interaction.followup.send("No games planned currently - For more information use !nextdota in <#721391448812945480>")
+      #await message.reply("No games planned currently - For more information use /nextdota in <#721391448812945480>")
+      await interaction.followup.send("No games planned currently - For more information use /nextdota in <#721391448812945480>")
     else:
       embed=discord.Embed(title="OG Dota's next game", url="https://liquipedia.net/dota2/OG", color=0xf10909)
       embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
@@ -1894,7 +1894,7 @@ async def self(interaction: discord.Interaction):
 
     if (embed == "N"):
         if (channelDataID in ShortList):
-            await interaction.followup.send("No games planned currently - For more information use !nextvalo in <#721391448812945480>")
+            await interaction.followup.send("No games planned currently - For more information use /nextvalo in <#721391448812945480>")
         else:
             embed = discord.Embed(title="OG LDN Valorant's next game",url="https://www.vlr.gg/team/8903/og-ldn-utd",color=0xd57280)
             embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
@@ -1909,7 +1909,7 @@ async def self(interaction: discord.Interaction):
   except:
 
     if (channelDataID in ShortList):
-      await interaction.followup.send("No games planned currently - For more information use !nextvalo in <#721391448812945480>")
+      await interaction.followup.send("No games planned currently - For more information use /nextvalo in <#721391448812945480>")
     else:
           embed = discord.Embed(title="OG LDN Valorant's next game",url="https://www.vlr.gg/team/8903/og-ldn-utd",color=0xd57280)
           embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
@@ -2419,7 +2419,7 @@ async def self(interaction: discord.Interaction):
 
   if (Teams1 == "No games found"):
       embed = discord.Embed(title="No Dota streams / games were found",color=0xf10909)
-      embed.add_field(name="What you can try",value="You can try using !nextdota / !nextdota2 to see if there are any games coming up",inline=True)
+      embed.add_field(name="What you can try",value="You can try using /nextdota / /nextdota2 to see if there are any games coming up",inline=True)
       embed.add_field(name="Links",value="https://liquipedia.net/dota2/OG",inline=False)
       await interaction.followup.send(embed=embed)
 
@@ -2447,7 +2447,7 @@ async def self(interaction: discord.Interaction):
 
   if (matchlink == "No games found"):
       embed = discord.Embed(title="No Valorant streams / games were found",color=0xd57280)
-      embed.add_field(name="What you can try",value="You can try using !nextldnvalo / !nextldnvalorant to see if there are any games coming up",inline=True)
+      embed.add_field(name="What you can try",value="You can try using /nextldnvalo / /nextldnvalorant to see if there are any games coming up",inline=True)
       embed.add_field(name="Links",value="https://www.vlr.gg/team/8903/og-ldn-utd / https://liquipedia.net/valorant/OG_LDN_UTD",inline=False)
       await interaction.followup.send(embed=embed)
 
@@ -2475,7 +2475,7 @@ async def self(interaction: discord.Interaction):
 
   if (team1 == "No games found"):
       embed = discord.Embed(title="No CSGO streams / games were found",color=0xff8800)
-      embed.add_field(name="What you can try",value="You can try using !nextcsgo to see if there are any games coming up",inline=True)
+      embed.add_field(name="What you can try",value="You can try using /nextcsgo to see if there are any games coming up",inline=True)
       embed.add_field(name="Links",value="OG Liquipedia:  https://liquipedia.net/counterstrike/OG\nOG HLTV: https://www.hltv.org/team/10503/og#tab-matchesBox",inline=False)
       await interaction.followup.send(embed=embed)
     
@@ -2499,7 +2499,7 @@ async def self(interaction: discord.Interaction):
 
   if (team1 == "No games found"):
       embed = discord.Embed(title="No CSGO streams / games were found",color=0xff8800)
-      embed.add_field(name="What you can try",value="You can try using !nextcsgo to see if there are any games coming up",inline=True)
+      embed.add_field(name="What you can try",value="You can try using /nextcsgo to see if there are any games coming up",inline=True)
       embed.add_field(name="Links",value="OG Liquipedia:  https://liquipedia.net/counterstrike/OG_Academy\nOG HLTV: https://www.hltv.org/team/11672/og-academy#tab-matchesBox",inline=False)
       await interaction.followup.send(embed=embed)
     

@@ -411,6 +411,10 @@ async def self(interaction: discord.Interaction):
                 
 
 
+
+
+
+
 @tree.command(name="reminder", description = "Create a reminder - using time format xdxhxmxs - day/hour/minute/second", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, delay: str, remindertosave: str):
   await interaction.response.defer()
@@ -3132,7 +3136,7 @@ async def testingspam():
 
       try:
         counter = teams.count('/')
-        if lines[0] == linetocheck or counter > 0 or teams == "Vitality vs OG":
+        if lines[0] == linetocheck or counter > 0:
           pass
         else:
           eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)

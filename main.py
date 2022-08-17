@@ -5,6 +5,7 @@ from discord import app_commands
 from discord.ui import Select, View
 import requests
 import os
+from time import sleep
 import csv
 import datetime
 from dotenv import load_dotenv
@@ -358,8 +359,6 @@ async def self(interaction: discord.Interaction, ping: typing.Optional[discord.U
     await interaction.followup.send(ping.avatar)
   except:
     await interaction.followup.send(interaction.user.avatar)
-
-
 
 
 

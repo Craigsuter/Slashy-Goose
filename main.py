@@ -1999,7 +1999,8 @@ async def self(interaction: discord.Interaction, series_length: int):
     await interaction.followup.send("I have created the roles for a CSGO Bo5")
     
   else:
-    await interaction.followup.send("Value for series length invalid, must be 1 / 2 / 3 / 5, please try again")
+    if(isdone==0):
+      await interaction.followup.send("Value for series length invalid, must be 1 / 2 / 3 / 5, please try again")
 
 
 @tree.command(name="csgoabo", description = "Create CSGO Academy roles", guild = discord.Object(id = IDForServer))

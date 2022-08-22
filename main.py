@@ -411,10 +411,53 @@ async def self(interaction: discord.Interaction):
                 
 
 
+@tree.command(name="manualcsgoevent", description = "Update the CSGO event sign up message ID", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, eventid: int):
+  await interaction.response.defer()
+  a_file=open("csgoinfo.txt", "w")
+  a_file.write(str(eventid))
+  a_file.close()
+  upload_file('/csgoeventsignup.txt', 'csgoinfo.txt')
+  await interaction.followup.send("CSGO Event updated with message ID - " + str(eventid))
+
+@tree.command(name="manualcsgoaevent", description = "Update the CSGO Academy event sign up message ID", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, eventid: int):
+  await interaction.response.defer()
+  a_file=open("csgoainfo.txt", "w")
+  a_file.write(str(eventid))
+  a_file.close()
+  upload_file('/csgoaeventsignup.txt', 'csgoainfo.txt')
+ 
+  await interaction.followup.send("CSGO Academy event updated with message ID - " + str(eventid))
+
+
+
+@tree.command(name="manualvaloevent", description = "Update the Valorant event sign up message ID", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, eventid: int):
+  await interaction.response.defer()
+  a_file=open("valoinfo.txt", "w")
+  a_file.write(str(eventid))
+  a_file.close()
+  upload_file('/valoeventsignup.txt', 'valoinfo.txt')
+ 
+  await interaction.followup.send("Valorant event updated with message ID - " + str(eventid))
 
 
 
 
+@tree.command(name="manualdotaevent", description = "Update the Dota event sign up message ID", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, eventid: int):
+  await interaction.response.defer()
+  a_file=open("dotainfo.txt", "w")
+  a_file.write(str(eventid))
+  a_file.close()
+  upload_file('/dotaeventsignup.txt', 'dotainfo.txt')
+ 
+  await interaction.followup.send("Dota event updated with message ID - " + str(eventid))
+
+
+
+  
 @tree.command(name="reminder", description = "Create a reminder - using time format xdxhxmxs - day/hour/minute/second", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, delay: str, remindertosave: str):
   await interaction.response.defer()

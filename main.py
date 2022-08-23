@@ -2722,7 +2722,7 @@ async def self(interaction: discord.Interaction):
   channelDataID = interaction.channel_id
   embed = DotaCheckTourni(channelDataID)
   embed = embed[0]
-  if ((channelDataID == 867690069981003807) or (channelDataID == 867690069981003807)):
+  if ((channelDataID == 689903856095723569) or (channelDataID == 690952309827698749)):
       await interaction.followup.send(embed)
   else:
       await interaction.followup.send(embed=embed)

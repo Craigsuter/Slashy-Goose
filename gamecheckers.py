@@ -179,9 +179,9 @@ def DotaCheck(channelDataID, isShort):
       if(isShort == True):
         c= str(c)
         if (c == "No games planned"):
-          embed = "No games planned currently - For more information use !nextdota in <#721391448812945480>"
+          embed = "No games planned currently - For more information use /nextdota in <#721391448812945480>"
         else:
-          embed= Teams + " - Starts in: " + c + " / In your local time: <t:" + str(epoch) + "> - For more information use !nextdota in <#721391448812945480>"
+          embed= Teams + " - Starts in: " + c + " / In your local time: <t:" + str(epoch) + "> - For more information use /nextdota in <#721391448812945480>"
 
       #Creates the embed with all the details
       else:
@@ -352,9 +352,9 @@ def CSGOCheck(channelDataID, page, isShort):
     #Prints based on pro-match channel - will give a more chat friendly version
     if(isShort == True):
       if(timetoadd > 0 ):
-        embed=teams + " - Starts in: " + time2 + " /  <t:" + str(test) + "> - For more information use !nextcsgo in <#721391448812945480>"
+        embed=teams + " - Starts in: " + time2 + " /  <t:" + str(test) + "> - For more information use /nextcsgo in <#721391448812945480>"
       else:
-        embed=teams + " should be live now - For more information use !nextcsgo in <#721391448812945480>"
+        embed=teams + " should be live now - For more information use /nextcsgo in <#721391448812945480>"
     else:
       if(OGpage == "https://www.hltv.org/team/10503/og#tab-matchesBox"):
         embed=discord.Embed(title="OG CSGO's next game", url="https://www.hltv.org/team/10503/og#tab-matchesBox",color=0xff8800)
@@ -383,7 +383,7 @@ def CSGOCheck(channelDataID, page, isShort):
   except Exception as e: 
     print(e)
     if(isShort == True):
-      embed= "There is currently no games planned for OG, for more information use !nextcsgo in <#721391448812945480>"
+      embed= "There is currently no games planned for OG, for more information use /nextcsgo in <#721391448812945480>"
     else:
       if(OGpage == "https://www.hltv.org/team/10503/og#tab-matchesBox"):
         embed=discord.Embed(title="OG CSGO's next game", url="https://www.hltv.org/team/10503/og#tab-matchesBox",color=0xff8800)
@@ -589,7 +589,7 @@ def ValoCheck(channelDataID, pageURL, isShort):
 
     if (isShort == True):
       c= str(c)
-      embed = valorantTeams + " - Starts in: " + c  + " / In your local time: <t:" + str(epoch) + "> - For more information use !nextvalo / !nextldnvalo in <#721391448812945480>"
+      embed = valorantTeams + " - Starts in: " + c  + " / In your local time: <t:" + str(epoch) + "> - For more information use /nextvalo / /nextldnvalo in <#721391448812945480>"
       
 
 

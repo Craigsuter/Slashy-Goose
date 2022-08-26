@@ -7,6 +7,7 @@ import requests
 import os
 from time import sleep
 import csv
+import asyncio
 import datetime
 from dotenv import load_dotenv
 load_dotenv()
@@ -46,6 +47,11 @@ from lastvalo import lastvalo
 from lastgames import LastDota
 import random
 
+
+
+
+
+
 class aclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
@@ -56,6 +62,7 @@ class aclient(discord.Client):
     await self.wait_until_ready()
     if not self.synced:
       await tree.sync(guild=discord.Object(id = int(os.getenv('IDForServer'))))
+      
       self.synced = True
     print(f"We have logged in as {self.user}")
     #Sets presence
@@ -115,7 +122,18 @@ class aclient(discord.Client):
 
     
 
+class bclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
 
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await tree2.sync(guild=discord.Object(id = int(os.getenv('IDForServer'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
 
 
 
@@ -123,6 +141,8 @@ class aclient(discord.Client):
 
 
 client = aclient()
+client2 = bclient()
+tree2 = app_commands.CommandTree(client2)
 tree = app_commands.CommandTree(client)
 ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
 IDForServer = int(os.getenv('IDForServer'))
@@ -1892,6 +1912,25 @@ async def self(interaction: discord.Interaction):
       #await message.reply(embed=embed)
       await interaction.followup.send(embed=embed)
 
+@tree2.command(name="nextcsgo", description="Get information on the next CSGO game", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  channelDataID = int(interaction.channel_id)
+  if(channelDataID in ShortList):
+    CSGOGame = CSGOCheck(channelDataID, 'https://www.hltv.org/team/10503/og#tab-matchesBox', True)
+  else:
+    CSGOGame = CSGOCheck(channelDataID, 'https://www.hltv.org/team/10503/og#tab-matchesBox', False)
+  embed = CSGOGame[6]
+  if(channelDataID in ShortList):
+      await interaction.followup.send(embed)
+  else:
+      await interaction.followup.send(embed=embed)
+
+
+
+
+
+
 
 @tree.command(name="nextcsgo", description="Get information on the next CSGO game", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
@@ -3346,9 +3385,11 @@ async def reminder(reminderData):
 
 
 
-  
+#loop = asyncio.new_event_loop()
+#asyncio.set_event_loop(loop)
 
 
-
-
+#loop.create_task(client.start((os.getenv('TOKEN'))))
+#loop.create_task(client2.start((os.getenv('TOKEN2'))))
+#loop.run_forever()
 client.run(os.getenv('TOKEN'))

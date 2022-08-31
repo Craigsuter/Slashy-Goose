@@ -26,6 +26,7 @@ from valomaps import valomaps
 from dropboxUploader import upload_file
 from dropboxUploader import download_file
 from tournamentcheckers import DotaCheckTourni
+from tournamentcheckers import ValoCheckTourni
 from tournamentchecker2 import DotaCheckTourni2
 from translation import translations
 from csgoscoreboarding import scoreboarding
@@ -40,10 +41,15 @@ from valoscoreboarding import valoscoreboarding
 from valoscoreboarding import valoscoreboardreader
 from valoscoreboarding import valoscoreboardadder
 from valoscoreboarding import valoscoreboardsingle
+from sentinelgamecheckers import SentinelsValoCheck
+from sentineldropboxUploader import sentineldownload_file
+from sentineldropboxUploader import sentinelupload_file
+from sentinelvaloevents import sentinelsvaloevents
 from dtStreams import dtStreams
 import typing
 from lastcs import lastcsgo
 from lastvalo import lastvalo
+from sentinellastvalo import sentinellastvalo
 from lastgames import LastDota
 import random
 
@@ -122,7 +128,7 @@ class aclient(discord.Client):
 
     
 
-class bclient(discord.Client):
+class sentinelclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
     super().__init__(intents=intents)
@@ -131,7 +137,7 @@ class bclient(discord.Client):
   async def on_ready(self):
     await self.wait_until_ready()
     if not self.synced:
-      await tree2.sync(guild=discord.Object(id = int(os.getenv('IDForServer'))))
+      await tree2.sync(guild=discord.Object(id = int(os.getenv('IDForServer2'))))
       self.synced = True
     print(f"We have logged in as {self.user}")
 
@@ -141,11 +147,12 @@ class bclient(discord.Client):
 
 
 client = aclient()
-client2 = bclient()
+client2 = sentinelclient()
 tree2 = app_commands.CommandTree(client2)
 tree = app_commands.CommandTree(client)
 ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
 IDForServer = int(os.getenv('IDForServer'))
+IDForServer2 = int(os.getenv('IDForServer2'))
 
 
 
@@ -429,7 +436,7 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send("An error was hit during this process - there may be no game available")
     print(e)
                 
-@tree.command(name="goosemarch", description = "Roll out the Goose")
+@tree2.command(name="goosemarch", description = "Roll out the Goose", guild = discord.Object(id = IDForServer2))
 async def self(interaction: discord.Interaction, eventid: str):
   await interaction.response.defer()
   await interaction.followup.send("<a:DuckWiggleMaShizzle:745372185815941203> <a:DuckWiggleMaShizzle:745372185815941203> <a:DuckWiggleMaShizzle:745372185815941203>")
@@ -819,6 +826,9 @@ async def self(interaction: discord.Interaction, minimumscore: int):
 
 
 
+
+
+#OG Commands
 
 @tree.command(name="csgowinners", description = "Will give the CSGO Awpacle role to the winners", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, minimumscore: int):
@@ -1915,19 +1925,6 @@ async def self(interaction: discord.Interaction):
       #await message.reply(embed=embed)
       await interaction.followup.send(embed=embed)
 
-@tree2.command(name="nextcsgo", description="Get information on the next CSGO game", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction):
-  await interaction.response.defer()
-  channelDataID = int(interaction.channel_id)
-  if(channelDataID in ShortList):
-    CSGOGame = CSGOCheck(channelDataID, 'https://www.hltv.org/team/10503/og#tab-matchesBox', True)
-  else:
-    CSGOGame = CSGOCheck(channelDataID, 'https://www.hltv.org/team/10503/og#tab-matchesBox', False)
-  embed = CSGOGame[6]
-  if(channelDataID in ShortList):
-      await interaction.followup.send(embed)
-  else:
-      await interaction.followup.send(embed=embed)
 
 
 
@@ -3378,21 +3375,109 @@ async def reminder(reminderData):
 
 
 
+    
+#Sentinel commands
+@tree2.command(name="nextvalo", description="Get information on the next Sentinels Valorant game", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  channelDataID = int(interaction.channel_id)
+  
+  try:
+    if(channelDataID in ShortList):
+      embed = SentinelsValoCheck(channelDataID, 'https://www.vlr.gg/team/2/sentinels', True)
+      embed=embed[0]
+    else:
+      embed = SentinelsValoCheck(channelDataID, 'https://www.vlr.gg/team/2/sentinels', False)
+      embed=embed[0]
+    
+
+    if (embed == "N"):
+        if (channelDataID in ShortList):
+            await interaction.followup.send("No games planned currently - For more information use /nextvalo")
+        else:
+            embed = discord.Embed(title="OG LDN Valorant's next game",url="https://www.vlr.gg/team/2/sentinels",color=0xd57280)
+            embed.set_thumbnail(url="https://owcdn.net/img/62875027c8e06.png")
+            embed.add_field(name="No games planned",value="No games planned",inline=True)
+            embed.add_field(name="Links",value="[Sentinals VLR](https://www.vlr.gg/team/2/sentinels) / [Sentinels Valorant Liquipedia](https://liquipedia.net/valorant/Sentinels)",inline=False)
+            await interaction.followup.send(embed=embed)
+    else:
+        if (channelDataID in ShortList):
+            await interaction.followup.send(embed)
+        else:
+            await interaction.followup.send(embed=embed)
+  except:
+
+    if (channelDataID in ShortList):
+      await interaction.followup.send("No games planned currently - For more information use /nextvalo")
+    else:
+          embed = discord.Embed(title="Sentinels Valorant's next game",url="https://www.vlr.gg/team/2/sentinels",color=0xd57280)
+          embed.set_thumbnail(url="https://owcdn.net/img/62875027c8e06.png")
+          embed.add_field(name="No games planned",value="No games planned",inline=True)
+          embed.add_field(name="Links",value="[Sentinels Valorant](https://www.vlr.gg/team/2/sentinels) / [Sentinels Valorant Liquipedia](https://liquipedia.net/valorant/Sentinels)",inline=False)
+          await interaction.followup.send(embed=embed)
+
+
+
+@tree2.command(name="nextvt", description = "Next game in the Valorant Tournament tracked", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  channelDataID = interaction.channel_id
+  embed = ValoCheckTourni(channelDataID)
+  embed = embed[0]
+  if ((channelDataID == 689903856095723569) or (channelDataID == 690952309827698749)):
+      await interaction.followup.send(embed)
+  else:
+      await interaction.followup.send(embed=embed)
+
+
+@tree2.command(name="changevt", description = "Change the Valo tournament tracked", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, liquipediaurl: str):
+  await interaction.response.defer()
+  newlink = liquipediaurl
+  f = open("valotournament.txt", "w")
+  f.write(newlink)
+  f.close()
+  sentinelupload_file('/dropvalotournament.txt', 'valotournament.txt')
+  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
+
+
+
+
+@tree2.command(name="resetvt", description = "Reset the Valo tournament tracked", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = sentineldownload_file('/dropvalotournament.txt','valotournament.txt')
+  f = open("valotournament.txt", "w")
+  f.write("none")
+  f.close()
+  sentinelupload_file('/dropvalotournament.txt', 'valotournament.txt')
+  await interaction.followup.send("The tournament currently tracked has been removed")
+
+
+@tree2.command(name="valoevents", description = "Check what events are coming up for Sentinels Valorant", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  test = sentinelsvaloevents()
+  await interaction.followup.send(embed=test)
+
+
+
+@tree2.command(name="lastvalo", description = "Last Sentinels Valorant map stats", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  last_valo = lastvalo('https://www.vlr.gg/team/matches/2/sentinels/?group=completed')
+  await interaction.followup.send(last_valo)
 
 
 
 
 
 
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 
-
-
-#loop = asyncio.new_event_loop()
-#asyncio.set_event_loop(loop)
-
-
-#loop.create_task(client.start((os.getenv('TOKEN'))))
-#loop.create_task(client2.start((os.getenv('TOKEN2'))))
-#loop.run_forever()
-client.run(os.getenv('TOKEN'))
+loop.create_task(client.start((os.getenv('TOKEN'))))
+loop.create_task(client2.start((os.getenv('TOKEN2'))))
+loop.run_forever()
+#client.run(os.getenv('TOKEN'))

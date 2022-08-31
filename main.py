@@ -436,10 +436,7 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send("An error was hit during this process - there may be no game available")
     print(e)
                 
-@tree2.command(name="goosemarch", description = "Roll out the Goose", guild = discord.Object(id = IDForServer2))
-async def self(interaction: discord.Interaction, eventid: str):
-  await interaction.response.defer()
-  await interaction.followup.send("<a:DuckWiggleMaShizzle:745372185815941203> <a:DuckWiggleMaShizzle:745372185815941203> <a:DuckWiggleMaShizzle:745372185815941203>")
+
 
 @tree.command(name="manualcsgoevent", description = "Update the CSGO event sign up message ID", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, eventid: str):

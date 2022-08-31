@@ -3435,7 +3435,7 @@ async def self(interaction: discord.Interaction, liquipediaurl: str):
   f.write(newlink)
   f.close()
   sentinelupload_file('/dropvalotournament.txt', 'valotournament.txt')
-  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
+  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifyvturl to check the link or try changing again!")
 
 
 
@@ -3464,6 +3464,16 @@ async def self(interaction: discord.Interaction):
   await interaction.response.defer()
   last_valo = lastvalo('https://www.vlr.gg/team/matches/2/sentinels/?group=completed')
   await interaction.followup.send(last_valo)
+
+
+
+@tree2.command(name="verifyvt", description = "Verify the Valorant tournament tracked", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = sentineldownload_file('/dropvalotournament.txt','valotournament.txt')
+  f = open("valotournament.txt", "r")
+  link = f.read()
+  await interaction.followup.send("The link currently stored is - <" +link + ">")
 
 
 

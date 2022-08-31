@@ -18,11 +18,13 @@ from gamecheckers import ValoCheck
 from streamcollection import DotaStreams
 from streamcollection import CSGOStreams
 from streamcollection import ValoStreams
+from Sentinelstreamcollection import SentinelValoStreams
 from CSEvents import csgoevents
 from dota_events import dotaevents
 from playerstats import csgoplayerstat, dotaplayerstats, valoplayerstats
 from csmap import csgomap
 from valomaps import valomaps
+from sentinelvalomaps import sentinelvalomaps
 from dropboxUploader import upload_file
 from dropboxUploader import download_file
 from tournamentcheckers import DotaCheckTourni
@@ -3475,6 +3477,92 @@ async def self(interaction: discord.Interaction):
   link = f.read()
   await interaction.followup.send("The link currently stored is - <" +link + ">")
 
+
+@tree2.command(name="valomaps", description="Get Sentinels Valorant maps and stats for current game", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  valo_maps = sentinelvalomaps()
+  await interaction.followup.send(valo_maps)
+
+
+
+@tree2.command(name="discordstats", description = "Get the Discord Stats of yourself or another user", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, ping: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    user = ping
+    createdon = user.created_at
+    joinedon = user.joined_at
+    cyear = createdon.year
+    cmonth = createdon.month
+    cday = createdon.day
+    chour = createdon.hour
+    cminute = createdon.minute
+    csecond = createdon.second
+    timecreation = str(cday) + "/" + str(cmonth) + "/" + str(
+        cyear) + " - " + str(chour) + ":" + str(
+            cminute) + ":" + str(csecond)
+
+    jyear = joinedon.year
+    jmonth = joinedon.month
+    jday = joinedon.day
+    jhour = joinedon.hour
+    jminute = joinedon.minute
+    jsecond = joinedon.second
+    timejoining = str(jday) + "/" + str(jmonth) + "/" + str(jyear) + " - " + str(jhour) + ":" + str(jminute) + ":" + str(jsecond)
+
+    embed = discord.Embed(title="Account information of - " +str(user.display_name),color=0x55a7f7)
+    embed.add_field(name="Account details",value="User account was created on - " +str(timecreation) +"\nJoined the server on- " +str(timejoining),inline=True)
+
+    await interaction.followup.send(embed=embed)
+  except:
+    
+    user = interaction.user
+    createdon = user.created_at
+    joinedon = user.joined_at
+    cyear = createdon.year
+    cmonth = createdon.month
+    cday = createdon.day
+    chour = createdon.hour
+    cminute = createdon.minute
+    csecond = createdon.second
+    timecreation = str(cday) + "/" + str(cmonth) + "/" + str(cyear) + " - " + str(chour) + ":" + str(cminute) + ":" + str(csecond)
+    jyear = joinedon.year
+    jmonth = joinedon.month
+    jday = joinedon.day
+    jhour = joinedon.hour
+    jminute = joinedon.minute
+    jsecond = joinedon.second
+    timejoining = str(jday) + "/" + str(jmonth) + "/" + str(jyear) + " - " + str(jhour) + ":" + str(jminute) + ":" + str(jsecond)
+
+    embed = discord.Embed(title="Account information of - " +str(user.display_name),color=0x55a7f7)
+    embed.add_field(name="Account details",value="User account was created on - " +str(timecreation) +"\nJoined the server on- " + str(timejoining),inline=True)
+    await interaction.followup.send(embed=embed)
+
+@tree2.command(name="valostreams", description = "Get the streams for the next Valorant series", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  streaminfo = SentinelValoStreams('https://www.vlr.gg/team/2/sentinels')
+  valoenemyteam = streaminfo[0]
+  streams = streaminfo[1]
+  matchlink = streaminfo[2]
+
+  if (matchlink == "No games found"):
+      embed = discord.Embed(title="No Valorant streams / games were found",color=0xd57280)
+      embed.add_field(name="What you can try",value="You can try using /nextvalo to see if there are any games coming up",inline=True)
+      embed.add_field(name="Links",value="https://www.vlr.gg/team/2/sentinels / https://liquipedia.net/valorant/Sentinels",inline=False)
+      await interaction.followup.send(embed=embed)
+
+  else:
+      embed = discord.Embed(title="Valorant streams coming up!",color=0xd57280)
+      embed.add_field(name="The game found",value="Sentinels vs " + valoenemyteam,inline=True)
+    
+      if(interaction.channel_id != 810939258222936094 and interaction.channel_id != 926214194280419368 and interaction.channel_id != 1007303552445726750):
+        embed.add_field(name="Streams for copying", value="```" + streams + "```",inline=False)
+        
+      embed.add_field(name="Streams with flags",value=streams,inline=False)
+      embed.add_field(name="Game page info",value=matchlink,inline=False)
+      await interaction.followup.send(embed=embed)
 
 
 

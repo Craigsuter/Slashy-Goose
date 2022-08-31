@@ -3778,6 +3778,50 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+@tree2.command(name="getuserlist", description = "Get the list of users in a role", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  guild = interaction.guild
+  server = interaction.guild
+  role_name = discord.utils.get(guild.roles,id=int(role.id))
+  role_name = str(role_name)
+
+  role_id = server.roles[0]
+  display_names = []
+  member_ids = []
+  file = open("filetosend.txt", "w")
+  file.close()
+  for role in server.roles:
+      if role_name == role.name:
+          role_id = role
+          break
+  else:
+      await interaction.followup.send("Role doesn't exist")
+      return
+  for member in server.members:
+      if role_id in member.roles:
+          display_names.append(member.display_name)
+          member_ids.append(member.id)
+
+  i = 0
+  while (i < len(display_names)):
+      f = open("filetosend.txt", "a")
+      f.write("name: " + display_names[i] + " - their id number: " +str(member_ids[i]) + "\n")
+      f.close
+      i = i + 1
+
+  f = open("filetosend.txt", "r")
+  print(f.read())
+  await interaction.followup.send("Role returned: " + role_name + '!',file=discord.File("filetosend.txt"))
+
+
+
+
+
+
+
+
+
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)

@@ -3567,6 +3567,110 @@ async def self(interaction: discord.Interaction):
 
 
 
+@tree2.command(name="valobo", description = "Create Valorant roles for prediction [requires 1 / 2 / 3 / 5]", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone = 0
+  if(series_length == 1):
+    await guild.create_role(name="V1-0")
+    await guild.create_role(name="V0-1")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Valorant Bo1")
+    
+  if(series_length == 2):
+    await guild.create_role(name="V2-0")
+    await guild.create_role(name="V1-1")
+    await guild.create_role(name="V0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Valorant Bo2")
+    
+  if(series_length==3):
+    await guild.create_role(name="V2-0")
+    await guild.create_role(name="V2-1")
+    await guild.create_role(name="V1-2")
+    await guild.create_role(name="V0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Valorant Bo3")
+    
+  if(series_length==5):
+    await guild.create_role(name="V3-0")
+    await guild.create_role(name="V3-2")
+    await guild.create_role(name="V3-1")
+    await guild.create_role(name="V1-3")
+    await guild.create_role(name="V2-3")
+    await guild.create_role(name="V0-3")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Valorant Bo5")
+    
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("Value for series length invalid, must be 1 / 2 / 3 / 5, please try again")
+
+
+
+
+
+
+
+@tree2.command(name="deletevaloroles", description = "Delete Valorant roles for prediction", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone=0
+  if(series_length==1):
+    role_object = discord.utils.get(guild.roles, name="V1-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V0-1")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Valorant Bo1")
+    isdone=1
+  if(series_length==2):
+    role_object = discord.utils.get(guild.roles, name="V2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V1-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Valorant Bo2")
+    isdone=1
+  if(series_length==3):
+    role_object = discord.utils.get(guild.roles, name="V2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V2-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V1-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Valorant Bo3")
+    isdone=1
+  if(series_length==5):
+    role_object = discord.utils.get(guild.roles, name="V3-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V3-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V3-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V1-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V2-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="V0-3")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Valorant Bo5")
+    isdone=1
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("I was unable to delete any of the roles please verify series length - 1 / 2 / 3 / 5")
+
+
+
+
+
+
+
+
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)

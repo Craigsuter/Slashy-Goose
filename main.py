@@ -52,6 +52,7 @@ from sentineldropboxUploader import sentineldownload_file
 from sentineldropboxUploader import sentinelupload_file
 from sentinelvaloevents import sentinelsvaloevents
 from dtStreams import dtStreams
+from sentinelsVTstreams import vtStreams
 import typing
 from lastcs import lastcsgo
 from lastvalo import lastvalo
@@ -3817,6 +3818,24 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+
+
+
+@tree2.command(name="vtstreams", description = "Get streams for the Valo tournament tracked", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = sentineldownload_file('/dropvalotournament.txt','valotournament.txt')
+  f = open("valotournament.txt", "r")
+  my_url = f.read()
+  f.close()
+  dtstreaminfo = vtStreams(my_url)
+  streamlinks = dtstreaminfo[0]
+  urloftourni = dtstreaminfo[1]
+
+  embed = discord.Embed(title="Streams for the tournament", color=0x55a7f7)
+  embed.add_field(name="Streams", value=streamlinks, inline=True)
+  embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
+  await interaction.followup.send(embed=embed)
 
 
 

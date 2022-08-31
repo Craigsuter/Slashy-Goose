@@ -151,7 +151,9 @@ def DotaCheckTourni(channelDataID):
           b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
 
           c = a-b
-                 
+          epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0).timestamp()      
+          lenofepoch = len(str(epochtest))  
+          epoch = str(epochtest)[:lenofepoch - 2]
           if (c.days < 0):
             
             c = "The game is meant to have begun!"
@@ -165,6 +167,7 @@ def DotaCheckTourni(channelDataID):
           Teams = 'No games planned'
           nextgametime = 'No games planned'
           dayofgame2 = 'no games planned'
+          epoch = 'No games planned'
           links= 'Tournament page: ' + str(my_url)
           c = "No games planned"
 
@@ -175,10 +178,11 @@ def DotaCheckTourni(channelDataID):
         if (c == "No games planned"):
           embed = "No games planned currently in the tournament tracked"
         else:
-          embed= Teams + " - Starts in: " + c + " - this is in: "+ DTtourniname + " - For more information use !nextdt in <#721391448812945480>"
+          embed= Teams + " - Starts in: " + c + "/ In your local time: <t:" + str(epoch) + "> - this is in: "+ DTtourniname + " - For more information use !nextdt in <#721391448812945480>"
       else:
         embed=discord.Embed(title="Next game in - "+ DTtourniname, url=my_url, color=0xf10909)
-        embed.add_field(name=Teams, value=nextgametime, inline=True)
+        if(str(epoch) != "No games planned"):
+          embed.add_field(name=Teams, value="<t:" + str(epoch) + "> - this is local to your timezone", inline=True)
         embed.add_field(name="Time remaining", value = c, inline=False)
         embed.add_field(name="Notice",value="Please check Liquipedia by clicking the title of this embed for more information as the time might not be accurate", inline=False)
         embed.add_field(name="Links", value=links, inline=False)
@@ -339,7 +343,9 @@ def ValoCheckTourni(channelDataID):
           b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
 
           c = a-b
-                 
+          epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0).timestamp()      
+          lenofepoch = len(str(epochtest))  
+          epoch = str(epochtest)[:lenofepoch - 2]
           if (c.days < 0):
             
             c = "The game is meant to have begun!"
@@ -363,10 +369,11 @@ def ValoCheckTourni(channelDataID):
         if (c == "No games planned"):
           embed = "No games planned currently in the tournament tracked"
         else:
-          embed= Teams + " - Starts in: " + c + " - this is in: "+ DTtourniname + " - For more information use !nextdt in <#721391448812945480>"
+          embed= Teams + " - Starts in: " + c + "/ In your local time: <t:" + str(epoch) + "> - this is in: "+ DTtourniname + " - For more information use !nextdt in <#721391448812945480>"
       else:
         embed=discord.Embed(title="Next game in - "+ DTtourniname, url=my_url, color=0xf10909)
-        embed.add_field(name=Teams, value=nextgametime, inline=True)
+        if(str(epoch) != "No games planned"):
+          embed.add_field(name=Teams, value="<t:" + str(epoch) + "> - this is local to your timezone", inline=True)
         embed.add_field(name="Time remaining", value = c, inline=False)
         embed.add_field(name="Notice",value="Please check Liquipedia by clicking the title of this embed for more information as the time might not be accurate", inline=False)
         embed.add_field(name="Links", value=links, inline=False)

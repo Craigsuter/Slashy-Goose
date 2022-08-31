@@ -43,6 +43,10 @@ from valoscoreboarding import valoscoreboarding
 from valoscoreboarding import valoscoreboardreader
 from valoscoreboarding import valoscoreboardadder
 from valoscoreboarding import valoscoreboardsingle
+from sentinelsvaloscoreboarding import sentinelsvaloscoreboarding
+from sentinelsvaloscoreboarding import sentinelsvaloscoreboardreader
+from sentinelsvaloscoreboarding import sentinelsvaloscoreboardadder
+from sentinelsvaloscoreboarding import sentinelsvaloscoreboardsingle
 from sentinelgamecheckers import SentinelsValoCheck
 from sentineldropboxUploader import sentineldownload_file
 from sentineldropboxUploader import sentinelupload_file
@@ -3666,6 +3670,109 @@ async def self(interaction: discord.Interaction, series_length: int):
 
 
 
+
+
+
+
+@tree2.command(name="clearvaloboard", description = "This will clear the Valo leaderboard", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  sentinelsvaloscoreboarding()
+  await interaction.followup.send("The Valorant leaderboard has been reset")
+
+
+
+@tree2.command(name="showvalo", description = "Show the Valorant Prediction leaderboard", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    test = sentinelsvaloscoreboardsingle(user.id)
+    await interaction.followup.send(test)
+  except:
+    test = sentinelsvaloscoreboardreader("none")
+    embed = discord.Embed(title="Valorant prediction leaderboard",color=0x55a7f7)
+    embed.add_field(name="Valorant prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
+    embed.add_field(name="Can't see yourself?",value= "Can't see yourself on the table? use /show valo @*yourself* to see where you stand!",inline=False)
+    await interaction.followup.send(embed=embed)
+
+
+
+@tree2.command(name="valoadd", description = "Add 1 point to the Valo scoreboard", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  sentineldownload_file('/valoscoreboard.csv', 'scoreboard8.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            sentinelsvaloscoreboardadder(member.display_name,member.id, 1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        sentinelupload_file('/valoscoreboard.csv', 'scoreboard9.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /valoadd @v9-0")
+
+
+
+
+
+
+@tree2.command(name="valoremove", description = "Remove 1 point from the Valorant scoreboard", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  sentineldownload_file('/valoscoreboard.csv', 'scoreboard8.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            sentinelsvaloscoreboardadder(member.display_name,member.id, -1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        sentinelupload_file('/valoscoreboard.csv', 'scoreboard9.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /valoremove @V9-0")
 
 
 

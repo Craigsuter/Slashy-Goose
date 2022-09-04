@@ -299,7 +299,7 @@ def valoplayerstats(name):
         player_kast += float(agent_stats.find_all("td")[6].text.strip().rstrip("%"))
         print(player_kast)
         player_kast = player_kast.replace("%", "")
-        print(2)
+        print(player_kast)
         player_kpr += float(agent_stats.find_all("td")[7].text.strip())
         print(2)
         count += 1

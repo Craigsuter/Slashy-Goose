@@ -2013,7 +2013,34 @@ async def self(interaction: discord.Interaction):
           embed.add_field(name="Links",value="[OG LDN VLR](https://www.vlr.gg/team/8903/og-ldn-utd) / [OG LDN Valorant Liquipedia](https://liquipedia.net/valorant/OG_LDN_UTD)",inline=False)
           await interaction.followup.send(embed=embed)
 
+@tree.command(name="tiqualroles", description = "Create roles for TI qualifier predictions", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, team_count: int, prefix: str):
+  await interaction.response.defer()
+  guild = interaction.guild
+  i=0
+  while i< team_count:
+    roletomake = prefix + "team-" + str(i+1)
+    i=i+1
+    await(guild.create_role(name=roletomake))
+ 
+  await interaction.followup.send("I have created - " + str(team_count) + " roles, with prefix - " + prefix)
 
+@tree.command(name="tiqualrolesdelete", description = "Delete roles for TI qualifier predictions", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, team_count: int, prefix: str):
+  await interaction.response.defer()
+  guild = interaction.guild
+  i=0
+  try:
+    while(i<team_count):
+      roletodelete = prefix + "team-"+str(i+1)
+      role_object = discord.utils.get(guild.roles, name=roletodelete)
+      await role_object.delete()
+      i=i+1
+  except Exception as e:
+      print(e)
+  
+  
+  await interaction.followup.send("I have created - " + str(i) + " roles, with prefix - " + prefix)
 
 @tree.command(name="dotabo", description = "Create Dota roles", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, series_length: int):

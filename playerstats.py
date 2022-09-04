@@ -236,7 +236,7 @@ def valoplayerstats(name):
     name2 = name.lower()
   
     driver.get("https://www.vlr.gg/")
-    print(1)
+    
   except Exception as e:
     print(e)
     embed = discord.Embed(title= "Error searching")
@@ -297,6 +297,8 @@ def valoplayerstats(name):
         player_adr += float(agent_stats.find_all("td")[5].text.strip())
         print(2)
         player_kast += float(agent_stats.find_all("td")[6].text.strip().rstrip("%"))
+        print(player_kast)
+        player_kast = player_kast.replace("%", "")
         print(2)
         player_kpr += float(agent_stats.find_all("td")[7].text.strip())
         print(2)

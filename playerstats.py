@@ -246,7 +246,7 @@ def valoplayerstats(name):
   try:
     button = driver.find_element_by_name("q")
     button.click()
-    print(1)
+    
     button.send_keys(name)
     time.sleep(2)
     data = soup(driver.page_source, "html.parser")
@@ -291,10 +291,15 @@ def valoplayerstats(name):
         else:
             player_agents += ", " + agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
         player_acs += float(agent_stats.find_all("td")[3].text.strip())
+        print(2)
         player_kdr += float(agent_stats.find_all("td")[4].text.strip())
+        print(2)
         player_adr += float(agent_stats.find_all("td")[5].text.strip())
+        print(2)
         player_kast += float(agent_stats.find_all("td")[6].text.strip().rstrip("%"))
+        print(2)
         player_kpr += float(agent_stats.find_all("td")[7].text.strip())
+        print(2)
         count += 1
 
     player_acs /= count

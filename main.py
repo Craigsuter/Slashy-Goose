@@ -2711,7 +2711,7 @@ async def self(interaction: discord.Interaction, player: str):
 @tree.command(name="valostats", description="Get stats for Valorant players", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, player: str):
   await interaction.response.defer()
-  embed = valoplayerstats(player) 
+  embed = valoplayerstats(str(player)) 
   await interaction.followup.send(embed=embed)
 
 

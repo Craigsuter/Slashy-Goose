@@ -354,5 +354,5 @@ def valoplayerstats(name):
     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
     print(exc_type, fname, exc_tb.tb_lineno)
     embed = discord.Embed(title= "Error searching")
-    embed.add_field(name="Error searching", value= "I was unable to find any players under that name, please try again!\nE.G: !valostats laaw", inline=True)
+    embed.add_field(name="Error searching", value= "I was unable to find any players under that name, please try again!\n Or there were no visible stats on the player", inline=True)
     return embed

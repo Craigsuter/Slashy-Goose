@@ -261,15 +261,17 @@ def valoplayerstats(name):
         i = 1
     driver.close()
     
+    
     link = "https://www.vlr.gg" + link + "/?timespan=60d"
     if (str(name2).lower() == "leeeeeen" or str(name2).lower() == "leeeeen" or str(name2).lower() == "leeeen" or str(name2).lower() == "leeen"):   
       link = "https://www.vlr.gg/player/14607/leeeeeen/?timespan=60d"
-
+    print(link)
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
     player_page = requests.get(link, headers=headers)
     page_html = soup(player_page.text, "html.parser")
     image_container = page_html.find("div", {"class": "wf-avatar mod-player"})
     stats_table = page_html.find("table", {"class": "wf-table"})
+    print(stats_table)
     stats_per_agent = stats_table.find("tbody").find_all("tr")
 
     player_image = image_container.find("img")['src']

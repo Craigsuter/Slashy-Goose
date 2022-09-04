@@ -2,6 +2,7 @@ import os
 #imports
 from bs4 import BeautifulSoup as soup
 from dotenv import load_dotenv
+import sys
 load_dotenv()
 import requests
 from selenium import webdriver

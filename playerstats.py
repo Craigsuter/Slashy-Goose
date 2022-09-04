@@ -285,57 +285,54 @@ def valoplayerstats(name):
     player_kast = 0
     player_kpr = 0
     # Get the stats involved
-    for agent_stats in stats_per_agent:
-        if count == 0:
-            player_agents += agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
-        else:
-            player_agents += ", " + agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
-        player_acs += float(agent_stats.find_all("td")[4].text.strip())
-        print(player_acs)
-        print(2)
-        player_kdr += float(agent_stats.find_all("td")[5].text.strip())
-        print(player_kdr)
-        print(2)
-        player_adr += float(agent_stats.find_all("td")[6].text.strip())
-        print(player_adr)
-        print(2)
-        
-        player_kast += float(agent_stats.find_all("td")[7].text.strip().rstrip("%"))
-        
-        
-        
-        print(player_kast)
-        player_kpr += float(agent_stats.find_all("td")[8].text.strip())
-        print(player_kpr)
-        print(2)
-        count += 1
-
-    player_acs /= count
-    player_kdr /= count
-    player_adr /= count
-    player_kast /= count
-    player_kpr /= count
-    
-    if len(str(player_kpr)) > 4:
-      player_kpr = str(player_kpr)
-      player_kpr = player_kpr[0:5]
-    if(len(str(player_kdr))) > 4:
-      player_kdr = str(player_kdr)
-      player_kdr = player_kdr[0:5]
-
-    player_stats = discord.Embed(title=f'{name} stats', url=link, color=0xd57280)
-    player_stats.set_thumbnail(url=player_image)
-    player_stats.add_field(name="Top agents", value=player_agents, inline=False)
-    player_stats.add_field(name="ACS", value=player_acs, inline=False)
-    player_stats.add_field(name="ADR", value=player_adr, inline=False)
-    player_stats.add_field(name="KAST", value=player_kast)
-    player_stats.add_field(name="KPR", value=player_kpr)
-    player_stats.add_field(name="KDR", value=player_kdr)
-
-    return player_stats
-    
+    try:
+      for agent_stats in stats_per_agent:
+          if count == 0:
+              player_agents += agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
+          else:
+              player_agents += ", " + agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
+          player_acs += float(agent_stats.find_all("td")[4].text.strip())
+          player_kdr += float(agent_stats.find_all("td")[5].text.strip())
+          player_adr += float(agent_stats.find_all("td")[6].text.strip())
+          player_kast += float(agent_stats.find_all("td")[7].text.strip().rstrip("%"))
+          player_kpr += float(agent_stats.find_all("td")[8].text.strip())
+  
+          count += 1
+  
+      player_acs /= count
+      player_kdr /= count
+      player_adr /= count
+      player_kast /= count
+      player_kpr /= count
+      
+      if len(str(player_kpr)) > 4:
+        player_kpr = str(player_kpr)
+        player_kpr = player_kpr[0:5]
+      if(len(str(player_kdr))) > 4:
+        player_kdr = str(player_kdr)
+        player_kdr = player_kdr[0:5]
+  
+      player_stats = discord.Embed(title=f'{name} stats', url=link, color=0xd57280)
+      player_stats.set_thumbnail(url=player_image)
+      player_stats.add_field(name="Top agents", value=player_agents, inline=False)
+      player_stats.add_field(name="ACS", value=player_acs, inline=False)
+      player_stats.add_field(name="ADR", value=player_adr, inline=False)
+      player_stats.add_field(name="KAST", value=player_kast)
+      player_stats.add_field(name="KPR", value=player_kpr)
+      player_stats.add_field(name="KDR", value=player_kdr)
+  
+      return player_stats
+    except Exception as e:
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
+      embed = discord.Embed(title= "Error searching")
+      embed.add_field(name="Error searching", value= "I was unable to find any players under that name, please try again!\nE.G: !valostats laaw", inline=True)
+      return embed
   except Exception as e:
-    print(e)
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
     embed = discord.Embed(title= "Error searching")
     embed.add_field(name="Error searching", value= "I was unable to find any players under that name, please try again!\nE.G: !valostats laaw", inline=True)
     return embed

@@ -327,8 +327,15 @@ def valoplayerstats(name):
       exc_type, exc_obj, exc_tb = sys.exc_info()
       fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
       print(exc_type, fname, exc_tb.tb_lineno)
-      embed = discord.Embed(title= "Error searching")
-      embed.add_field(name="Error searching", value= "I was unable to find any players under that name, please try again!\nE.G: !valostats laaw", inline=True)
+      player_stats = discord.Embed(title=f'{name} stats', url=link, color=0xd57280)
+      player_stats.set_thumbnail(url=player_image)
+      player_stats.add_field(name="Top agents", value=player_agents, inline=False)
+      player_stats.add_field(name="ACS", value=player_acs, inline=False)
+      player_stats.add_field(name="ADR", value=player_adr, inline=False)
+      player_stats.add_field(name="KAST", value=player_kast)
+      player_stats.add_field(name="KPR", value=player_kpr)
+      player_stats.add_field(name="KDR", value=player_kdr)
+  
       return embed
   except Exception as e:
     exc_type, exc_obj, exc_tb = sys.exc_info()

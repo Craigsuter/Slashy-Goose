@@ -290,22 +290,22 @@ def valoplayerstats(name):
             player_agents += agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
         else:
             player_agents += ", " + agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
-        player_acs += float(agent_stats.find_all("td")[3].text.strip())
+        player_acs += float(agent_stats.find_all("td")[4].text.strip())
         print(player_acs)
         print(2)
-        player_kdr += float(agent_stats.find_all("td")[4].text.strip())
+        player_kdr += float(agent_stats.find_all("td")[5].text.strip())
         print(player_kdr)
         print(2)
-        player_adr += float(agent_stats.find_all("td")[5].text.strip())
+        player_adr += float(agent_stats.find_all("td")[6].text.strip())
         print(player_adr)
         print(2)
         
-        player_kast += float(agent_stats.find_all("td")[6].text.strip().rstrip("%"))
+        player_kast += float(agent_stats.find_all("td")[7].text.strip().rstrip("%"))
         
         
         
         print(player_kast)
-        player_kpr += float(agent_stats.find_all("td")[7].text.strip())
+        player_kpr += float(agent_stats.find_all("td")[8].text.strip())
         print(player_kpr)
         print(2)
         count += 1

@@ -288,6 +288,7 @@ def valoplayerstats(name):
     # Get the stats involved
     try:
       for agent_stats in stats_per_agent:
+          print(count)
           if count == 0:
               player_agents += agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
           else:

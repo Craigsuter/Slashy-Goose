@@ -265,7 +265,15 @@ def valoplayerstats(name):
     link = "https://www.vlr.gg" + link + "/?timespan=60d"
     if (str(name2).lower() == "leeeeeen" or str(name2).lower() == "leeeeen" or str(name2).lower() == "leeeen" or str(name2).lower() == "leeen"):   
       link = "https://www.vlr.gg/player/14607/leeeeeen/?timespan=60d"
-    print(link)
+    if(str(name2).lower == "zellsis"):
+      link = "https://www.vlr.gg/player/729/zellsis/?timespan=60d"
+    if(str(name2).lower == "shroud"):
+      link = "https://www.vlr.gg/player/56/shroud/?timespan=60d"
+    if(str(name2).lower == "zombs"):
+      link = "https://www.vlr.gg/player/47/zombs/?timespan=60d"
+    if(str(name2).lower == "sick"):
+      link="https://www.vlr.gg/player/45/sick/?timespan=60d"
+    
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
     player_page = requests.get(link, headers=headers)
     page_html = soup(player_page.text, "html.parser")
@@ -324,7 +332,8 @@ def valoplayerstats(name):
       player_stats.add_field(name="KAST", value=player_kast)
       player_stats.add_field(name="KPR", value=player_kpr)
       player_stats.add_field(name="KDR", value=player_kdr)
-  
+
+      
       return player_stats
     except Exception as e:
       exc_type, exc_obj, exc_tb = sys.exc_info()

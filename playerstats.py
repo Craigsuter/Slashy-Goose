@@ -279,7 +279,6 @@ def valoplayerstats(name):
     page_html = soup(player_page.text, "html.parser")
     image_container = page_html.find("div", {"class": "wf-avatar mod-player"})
     stats_table = page_html.find("table", {"class": "wf-table"})
-    print(stats_table)
     stats_per_agent = stats_table.find("tbody").find_all("tr")
 
     player_image = image_container.find("img")['src']
@@ -298,7 +297,7 @@ def valoplayerstats(name):
     # Get the stats involved
     try:
       for agent_stats in stats_per_agent:
-          print(count)
+          
           if count == 0:
               player_agents += agent_stats.find("img")['src'].split("agents/", 1)[1].split(".", 1)[0].capitalize()
           else:

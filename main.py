@@ -367,6 +367,25 @@ async def on_message(message):
       embed = data
       await channel.send(embed=embed)
 
+  if(guild.id == 689865753662455829):
+    channel = message.guild.get_channel(874740662157844480)
+    msgID = message.jump_url
+    author = message.author
+    data = translations(nexttrans, author, msgID)
+    #Getting translation data
+    embed = data
+    await channel.send(embed=embed)
+
+  #Spanish Translations - Main OG Discord
+  if (channelDataID == 976049798354460703):
+      channel = message.guild.get_channel(976053475010023425)
+      msgID = message.jump_url
+      author = message.author
+      data = translations(nexttrans, author, msgID)
+      #Getting translation data
+      embed = data
+      await channel.send(embed=embed)
+
   #Finnis Translations - Jerax Discord
   if (channelDataID == 825328809854238731):
       channel = message.guild.get_channel(835434616000872448)

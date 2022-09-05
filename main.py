@@ -365,6 +365,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
   if(guild.id == 689865753662455829):
@@ -374,6 +375,7 @@ async def on_message(message):
     data = translations(nexttrans, author, msgID)
     #Getting translation data
     embed = data
+    embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
     await channel.send(embed=embed)
 
   #Spanish Translations - Main OG Discord
@@ -384,6 +386,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
   #Finnis Translations - Jerax Discord
@@ -394,6 +397,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
   #Testing translation - test channel personal discord
@@ -405,6 +409,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
   #Rus translation - N0tail Discord
@@ -415,6 +420,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
   #Russain Translation - Main Discord
@@ -425,6 +431,7 @@ async def on_message(message):
       data = translations(nexttrans, author, msgID)
       #Getting translation data
       embed = data
+      embed.add_field(name="Channel of sending", value="<#" + str(message.channel.id) + ">", inline=False)
       await channel.send(embed=embed)
 
 

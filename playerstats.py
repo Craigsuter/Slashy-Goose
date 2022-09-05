@@ -332,6 +332,8 @@ def valoplayerstats(name):
       player_stats.add_field(name="KAST", value=player_kast)
       player_stats.add_field(name="KPR", value=player_kpr)
       player_stats.add_field(name="KDR", value=player_kdr)
+      player_stats.add_field(name="Information", value= "These stats were found for the last 60 days VLR page - [" + str(name) + " VLR](" + str(link) +")", inline=False )
+  
 
       
       return player_stats
@@ -347,6 +349,7 @@ def valoplayerstats(name):
       player_stats.add_field(name="KAST", value=player_kast)
       player_stats.add_field(name="KPR", value=player_kpr)
       player_stats.add_field(name="KDR", value=player_kdr)
+      player_stats.add_field(name="Information", value= "These stats were found for the last 60 days VLR page - [" + str(name) + " VLR](" + str(link) +")", inline=False )
   
       return embed
   except Exception as e:

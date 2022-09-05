@@ -12,6 +12,7 @@ import datetime
 from dotenv import load_dotenv
 load_dotenv()
 from gamecheckers import DotaCheck
+from csv import reader
 import asyncio
 from gamecheckers import CSGOCheck
 from gamecheckers import ValoCheck
@@ -43,6 +44,10 @@ from valoscoreboarding import valoscoreboarding
 from valoscoreboarding import valoscoreboardreader
 from valoscoreboarding import valoscoreboardadder
 from valoscoreboarding import valoscoreboardsingle
+from VCTscoreboarding import vctscoreboarding
+from VCTscoreboarding import vctscoreboardreader
+from VCTscoreboarding import vctscoreboardadder
+from VCTscoreboarding import vctscoreboardsingle
 from sentinelsvaloscoreboarding import sentinelsvaloscoreboarding
 from sentinelsvaloscoreboarding import sentinelsvaloscoreboardreader
 from sentinelsvaloscoreboarding import sentinelsvaloscoreboardadder
@@ -59,6 +64,10 @@ from lastvalo import lastvalo
 from sentinellastvalo import sentinellastvalo
 from lastgames import LastDota
 import random
+from ldnVCTscoreboarding import ldnvctscoreboarding
+from ldnVCTscoreboarding import ldnvctscoreboardreader
+from ldnVCTscoreboarding import ldnvctscoreboardadder
+from ldnVCTscoreboarding import ldnvctscoreboardsingle
 
 
 
@@ -157,16 +166,32 @@ class sentinelclient(discord.Client):
 
 
 
+class ldnutdclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
+
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await tree3.sync(guild=discord.Object(id = int(os.getenv('IDForServer3'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
+    
 
 
 
 client = aclient()
 client2 = sentinelclient()
+client3 = ldnutdclient()
+tree3 = app_commands.CommandTree(client3)
 tree2 = app_commands.CommandTree(client2)
 tree = app_commands.CommandTree(client)
 ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
 IDForServer = int(os.getenv('IDForServer'))
 IDForServer2 = int(os.getenv('IDForServer2'))
+IDForServer3 = int(os.getenv('IDForServer3'))
 
 
 
@@ -841,6 +866,50 @@ async def self(interaction: discord.Interaction, minimumscore: int):
 
 #OG Commands
 
+
+
+
+@tree.command(name="vctpredictionwinner", description = "Choose VCT prediction winner", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  list=[]
+  download_file('/vctscoreboard.csv', 'scoreboard2.csv')
+  with open('scoreboard2.csv', 'r') as read_obj:
+    csv_reader=reader(read_obj)
+    for row in csv_reader:
+      i=0
+      while(i<int(row[2])):
+        list.append(row[1])
+        i=i+1
+
+  
+  await interaction.followup.send("The winner of the vct challenge... IS! - <@" + str(random.choice(list)) + ">")
+        
+        
+
+
+
+@tree3.command(name="vctpredictionwinner", description = "Choose VCT prediction winner", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  list=[]
+  download_file('/ldnvctscoreboard.csv', 'scoreboard2.csv')
+  with open('scoreboard2.csv', 'r') as read_obj:
+    csv_reader=reader(read_obj)
+    for row in csv_reader:
+      i=0
+      while(i<int(row[2])):
+        list.append(row[1])
+        i=i+1
+
+  
+  await interaction.followup.send("The winner of the vct challenge... IS! - <@" + str(random.choice(list)) + ">")
+
+
+
+
+    
+
 @tree.command(name="csgowinners", description = "Will give the CSGO Awpacle role to the winners", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, minimumscore: int):
   await interaction.response.defer()
@@ -1252,6 +1321,84 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+@tree.command(name="vctremove", description = "Remove 1 point from the VCT scoreboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  download_file('/vctscoreboard.csv', 'scoreboard2.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            vctscoreboardadder(member.display_name, member.id,-1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        upload_file('/vctscoreboard.csv', 'scoreboard3.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /vctremove @cs9-0")
+
+
+
+
+@tree3.command(name="vctremove", description = "Remove 1 point from the VCT scoreboard", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  download_file('/ldnvctscoreboard.csv', 'scoreboard2.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            ldnvctscoreboardadder(member.display_name, member.id,-1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        upload_file('/ldnvctscoreboard.csv', 'scoreboard3.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /vctremove @cs9-0")
+
+
+
+
 
 @tree.command(name="dotaremove", description = "Remove 1 point from the Dota scoreboard", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, role: discord.Role):
@@ -1527,6 +1674,87 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+@tree.command(name="vctadd", description = "Add 1 point to the VCT scoreboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  download_file('/vctscoreboard.csv', 'scoreboard2.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            vctscoreboardadder(member.display_name, member.id, 1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        upload_file('/vctscoreboard.csv', 'scoreboard3.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /vctadd @cs9-0")
+
+
+
+
+
+@tree3.command(name="vctadd", description = "Add 1 point to the VCT scoreboard", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  download_file('/ldnvctscoreboard.csv', 'scoreboard2.csv')
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            ldnvctscoreboardadder(member.display_name, member.id, 1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        upload_file('/ldnvctscoreboard.csv', 'scoreboard3.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /vctadd @cs9-0")
+
+
+
+
+
+
 @tree.command(name="dotaadd", description = "Add 1 point to the Dota scoreboard", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
@@ -1601,11 +1829,32 @@ async def self(interaction: discord.Interaction):
   await interaction.followup.send("The CSGO Leaderboard is reset")
 
 
+@tree.command(name="clearvctboard", description = "This will clear the VCT leaderboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  vctscoreboarding()
+  await interaction.followup.send("The VCT Leaderboard is reset")
+
+
+
+@tree3.command(name="clearvctboard", description = "This will clear the VCT leaderboard", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  ldnvctscoreboarding()
+  await interaction.followup.send("The VCT Leaderboard is reset")
+
+
+
+
 @tree.command(name="cleardotaboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
   dotascoreboarding()
   await interaction.followup.send("The Dota leaderboard has been reset")
+
+
+
+
 
 
 @tree.command(name="clearvaloboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer))
@@ -1832,6 +2081,50 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
 
 
 
+@tree.command(name="showvct", description = "Show the VCT Prediction leaderboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
+
+  await interaction.response.defer()
+  try:
+    test = vctscoreboardsingle(user.id)
+    await interaction.followup.send(test)
+    
+  except:
+    test = vctscoreboardreader("none")
+    embed = discord.Embed(title="VCT prediction leaderboard",color=0x55a7f7)
+    embed.add_field(name="VCT Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show vct @*yourself* to see where you stand!",inline=False)
+    await interaction.followup.send(embed=embed)
+
+
+
+
+@tree3.command(name="showvct", description = "Show the VCT Prediction leaderboard", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
+
+  await interaction.response.defer()
+  try:
+    test = ldnvctscoreboardsingle(user.id)
+    await interaction.followup.send(test)
+    
+  except:
+    test = ldnvctscoreboardreader("none")
+    embed = discord.Embed(title="VCT prediction leaderboard",color=0x55a7f7)
+    embed.add_field(name="VCT Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show vct @*yourself* to see where you stand!",inline=False)
+    await interaction.followup.send(embed=embed)
+
+
+
+
+
+
+
+
+
+
+
+
 @tree.command(name="showvalo", description = "Show the Valorant Prediction leaderboard", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
   await interaction.response.defer()
@@ -2041,6 +2334,44 @@ async def self(interaction: discord.Interaction, team_count: int, prefix: str):
   
   
   await interaction.followup.send("I have created - " + str(i) + " roles, with prefix - " + prefix)
+
+
+@tree3.command(name="teamroles", description = "Create roles for TI qualifier predictions", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction, team_count: int, prefix: str):
+  await interaction.response.defer()
+  guild = interaction.guild
+  i=0
+  while i< team_count:
+    roletomake = prefix + "team-" + str(i+1)
+    i=i+1
+    await(guild.create_role(name=roletomake))
+ 
+  await interaction.followup.send("I have created - " + str(team_count) + " roles, with prefix - " + prefix)
+
+
+
+
+@tree3.command(name="teamrolesdelete", description = "Delete roles for TI qualifier predictions", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction, team_count: int, prefix: str):
+  await interaction.response.defer()
+  guild = interaction.guild
+  i=0
+  try:
+    while(i<team_count):
+      roletodelete = prefix + "team-"+str(i+1)
+      role_object = discord.utils.get(guild.roles, name=roletodelete)
+      await role_object.delete()
+      i=i+1
+  except Exception as e:
+      print(e)
+  
+  
+  await interaction.followup.send("I have created - " + str(i) + " roles, with prefix - " + prefix)
+
+
+
+
+  
 
 @tree.command(name="dotabo", description = "Create Dota roles", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, series_length: int):
@@ -3973,5 +4304,6 @@ asyncio.set_event_loop(loop)
 
 loop.create_task(client.start((os.getenv('TOKEN'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
+#loop.create_task(client3.start((os.getenv('TOKEN3'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

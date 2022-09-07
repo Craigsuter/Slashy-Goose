@@ -159,7 +159,7 @@ def valoscoreboardadder(usersname, userID, scoretoadd, counter):
         z=z+1
 
     if(z == 0):
-      table.rows.append([usersname, userID, 1])
+      table.rows.append([usersname, userID, int(scoretoadd)])
   except Exception as e:
     print(e)
       

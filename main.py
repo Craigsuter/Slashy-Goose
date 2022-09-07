@@ -1623,77 +1623,143 @@ async def self(interaction: discord.Interaction):
 
 
 @tree.command(name="valoadd", description = "Add 1 point to the Valo scoreboard", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction, role: discord.Role):
+async def self(interaction: discord.Interaction, role: discord.Role, points_to_add: typing.Optional[int]):
   await interaction.response.defer()
   download_file('/valoscoreboard.csv', 'scoreboard8.csv')
-  try:
-    server = interaction.guild
-    guild=interaction.guild
-    role_name = discord.utils.get(guild.roles,id=int(role.id))
-    role_name = str(role_name)
-    i = 0
-    role_id = server.roles[0]
-    display_names = []
-    member_ids = []
-    file = open("filetosend.txt", "w")
-    file.close()
-    for role in server.roles:
-        if role_name == role.name:
-            role_id = role
-            break
-    else:
-        await interaction.followup.send("Role doesn't exist")
-        return
-    for member in server.members:
-        if role_id in member.roles:
-            i = i + 1
-            valoscoreboardadder(member.display_name,member.id, 1, i)
-            display_names.append(member.display_name)
-            member_ids.append(member.id)
-    if (i == 0):
-        await interaction.followup.send("No one was found in that role!")
-    else:
-        upload_file('/valoscoreboard.csv', 'scoreboard9.csv')
-        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
-  except:
-    await interaction.followup.send("You need to tag the winning role: example /valoadd @v9-0")
+  if(str(points_to_add) == "None"):
+    try:
+      server = interaction.guild
+      guild=interaction.guild
+      role_name = discord.utils.get(guild.roles,id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              valoscoreboardadder(member.display_name,member.id, 1, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+          upload_file('/valoscoreboard.csv', 'scoreboard9.csv')
+          await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /valoadd @v9-0")
+  else:
+    try:
+      server = interaction.guild
+      guild=interaction.guild
+      role_name = discord.utils.get(guild.roles,id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              valoscoreboardadder(member.display_name,member.id, points_to_add, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+          upload_file('/valoscoreboard.csv', 'scoreboard9.csv')
+          await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /valoadd @v9-0")
 
 
 @tree.command(name="csgoadd", description = "Add 1 point to the CSGO scoreboard", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction, role: discord.Role):
+async def self(interaction: discord.Interaction, role: discord.Role, points_to_add: typing.Optional[int]):
   await interaction.response.defer()
   download_file('/csgoscoreboard.csv', 'scoreboard2.csv')
-  try:
-    server = interaction.guild
-    guild=interaction.guild
-    role_name = discord.utils.get(guild.roles,id=int(role.id))
-    role_name = str(role_name)
-    i = 0
-    role_id = server.roles[0]
-    display_names = []
-    member_ids = []
-    file = open("filetosend.txt", "w")
-    file.close()
-    for role in server.roles:
-        if role_name == role.name:
-            role_id = role
-            break
-    else:
-        await interaction.followup.send("Role doesn't exist")
-        return
-    for member in server.members:
-        if role_id in member.roles:
-            i = i + 1
-            scoreboardadder(member.display_name, member.id, 1, i)
-            display_names.append(member.display_name)
-            member_ids.append(member.id)
-    if (i == 0):
-        await interaction.followup.send("No one was found in that role!")
-    else:
-        upload_file('/csgoscoreboard.csv', 'scoreboard3.csv')
-        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
-  except:
-    await interaction.followup.send("You need to tag the winning role: example /csgoadd @cs9-0")
+  if(str(points_to_add)=="None"):
+    try:
+      server = interaction.guild
+      guild=interaction.guild
+      role_name = discord.utils.get(guild.roles,id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              scoreboardadder(member.display_name, member.id, 1, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+          upload_file('/csgoscoreboard.csv', 'scoreboard3.csv')
+          await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /csgoadd @cs9-0")
+  else:
+    try:
+      server = interaction.guild
+      guild=interaction.guild
+      role_name = discord.utils.get(guild.roles,id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              scoreboardadder(member.display_name, member.id, points_to_add, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+          upload_file('/csgoscoreboard.csv', 'scoreboard3.csv')
+          await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /csgoadd @cs9-0")
 
 
 
@@ -1782,39 +1848,73 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 @tree.command(name="dotaadd", description = "Add 1 point to the Dota scoreboard", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction, role: discord.Role):
-  await interaction.response.defer()
-  try:
-    guild = interaction.guild
-    server = interaction.guild
-    role_name = discord.utils.get(guild.roles, id=int(role.id))
-    role_name = str(role_name)
-    i = 0
-    role_id = server.roles[0]
-    display_names = []
-    member_ids = []
-    file = open("filetosend.txt", "w")
-    file.close()
-    for role in server.roles:
-        if role_name == role.name:
-            role_id = role
-            break
-    else:
-        await interaction.followup.send("Role doesn't exist")
-        return
-    for member in server.members:
-        if role_id in member.roles:
-            i = i + 1
-            dotascoreboardadder(member.display_name,member.id, 1, i)
-            display_names.append(member.display_name)
-            member_ids.append(member.id)
-    if (i == 0):
-        await interaction.followup.send("No one was found in that role!")
-    else:
-      upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
-      await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
-  except:
-    await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
+async def self(interaction: discord.Interaction, role: discord.Role, points_to_add: typing.Optional[int]):
+  if(str(points_to_add)=="None"):
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              dotascoreboardadder(member.display_name,member.id, 1, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
+  else:
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              dotascoreboardadder(member.display_name,member.id, points_to_add, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
 
 
 @tree.command(name="clearvaloldnevent", description = "This will clear the event file for Valo LDN", guild = discord.Object(id = IDForServer))
@@ -2088,6 +2188,12 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show dota @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
     
+
+
+
+
+
+
 
 
 @tree.command(name="showcsgo", description = "Show the CSGO Prediction leaderboard", guild = discord.Object(id = IDForServer))

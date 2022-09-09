@@ -4436,6 +4436,6 @@ asyncio.set_event_loop(loop)
 
 loop.create_task(client.start((os.getenv('TOKEN'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
-#loop.create_task(client3.start((os.getenv('TOKEN3'))))
+loop.create_task(client3.start((os.getenv('TOKEN3'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

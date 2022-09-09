@@ -2465,10 +2465,10 @@ async def self(interaction: discord.Interaction, team_count: int, prefix: str):
       print(e)
   
   
-  await interaction.followup.send("I have created - " + str(i) + " roles, with prefix - " + prefix)
+  await interaction.followup.send("I have deleted - " + str(i) + " roles, with prefix - " + prefix)
 
 
-@tree3.command(name="teamroles", description = "Create roles for TI qualifier predictions", guild = discord.Object(id = IDForServer3))
+@tree3.command(name="teamroles", description = "Create roles for qualifier predictions", guild = discord.Object(id = IDForServer3))
 async def self(interaction: discord.Interaction, team_count: int, prefix: str):
   await interaction.response.defer()
   guild = interaction.guild

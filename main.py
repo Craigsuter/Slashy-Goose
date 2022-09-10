@@ -178,13 +178,30 @@ class ldnutdclient(discord.Client):
       await tree3.sync(guild=discord.Object(id = int(os.getenv('IDForServer3'))))
       self.synced = True
     print(f"We have logged in as {self.user}")
-    
+
+
+
+
+class testbotclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
+
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await tree4.sync(guild=discord.Object(id = int(os.getenv('IDForServer3'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
 
 
 
 client = aclient()
 client2 = sentinelclient()
 client3 = ldnutdclient()
+client4 = testbotclient()
+tree4 = app_commands.CommandTree(client4)
 tree3 = app_commands.CommandTree(client3)
 tree2 = app_commands.CommandTree(client2)
 tree = app_commands.CommandTree(client)
@@ -192,6 +209,7 @@ ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 69744727
 IDForServer = int(os.getenv('IDForServer'))
 IDForServer2 = int(os.getenv('IDForServer2'))
 IDForServer3 = int(os.getenv('IDForServer3'))
+IDForServer4 = int(os.getenv('IDForServer4'))
 
 
 
@@ -3102,65 +3120,6 @@ async def self(interaction: discord.Interaction):
       await interaction.followup.send(embed=embed)
 
 
-@tree.command(name="createrolelist", description="Create roles for the prediction game", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction):
-  await interaction.response.defer()
-  guild = interaction.guild
-  select = Select(placeholder="Choose a game", options=[discord.SelectOption(label="Dota", emoji="1️⃣"), 
-                                                            discord.SelectOption(label="CSGO", emoji="2️⃣"), 
-                                                            discord.SelectOption(label="CSGOA", emoji="3️⃣"),
-                                                            discord.SelectOption(label="LDNValo",emoji="4️⃣"),
-                                                            discord.SelectOption(label="random",emoji="5️⃣")])
-  select2 = Select(placeholder="Choose the series length", options=[discord.SelectOption(label="Bo1", emoji="1️⃣"), 
-                                                            discord.SelectOption(label="Bo2", emoji="2️⃣"),
-                                                            discord.SelectOption(label="Bo3", emoji="3️⃣"),
-                                                            discord.SelectOption(label="Bo5", emoji="5️⃣")])
-
-  async def my_callback(interaction):
-    option1 = select.values[0]
-    async def my_callback2(interaction):
-      option2 = select.values[0]
-      if(str(option2) == "Bo1"):
-        await guild.create_role(name=str(option1)+"1-0")
-        await guild.create_role(name=str(option1)+"0-1")
-        await interaction.followup.send("I have created roles for - " + str(option1) + " Bo1")
-      if(str(option2) == "Bo2"):
-        await guild.create_role(name=str(option1)+"2-0")
-        await guild.create_role(name=str(option1)+"1-1")
-        await guild.create_role(name=str(option1)+"0-2")
-        await interaction.followup.send("I have created roles for - " + str(option1) + " Bo2")
-      if(str(option2) == "Bo3"):
-        await guild.create_role(name=str(option1)+"2-0")
-        await guild.create_role(name=str(option1)+"2-1")
-        await guild.create_role(name=str(option1)+"1-2")
-        await guild.create_role(name=str(option1)+"0-2")
-        await interaction.followup.send("I have created roles for - " + str(option1) + " Bo3")
-      if(str(option2)== "Bo5"):
-        await guild.create_role(name=str(option1)+"3-0")
-        await guild.create_role(name=str(option1)+"3-2")
-        await guild.create_role(name=str(option1)+"3-1")
-        await guild.create_role(name=str(option1)+"1-3")
-        await guild.create_role(name=str(option1)+"2-2")
-        await guild.create_role(name=str(option1)+"0-3")
-        await interaction.followup.send("I have created roles for - " + str(option1) + " Bo5")
-        
-
-    select2.callback = my_callback2
-    view2=View()
-    view2.add_item(select2)
-    await interaction.response.send_message("and now this", view=view2)
-
-  
-  select.callback = my_callback
-  view=View()
-  view.add_item(select)
-  
-  await interaction.followup.send("Choose an option", view=view)
-
-
-
-
-
 
 
 
@@ -4340,6 +4299,7 @@ async def self(interaction: discord.Interaction, player: str):
   await interaction.response.defer()
   embed = valoplayerstats(str(player)) 
   await interaction.followup.send(embed=embed)
+  guild = interaction.guild
 
 
 
@@ -4347,7 +4307,9 @@ async def self(interaction: discord.Interaction, player: str):
 
 
 
-
+@tree4.command(name="TestSelectTeam", description="Select Team", guild = discord.Object(id = IDForServer4))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
 
 
 
@@ -4380,7 +4342,7 @@ async def testingspamsentinels():
       tourniname = value[7]
       description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
       end_time=time+datetime.timedelta(minutes=30)
-      guild = client.get_guild(877306803803807785)
+      guild = client.get_guild(423635651339223041)
       linetocheck = teams + "," + gamepos +"," +tourniname
       try:
         sentineldownload_file('/valoevent.txt', 'valoevent.txt')
@@ -4437,5 +4399,6 @@ asyncio.set_event_loop(loop)
 loop.create_task(client.start((os.getenv('TOKEN'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
 loop.create_task(client3.start((os.getenv('TOKEN3'))))
+#loop.create_task(client4.start((os.getenv('TOKEN4'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

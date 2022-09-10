@@ -4307,7 +4307,7 @@ async def self(interaction: discord.Interaction, player: str):
 
 
 
-@tree4.command(name="TestSelectTeam", description="Select Team", guild = discord.Object(id = IDForServer4))
+@tree4.command(name="testselectteam", description="Select Team", guild = discord.Object(id = IDForServer4))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
 

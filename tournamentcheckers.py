@@ -256,7 +256,7 @@ def ValoCheckTourni(channelDataID):
 
       #Parses the HTML data - Dota
       containers = page_soup2.findAll(
-          "span", {"class": "team-template-team2-short"})
+          "span", {"class": "team-template-team-short"})
       containers2 = page_soup2.findAll(
           "span", {"class": "team-template-team-short"})
       containers3 = page_soup2.findAll(
@@ -284,7 +284,7 @@ def ValoCheckTourni(channelDataID):
       #Adds game to containers - dota
       try:
           team1 = containers[0]
-          team2 = containers2[0]
+          team2 = containers2[1]
           
       except:
           pass

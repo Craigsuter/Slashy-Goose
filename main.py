@@ -2,7 +2,7 @@ import discord
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
-from discord.ui import Select, View
+from discord.ui import Select, View, Modal, TextInput
 import requests
 import os
 from time import sleep
@@ -68,6 +68,7 @@ from ldnVCTscoreboarding import ldnvctscoreboarding
 from ldnVCTscoreboarding import ldnvctscoreboardreader
 from ldnVCTscoreboarding import ldnvctscoreboardadder
 from ldnVCTscoreboarding import ldnvctscoreboardsingle
+
 
 
 
@@ -197,6 +198,7 @@ class testbotclient(discord.Client):
 
 
 
+
 client = aclient()
 client2 = sentinelclient()
 client3 = ldnutdclient()
@@ -210,6 +212,14 @@ IDForServer = int(os.getenv('IDForServer'))
 IDForServer2 = int(os.getenv('IDForServer2'))
 IDForServer3 = int(os.getenv('IDForServer3'))
 IDForServer4 = int(os.getenv('IDForServer4'))
+
+
+
+
+
+
+
+
 
 
 
@@ -462,6 +472,8 @@ async def on_message(message):
 #users will see "name or value" below, but can be called anything
 
 
+  
+  
 @tree.command(name="avatar", description = "Get the avatar of yourself or a user", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, ping: typing.Optional[discord.User]):
   await interaction.response.defer()
@@ -1400,6 +1412,16 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
     await interaction.followup.send("You need to tag the winning role: example /vctremove @cs9-0")
+
+
+
+
+@tree3.command(name="valovctwinner", description = "Picks the winner", guild = discord.Object(id = IDForServer3))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  list=[98468521951924224, 312656577045987328, 212512241076011008]
+  winner = random.choice(list)
+  await interaction.followup.send("The winner of the VCT prediction game is - <@" + str(winner) + ">")
 
 
 

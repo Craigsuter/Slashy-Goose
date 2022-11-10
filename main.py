@@ -144,7 +144,21 @@ class aclient(discord.Client):
     await asyncio.gather(*tasks)
 
     
+class houseclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
 
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await treehouse.sync(guild=discord.Object(id = int(os.getenv('IDForServerHouse'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
+
+
+    
 class sentinelclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
@@ -164,6 +178,12 @@ class sentinelclient(discord.Client):
         print("Daily announcement success")
     except:
         print("Daily announced schedule failed")
+
+
+
+
+
+
 
 
 
@@ -203,6 +223,8 @@ client = aclient()
 client2 = sentinelclient()
 client3 = ldnutdclient()
 client4 = testbotclient()
+houseclient= houseclient()
+treehouse = app_commands.CommandTree(houseclient)
 tree4 = app_commands.CommandTree(client4)
 tree3 = app_commands.CommandTree(client3)
 tree2 = app_commands.CommandTree(client2)
@@ -212,6 +234,7 @@ IDForServer = int(os.getenv('IDForServer'))
 IDForServer2 = int(os.getenv('IDForServer2'))
 IDForServer3 = int(os.getenv('IDForServer3'))
 IDForServer4 = int(os.getenv('IDForServer4'))
+IDForServerHouse = int(os.getenv('IDForServerHouse'))
 
 
 
@@ -3217,7 +3240,6 @@ async def self(interaction: discord.Interaction, liquipediaurl: str):
   await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
 
 
-
 @tree.command(name="resetdt", description = "Reset the Dota tournament tracked", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
@@ -3266,6 +3288,118 @@ async def self(interaction: discord.Interaction):
   embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
   await interaction.followup.send(embed=embed)
 
+
+
+
+@treehouse.command(name="addviewing", description = "Add a house for viewing", guild = discord.Object(id = IDForServerHouse))
+async def self(interaction: discord.Interaction, linktohouse: str, pcm: int, dateofviewing: str):
+  await interaction.response.defer()
+  try:
+    linetoadd = str(linktohouse) + ", £" + str(pcm) + ", Date of viewing - " + str(dateofviewing) + "\n"
+    #data = download_file('/dropviewings.txt', 'viewings.txt')
+    f = open("viewings.txt", "a")
+    f.write(linetoadd)
+    f.close()
+    upload_file('/dropviewings.txt', 'viewings.txt')
+    await interaction.followup.send("I have added house: " + str(linktohouse) + " , at cost - £" + str(pcm) + ", on: " + str(dateofviewing))
+  except Exception as e:
+    print(e)
+
+    
+@treehouse.command(name="upcomingviewings", description = "list viewings", guild = discord.Object(id = IDForServerHouse))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  try:
+    data = download_file('/dropviewings.txt', 'viewings.txt')
+  except:
+    await interaction.followup.send("No viewings yet :( LETS GET SOME IN!!")
+  a_file = open("viewings.txt", "r")
+  x = a_file.readlines()
+  text=""
+  try:
+    i = 0
+    while(i < len(x)):
+      text = str(text) + str(i+1) + " - " + str(x[i]) 
+      i=i+1
+    
+    embed = discord.Embed(title="Upcoming viewings", color=0x55a7f7)
+    embed.add_field(name="Viewings",value=text,inline=True)
+    await interaction.followup.send(embed=embed)
+
+  except Exception as e:
+    print(e)
+
+@treehouse.command(name="reviewhouse", description = "Review the house we visited", guild = discord.Object(id = IDForServerHouse))
+async def self(interaction: discord.Interaction, viewingnumber: int, review: str):
+  try:
+    await interaction.response.defer()
+    text="error"
+    data = download_file('/dropviewings.txt', 'viewings.txt')
+    a_file = open("viewings.txt", "r")
+    x = a_file.readlines()  
+    viewings=""
+    viewingdone=""
+    viewingafter=""
+    viewingnumber = viewingnumber -1
+    i=0
+    while(i < len(x)):
+      if(i != viewingnumber and i < viewingnumber):
+        viewings = str(viewings) + str(x[i])
+      if (i != viewingnumber and i > viewingnumber):
+        viewingafter = str(x[i])
+        viewings = str(viewings) + str(viewingafter)
+      else:
+        viewingdone = str(review) + " - " + str(x[i]) 
+        text="NoError"
+      i=i+1
+    b_file = open("viewings.txt", "w")
+    b_file.write(viewings)
+    b_file.close()
+    upload_file('/dropviewings.txt', 'viewings.txt')
+  
+    data2 = download_file('/dropviewed.txt', 'viewed.txt')
+    c_file = open("viewed.txt", "a")
+    c_file.write(viewingdone)
+    c_file.close()
+    upload_file('/dropviewed.txt', 'viewed.txt')
+    if(text=="error"):
+      await interaction.followup.send("Wagwan whats goin on, you put a number that aint on the list fam! Give it another go! You got this!")
+    await interaction.followup.send("Done")
+  except Exception as e:
+    print(e)
+    await interaction.followup.send("Wagwan whats goin on, you put a number that aint on the list fam! Give it another go! You got this!")
+
+
+
+
+
+@treehouse.command(name="viewedhomes", description = "list homes we've seen with reviews", guild = discord.Object(id = IDForServerHouse))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  try:
+    data = download_file('/dropviewed.txt', 'viewed.txt')
+  except:
+    await interaction.followup.send("We haven't viewed any homes yet what ya doin!")
+  a_file = open("viewed.txt", "r")
+  x = a_file.readlines()
+  text=""
+  print(len(x))
+  
+  try:
+    i = 0
+    while(i < len(x)):
+      toadd = str(x[i])
+      text = str(text) + str(toadd)
+      i=i+1
+    embed = discord.Embed(title="Viewed homes", color=0x55a7f7)
+    embed.add_field(name="Viewed homes and notes",value=text,inline=True)
+    
+    await interaction.followup.send(embed=embed)
+
+  except Exception as e:
+    print(e)
+
+    
 
 
 #Cleans out reminder file if no reminders are left
@@ -4368,6 +4502,7 @@ asyncio.set_event_loop(loop)
 loop.create_task(client.start((os.getenv('TOKEN'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
 loop.create_task(client3.start((os.getenv('TOKEN3'))))
+loop.create_task(houseclient.start((os.getenv('TOKENHOUSE'))))
 #loop.create_task(client4.start((os.getenv('TOKEN4'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

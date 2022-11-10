@@ -3315,6 +3315,7 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send("No viewings yet :( LETS GET SOME IN!!")
   a_file = open("viewings.txt", "r")
   x = a_file.readlines()
+  print(len(x))
   text=""
   try:
     i = 0
@@ -3327,6 +3328,7 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send(embed=embed)
 
   except Exception as e:
+    await interaction.followup.send("No viewings yet :( LETS GET SOME IN!!")
     print(e)
 
 @treehouse.command(name="reviewhouse", description = "Review the house we visited", guild = discord.Object(id = IDForServerHouse))
@@ -3334,6 +3336,8 @@ async def self(interaction: discord.Interaction, viewingnumber: int, review: str
   try:
     await interaction.response.defer()
     text="error"
+    check = int(os.getenv('checker'))
+    
     data = download_file('/dropviewings.txt', 'viewings.txt')
     a_file = open("viewings.txt", "r")
     x = a_file.readlines()  
@@ -3342,6 +3346,7 @@ async def self(interaction: discord.Interaction, viewingnumber: int, review: str
     viewingafter=""
     viewingnumber = viewingnumber -1
     i=0
+    j=0
     while(i < len(x)):
       if(i != viewingnumber and i < viewingnumber):
         viewings = str(viewings) + str(x[i])
@@ -3349,20 +3354,21 @@ async def self(interaction: discord.Interaction, viewingnumber: int, review: str
         viewingafter = str(x[i])
         viewings = str(viewings) + str(viewingafter)
       else:
-        viewingdone = str(review) + " - " + str(x[i]) 
+        viewingdone = str(review) + " - " + str(x[i])
+        j=+1
         text="NoError"
       i=i+1
     b_file = open("viewings.txt", "w")
     b_file.write(viewings)
     b_file.close()
     upload_file('/dropviewings.txt', 'viewings.txt')
-  
-    data2 = download_file('/dropviewed.txt', 'viewed.txt')
+    if(check==0):
+      data2 = download_file('/dropviewed.txt', 'viewed.txt')
     c_file = open("viewed.txt", "a")
     c_file.write(viewingdone)
     c_file.close()
     upload_file('/dropviewed.txt', 'viewed.txt')
-    if(text=="error"):
+    if(j==0):
       await interaction.followup.send("Wagwan whats goin on, you put a number that aint on the list fam! Give it another go! You got this!")
     await interaction.followup.send("Done")
   except Exception as e:

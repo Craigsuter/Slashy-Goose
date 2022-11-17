@@ -373,6 +373,11 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_message(message):
+  #Chair giveaway role granter
+  if(int(message.channel.id) == 1042726111299248128):
+    member = message.guild.get_member(int(message.author.id))
+    role = discord.utils.get(member.guild.roles, id = 1042725097296896010)
+    await member.add_roles(role)
   if message.author == client.user:
       return
   guild = message.guild

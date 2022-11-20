@@ -1323,8 +1323,48 @@ async def self(interaction: discord.Interaction):
   await message.delete()
 
 
+@tree.command(name="giveaway_winner", description = "Remove 1 point from the Valorant scoreboard", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
 
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            valoscoreboardadder(member.display_name,member.id, -1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
 
+    print(member_ids)
+    picked=0
+    gardeners =[204923365205475329, 293360731867316225, 165146318954692608, 389454049528774662, 492549065041510403, 183707605032501248, 172360818715918337, 141651693694746624, 754724309276164159, 332438787588227072, 530121845760851968]
+    value = random.choice(member_ids)
+    while(picked==0):
+      value = random.choice(member_ids)
+      if(int(value) in gardeners):
+        print("Is a gardener")
+      else:
+        picked=1
+    await interaction.followup.send("The giveaway winner is - <@" + str(value) + ">")
+  except:
+    print("error")
 
 
 @tree.command(name="valoremove", description = "Remove 1 point from the Valorant scoreboard", guild = discord.Object(id = IDForServer))

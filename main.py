@@ -373,11 +373,35 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_message(message):
+  download_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
+  download_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
+  f=open('giveawaychanneldocument.txt', 'r')
+  g=open('giveawayroledocument.txt', 'r')
+  a=f.read()
+  b=g.read()
+  a=a.split(",")
+  b=b.split(",")
+  c=message.channel.id
+  if(str(c) in a):
+    d = a.index(str(c))
+    e = b[d]
+    member = message.guild.get_member(int(message.author.id))
+    role = discord.utils.get(member.guild.roles, id = int(e))
+    await member.add_roles(role)
+  
+
+
+
+  
   #Chair giveaway role granter
   if(int(message.channel.id) == 1042741947321810955):
     member = message.guild.get_member(int(message.author.id))
     role = discord.utils.get(member.guild.roles, id = 1042725097296896010)
     await member.add_roles(role)
+
+  
+
+    
   if message.author == client.user:
       return
   guild = message.guild
@@ -1321,6 +1345,41 @@ async def self(interaction: discord.Interaction):
   await messagedata.reply(message2send)
   message = await interaction.followup.send("Done", ephemeral=False)
   await message.delete()
+
+
+
+
+@tree.command(name="giveawaytracking", description = "Giveaway channel tracking", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction, role: discord.Role, channel: str):
+  await interaction.response.defer()
+  channel = channel.split()
+  channel = channel[0]
+
+  if (str(channel[:2]) == "<#"):
+    download_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
+    download_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
+    
+    channel = channel[2:-1]
+    role = role.id
+    f = open('giveawayroledocument.txt', 'a')
+    f.write(str(role) + ",")
+    f.close()
+
+    g = open('giveawaychanneldocument.txt', 'a')
+    g.write(str(channel) + ',')
+    g.close()
+
+    upload_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
+    upload_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
+    await interaction.followup.send("Tracking updated")
+  else:
+    await interaction.followup.send("Incorrect value inputted for channel please use '#General' for example")
+    
+    
+  
+
+
+
 
 
 @tree.command(name="giveaway_winner", description = "Picks a random winner from the role chosen [won't include gardeners]", guild = discord.Object(id = IDForServer))

@@ -373,21 +373,24 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_message(message):
-  download_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
-  download_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
-  f=open('giveawaychanneldocument.txt', 'r')
-  g=open('giveawayroledocument.txt', 'r')
-  a=f.read()
-  b=g.read()
-  a=a.split(",")
-  b=b.split(",")
-  c=message.channel.id
-  if(str(c) in a):
-    d = a.index(str(c))
-    e = b[d]
-    member = message.guild.get_member(int(message.author.id))
-    role = discord.utils.get(member.guild.roles, id = int(e))
-    await member.add_roles(role)
+  try:
+    download_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
+    download_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
+    f=open('giveawaychanneldocument.txt', 'r')
+    g=open('giveawayroledocument.txt', 'r')
+    a=f.read()
+    b=g.read()
+    a=a.split(",")
+    b=b.split(",")
+    c=message.channel.id
+    if(str(c) in a):
+      d = a.index(str(c))
+      e = b[d]
+      member = message.guild.get_member(int(message.author.id))
+      role = discord.utils.get(member.guild.roles, id = int(e))
+      await member.add_roles(role)
+  except:
+    print("Error")
   
 
 

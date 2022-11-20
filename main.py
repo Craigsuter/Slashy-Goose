@@ -1323,7 +1323,7 @@ async def self(interaction: discord.Interaction):
   await message.delete()
 
 
-@tree.command(name="giveaway_winner", description = "Remove 1 point from the Valorant scoreboard", guild = discord.Object(id = IDForServer))
+@tree.command(name="giveaway_winner", description = "Picks a random winner from the role chosen [won't include gardeners]", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
   try:
@@ -1352,7 +1352,6 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     if (i == 0):
         await interaction.followup.send("No one was found in that role!")
 
-    print(member_ids)
     picked=0
     gardeners =[204923365205475329, 293360731867316225, 165146318954692608, 389454049528774662, 492549065041510403, 183707605032501248, 172360818715918337, 141651693694746624, 754724309276164159, 332438787588227072, 530121845760851968]
     value = random.choice(member_ids)

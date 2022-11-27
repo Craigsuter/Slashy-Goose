@@ -16,6 +16,7 @@ from csv import reader
 import asyncio
 from gamecheckers import CSGOCheck
 from gamecheckers import ValoCheck
+
 from streamcollection import DotaStreams
 from streamcollection import CSGOStreams
 from streamcollection import ValoStreams
@@ -28,6 +29,8 @@ from valomaps import valomaps
 from sentinelvalomaps import sentinelvalomaps
 from dropboxUploader import upload_file
 from dropboxUploader import download_file
+from tundradropbox import tundraupload_file
+from tundradropbox import tundradownload_file
 from tournamentcheckers import DotaCheckTourni
 from tournamentcheckers import ValoCheckTourni
 from tournamentchecker2 import DotaCheckTourni2
@@ -68,8 +71,20 @@ from ldnVCTscoreboarding import ldnvctscoreboarding
 from ldnVCTscoreboarding import ldnvctscoreboardreader
 from ldnVCTscoreboarding import ldnvctscoreboardadder
 from ldnVCTscoreboarding import ldnvctscoreboardsingle
-
-
+from tundradotascoreboarding import tundradotascoreboarding
+from tundradotascoreboarding import tundradotascoreboardreader
+from tundradotascoreboarding import tundradotascoreboardadder
+from tundradotascoreboarding import tundradotascoreboardsingle
+from tundrafifascoreboarding import tundrafifascoreboarding
+from tundrafifascoreboarding import tundrafifascoreboardreader
+from tundrafifascoreboarding import tundrafifascoreboardadder
+from tundrafifascoreboarding import tundrafifascoreboardsingle
+from tundrastreamcollection import tundraDotaStreams
+from tundrastreamcollection import tundraCSGOStreams
+from tundrastreamcollection import tundraValoStreams
+from tundragamecheckers import tundraDotaCheck
+from tundragamecheckers import tundraCSGOCheck
+from tundragamecheckers import tundraValoCheck
 
 
 
@@ -203,6 +218,22 @@ class ldnutdclient(discord.Client):
 
 
 
+class tundraclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
+
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await tree5.sync(guild=discord.Object(id = int(os.getenv('IDForServer5'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
+
+
+
+
 class testbotclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
@@ -218,28 +249,186 @@ class testbotclient(discord.Client):
 
 
 
-
+#clients
 client = aclient()
 client2 = sentinelclient()
 client3 = ldnutdclient()
 client4 = testbotclient()
+client5 = tundraclient()
 houseclient= houseclient()
+#trees
 treehouse = app_commands.CommandTree(houseclient)
+tree5 = app_commands.CommandTree(client5)
 tree4 = app_commands.CommandTree(client4)
 tree3 = app_commands.CommandTree(client3)
 tree2 = app_commands.CommandTree(client2)
 tree = app_commands.CommandTree(client)
 ShortList=[1007303552445726750, 689903856095723569, 690952309827698749, 697447277647626297, 818793950965006357, 972571026066141204, 972946124161835078, 972570634196512798, 972470281627107351]
+#Servers
 IDForServer = int(os.getenv('IDForServer'))
 IDForServer2 = int(os.getenv('IDForServer2'))
 IDForServer3 = int(os.getenv('IDForServer3'))
 IDForServer4 = int(os.getenv('IDForServer4'))
+IDForServer5 = int(os.getenv('IDForServer5'))
 IDForServerHouse = int(os.getenv('IDForServerHouse'))
 
 
 
+@client5.event
+async def on_message(message):
+  channelDataID = str(message.channel.id)
+    if message.author == client5.user:
+      return
+    if (channelDataID == 980144504000626698):
+        embed = discord.Embed(title="Welcome to the Tundra Tribe!",
+                              color=0xff8800)
+        embed.add_field(
+            name="You seem to be lost, let me help",
+            value=
+            "Do be sure to go through <#867689566572118036> to check out the rules of the server! Follow this up in <#935744075670360064> to get access to the rest of the server! See you in there!",
+            inline=True)
+        embed.set_image(url="https://i.imgur.com/uiNH28L.png")
+
+        data = tundradownload_file('/droplastmessage.txt', 'lastmessage.txt')
+        g = open("lastmessage.txt", "r")
+        g2 = g.read()
+        g.close()
+
+        try:
+            print("Tried to delete message: " + g2)
+
+        except:
+            print("Failed to delete any message")
+        try:
+            await client5.http.delete_message(980144504000626698, g2)
+        except:
+            print("Failed to delete any message")
+        message = await message.reply(embed=embed)
+        f = open("lastmessage.txt", "w")
+        f.write(str(message.id))
+        f.close()
+        tundraupload_file('/droplastmessage.txt', 'lastmessage.txt')
 
 
+
+
+@client5.event
+async def on_member_update(before, after):
+    guild = after.guild.id
+    guild2 = after.guild
+    info = ("<@" + str(after.id) + ">")
+    #Only checks this guild
+
+    if (guild == 798487245920141322 or guild == 731631689826041878):
+
+        #If user gets given a new role
+        if len(before.roles) < len(after.roles):
+            newRole = next(role for role in after.roles
+                           if role not in before.roles)
+
+            #If user gets added to 'Muted' role
+            if (newRole.name == "Muted"):
+
+                #channel to get messages from [so will be General in main server]
+                c = client5.get_channel(689865754354384996)
+
+                i = 0
+                counter = 0
+                if (i < 1):
+                    for channel in guild2.text_channels:
+                        try:
+                            c = client5.get_channel(channel.id)
+                            messages = [
+                                messhis
+                                async for messhis in c.history(limit=100)
+                            ]
+                            i = 0
+
+                            #Will delete the latest message from the user
+                            for message in messages:
+                                user = message.author.id
+
+                                if user == after.id and i < 1:
+                                    #channelID , messageid
+                                    try:
+                                        channelofdel = client5.get_channel(
+                                            channel.id)
+                                        msgtodelete = await channelofdel.fetch_message(
+                                            message.id)
+                                        await client5.http.delete_message(
+                                            channel.id, message.id)
+                                        counter = counter + 1
+                                        i = i + 1
+                                    except:
+                                        i = i + 1
+                                        print("No access to channel")
+                        except:
+                            i = i + 1
+
+                channel = client5.get_channel(867689528667144232)
+
+                if guild == 798487245920141322 and counter == 0:
+                    guildofdel = client5.get_guild(798487245920141322)
+                    member = guildofdel.get_member(after.id)
+                    await member.ban(reason="Spam bot")
+                    bannedlist = [
+                        'https://cdn.discordapp.com/emojis/704664998307168297.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/853134498631647262.webp?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/666320711266205717.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/760839234243395595.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/838414946320515142.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/740935957972254873.webp?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/627835162910261269.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/746678657493237760.webp?size=96&quality=lossless'
+                    ]
+                    embed = discord.Embed(title="User was banned: " +
+                                          str(info),
+                                          color=0xff8800)
+                    embed.set_thumbnail(url=random.choice(bannedlist))
+                    embed.add_field(name="The action that happened",
+                                    value="**Banned**",
+                                    inline=False)
+                    await channel.send(embed=embed)
+
+                elif guild == 798487245920141322 and counter == 1:
+
+                    mutelist = [
+                        'https://cdn.discordapp.com/emojis/754439381703589958.gif?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/734030265248382986.webp?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/827576073382264862.webp?size=96&quality=lossless',
+                        'https://cdn.discordapp.com/emojis/517470041856540685.webp?size=96&quality=lossless'
+                    ]
+                    embed = discord.Embed(title="User was Muted: " + str(info),
+                                          color=0xff8800)
+                    embed.set_thumbnail(url=random.choice(mutelist))
+                    embed.add_field(name="The action that happened",
+                                    value="**Muted**",
+                                    inline=False)
+                    embed.add_field(name="We have removed - " + str(counter) +
+                                    " message[s] - with the following text",
+                                    value="```" + msgtodelete.content + "```",
+                                    inline=False)
+                    await channel.send(embed=embed)
+
+                else:
+                    await channel.send(
+                        str(info) +
+                        " - user got muted in the main server, messages removed: "
+                        + str(counter))
+
+            #Deletes messages when user gets Seeds role
+            if (newRole.name == "Tribe Gatherer"):
+                c = client5.get_channel(980144504000626698)
+                messages = [messhis async for messhis in c.history(limit=30)]
+                i = 0
+                #creates a collection of messahes
+                for message in messages:
+                    user = message.author.id
+                    #checks if message and the person who got Seeds is the same person deleting the messages
+                    if user == after.id:
+                        await client5.http.delete_message(
+                            980144504000626698, message.id)
+                        i = i + 1
 
 
 
@@ -526,7 +715,13 @@ async def on_message(message):
 #in the def self, you can poll items such as name / value as shown below
 #users will see "name or value" below, but can be called anything
 
-
+@tree5.command(name="avatar", description = "Get the avatar of yourself or a user", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, ping: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    await interaction.followup.send(ping.avatar)
+  except:
+    await interaction.followup.send(interaction.user.avatar)
   
   
 @tree.command(name="avatar", description = "Get the avatar of yourself or a user", guild = discord.Object(id = IDForServer))
@@ -1153,6 +1348,77 @@ async def self(interaction: discord.Interaction, minimumscore: int):
 
 
 
+@tree5.command(name="dotawinners", description = "Will give the Dota - Tribe Prophet role to the winners", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, minimumscore: int):
+  await interaction.response.defer()
+  try:
+    server = interaction.guild
+    role_name = "Tribe Prophet"
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+  
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    
+    j=0
+    for id in member_ids:
+      user = interaction.guild.get_member(id)
+      role = discord.utils.get(user.guild.roles, id=966648883813965864)
+      await user.remove_roles(role)
+      j=j+1
+    print(j)
+  except Exception as e:
+    print(e)
+
+  try:
+    tundradownload_file('/dotascoreboard.csv', 'scoreboard14.csv')
+    f = open('scoreboard14.csv', 'r')
+    reader = csv.reader(f, delimiter=',')
+    scorecheck = minimumscore
+    i=0
+    additionalmessage=""
+    for lines in reader:
+      if( int(lines[2]) == scorecheck or int(lines[2]) > scorecheck):
+        
+        try:
+          
+          i=i+1
+          user = interaction.guild.get_member(int(lines[1]))
+          additionalmessage = additionalmessage + "<@" + str(lines[1]) + "> / "
+          role = discord.utils.get(user.guild.roles, id=966648883813965864)
+          await user.add_roles(role)
+        except:
+          print("User no longer in server")
+      
+    await interaction.followup.send("I have removed the Tribe Prophet role from - " + str(j) + " people\n\nI have added the Tribe Prophet role to - " + str(i) + " people - you can use /getuserlist @ Tribe Prophet, to get a list of users with the role\n\nThis includes:\n```" + additionalmessage + "```")
+  except Exception as e: 
+    print(e)
+    await interaction.followup.send("There was an error in command usage, to use command use /dotawinners X, replacing X with the score you want people to have minimum to be rewarded the role, using '5', would mean all people with 5 and more will get the role")
+  
+
+
+
+
+
+
+
+
+
+
+
+
 @tree.command(name="valoldngardeners", description = "Pick which gardeners will moderate the next Valorant LDN UTD Game", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
@@ -1633,6 +1899,49 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+
+@tree5.command(name="dotaremove", description = "Remove 1 point from the Dota scoreboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  tundradownload_file('/dotascoreboard.csv', 'scoreboard5.csv')
+  try:
+    server = interaction.guild
+    guild = interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send(("Role doesn't exist"))
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            tundradotascoreboardadder(member.display_name,member.id, -1, i)
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+    else:
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+  except:
+    await interaction.followup.send("You need to tag the winning role: example /dotaremove @D9-0")
+
+
+
+
+
+
+
 @tree.command(name="deletereminder", description = "Delete 1 of your reminders - use /myreminders to get a list", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, remindertodelete: int):
   await interaction.response.defer()
@@ -2011,6 +2320,154 @@ async def self(interaction: discord.Interaction, role: discord.Role):
   except:
     await interaction.followup.send("You need to tag the winning role: example /vctadd @cs9-0")
 
+@tree5.command(name="dotaadd", description = "Add 1 point to the Dota scoreboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, role: discord.Role, points_to_add: typing.Optional[int]):
+  if(str(points_to_add)=="None"):
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              tundradotascoreboardadder(member.display_name,member.id, 1, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
+  else:
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              tundradotascoreboardadder(member.display_name,member.id, points_to_add, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
+
+
+
+
+
+
+
+
+@tree5.command(name="fifaadd", description = "Add 1 point to the Fifa scoreboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, role: discord.Role, points_to_add: typing.Optional[int]):
+  if(str(points_to_add)=="None"):
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              tundrafifascoreboardadder(member.display_name,member.id, 1, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        tundraupload_file('/fifascoreboard.csv', 'scoreboard22.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /fifaadd @D9-0" )
+  else:
+    await interaction.response.defer()
+    try:
+      guild = interaction.guild
+      server = interaction.guild
+      role_name = discord.utils.get(guild.roles, id=int(role.id))
+      role_name = str(role_name)
+      i = 0
+      role_id = server.roles[0]
+      display_names = []
+      member_ids = []
+      file = open("filetosend.txt", "w")
+      file.close()
+      for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+              break
+      else:
+          await interaction.followup.send("Role doesn't exist")
+          return
+      for member in server.members:
+          if role_id in member.roles:
+              i = i + 1
+              tundrafifascoreboardadder(member.display_name,member.id, points_to_add, i)
+              display_names.append(member.display_name)
+              member_ids.append(member.id)
+      if (i == 0):
+          await interaction.followup.send("No one was found in that role!")
+      else:
+        tundraupload_file('/fifascoreboard.csv', 'scoreboard22.csv')
+        await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
+    except:
+      await interaction.followup.send("You need to tag the winning role: example /fifaadd @D9-0" )
+
+
+
+
 
 
 
@@ -2107,6 +2564,15 @@ async def self(interaction: discord.Interaction):
   await interaction.followup.send("Event cleared")
 
 
+@tree5.command(name="cleardotaevent", description = "This will clear the event file for Dota", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  f = open("dotaevent.txt", "w")
+  f.write("empty")
+  f.close()
+  tundraupload_file('/dotaevent.txt', 'dotaevent.txt')
+  await interaction.followup.send("Event cleared")
+
 
 @tree.command(name="clearcsgoevent", description = "This will clear the event file for CSGO", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
@@ -2149,7 +2615,19 @@ async def self(interaction: discord.Interaction):
 
 
 
+@tree5.command(name="clearfifaboard", description = "This will clear the Fifa leaderboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  tundrafifascoreboarding()
+  await interaction.followup.send("The Fifa leaderboard has been reset")
 
+
+
+@tree5.command(name="cleardotaboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  tundradotascoreboarding()
+  await interaction.followup.send("The Dota leaderboard has been reset")
 
 
 @tree.command(name="clearvaloboard", description = "This will clear the Dota leaderboard", guild = discord.Object(id = IDForServer))
@@ -2356,10 +2834,36 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     embed.add_field(name="Dota 2 Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
     embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show dota @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
+
+
+
+@tree5.command(name="showfifa", description = "Show the Fifa Prediction leaderboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    test = tundrafifascoreboardsingle(user.id)
+    await interaction.followup.send(test)
+  except Exception as e :
+    test = tundrafifascoreboardreader("none")
+    embed = discord.Embed(title="Dota 2 prediction leaderboard", color=0x55a7f7)
+    embed.add_field(name="Dota 2 Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show dota @*yourself* to see where you stand!",inline=False)
+    await interaction.followup.send(embed=embed)
     
 
 
-
+@tree5.command(name="showdota", description = "Show the Dota Prediction leaderboard", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, user: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    test = tundradotascoreboardsingle(user.id)
+    await interaction.followup.send(test)
+  except Exception as e :
+    test = tundradotascoreboardreader("none")
+    embed = discord.Embed(title="Dota 2 prediction leaderboard", color=0x55a7f7)
+    embed.add_field(name="Dota 2 Prediction - page: " + str(test[2]) + "/" + str(test[1]),value="```\n" + test[0] + "\n```",inline=True)
+    embed.add_field(name="Can't see yourself?",value="Can't see yourself on the table? use /show dota @*yourself* to see where you stand!",inline=False)
+    await interaction.followup.send(embed=embed)
 
 
 
@@ -2439,7 +2943,70 @@ async def self(interaction: discord.Interaction, user: typing.Optional[discord.U
     embed.add_field(name="Can't see yourself?",value= "Can't see yourself on the table? use /show valo @*yourself* to see where you stand!",inline=False)
     await interaction.followup.send(embed=embed)
 
-  
+
+
+
+
+@tree5.command(name="discordstats", description = "Get the Discord Stats of yourself or a user", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, ping: typing.Optional[discord.User]):
+  await interaction.response.defer()
+  try:
+    user = ping
+    createdon = user.created_at
+    joinedon = user.joined_at
+    cyear = createdon.year
+    cmonth = createdon.month
+    cday = createdon.day
+    chour = createdon.hour
+    cminute = createdon.minute
+    csecond = createdon.second
+    timecreation = str(cday) + "/" + str(cmonth) + "/" + str(
+        cyear) + " - " + str(chour) + ":" + str(
+            cminute) + ":" + str(csecond)
+
+    jyear = joinedon.year
+    jmonth = joinedon.month
+    jday = joinedon.day
+    jhour = joinedon.hour
+    jminute = joinedon.minute
+    jsecond = joinedon.second
+    timejoining = str(jday) + "/" + str(jmonth) + "/" + str(jyear) + " - " + str(jhour) + ":" + str(jminute) + ":" + str(jsecond)
+    if (str(user.id) == "733626039002988574"): 
+      timejoining = " 11/12/2020 - 16:54"
+
+    embed = discord.Embed(title="Account information of - " +str(user.display_name),color=0x55a7f7)
+    embed.add_field(name="Account details",value="User account was created on - " +str(timecreation) +"\nJoined the server on- " +str(timejoining),inline=True)
+
+    await interaction.followup.send(embed=embed)
+  except:
+    
+    user = interaction.user
+    createdon = user.created_at
+    joinedon = user.joined_at
+    cyear = createdon.year
+    cmonth = createdon.month
+    cday = createdon.day
+    chour = createdon.hour
+    cminute = createdon.minute
+    csecond = createdon.second
+    timecreation = str(cday) + "/" + str(cmonth) + "/" + str(cyear) + " - " + str(chour) + ":" + str(cminute) + ":" + str(csecond)
+    jyear = joinedon.year
+    jmonth = joinedon.month
+    jday = joinedon.day
+    jhour = joinedon.hour
+    jminute = joinedon.minute
+    jsecond = joinedon.second
+    timejoining = str(jday) + "/" + str(jmonth) + "/" + str(jyear) + " - " + str(jhour) + ":" + str(jminute) + ":" + str(jsecond)
+    if (str(user.id) == "733626039002988574"):
+        timejoining = " 11/12/2020 - 16:54"
+
+    embed = discord.Embed(title="Account information of - " +str(user.display_name),color=0x55a7f7)
+    embed.add_field(name="Account details",value="User account was created on - " +str(timecreation) +"\nJoined the server on- " + str(timejoining),inline=True)
+    await interaction.followup.send(embed=embed)
+
+
+
+
   
 
 @tree.command(name="discordstats", description = "Get the Discord Stats of yourself or a user", guild = discord.Object(id = IDForServer))
@@ -2498,7 +3065,37 @@ async def self(interaction: discord.Interaction, ping: typing.Optional[discord.U
     embed = discord.Embed(title="Account information of - " +str(user.display_name),color=0x55a7f7)
     embed.add_field(name="Account details",value="User account was created on - " +str(timecreation) +"\nJoined the server on- " + str(timejoining),inline=True)
     await interaction.followup.send(embed=embed)
-    
+
+@tree5.command(name="nextdota", description="Get information on the next dota game", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  channelDataID = int(interaction.channel_id)
+  userID = int(interaction.user.id)
+  try:
+    if(channelDataID in ShortList):
+      embed = tundraDotaCheck(channelDataID, True)
+    else:
+      embed = tundraDotaCheck(channelDataID, False)
+    embed = embed[0]
+    if(channelDataID in ShortList):
+        await interaction.followup.send(embed)
+    else:
+        await interaction.followup.send(embed=embed)
+        #await message.reply(embed=embed)
+  except:
+    if(channelDataID in ShortList):
+      #await message.reply("No games planned currently - For more information use /nextdota in <#721391448812945480>")
+      await interaction.followup.send("No games planned currently - For more information use /nextdota in <#867689807214542899>")
+    else:
+      embed=discord.Embed(title="Tundra Dota's next game", url="https://liquipedia.net/dota2/Tundra_Esports", color=0xf10909)
+      embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/8/85/Tundra_Esports_2020_full_lightmode.png/600px-Tundra_Esports_2020_full_lightmode.png")
+      embed.add_field(name="Time remaining", value = "No games currently planned" , inline=False)
+      embed.add_field(name="Notice",value="Please check Liquipedia by clicking the title of this embed for more information as the time might not be accurate", inline=False)
+      embed.add_field(name="Links", value="Tundra Liquipedia: https://liquipedia.net/dota2/Tundra_Esports", inline=False)
+      #await message.reply(embed=embed)
+      await interaction.followup.send(embed=embed)
+
+  
 
 
 @tree.command(name="nextdota", description="Get information on the next dota game", guild = discord.Object(id = IDForServer))
@@ -2671,8 +3268,100 @@ async def self(interaction: discord.Interaction, team_count: int, prefix: str):
 
 
 
-
+@tree5.command(name="dotabo", description = "Create Dota roles", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone = 0
+  if(series_length == 1):
+    await guild.create_role(name="D1-0")
+    await guild.create_role(name="D0-1")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Dota Bo1")
+    
+  if(series_length == 2):
+    await guild.create_role(name="D2-0")
+    await guild.create_role(name="D1-1")
+    await guild.create_role(name="D0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Dota Bo2")
+    
+  if(series_length==3):
+    await guild.create_role(name="D2-0")
+    await guild.create_role(name="D2-1")
+    await guild.create_role(name="D1-2")
+    await guild.create_role(name="D0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Dota Bo3")
+    
+  if(series_length==5):
+    await guild.create_role(name="D3-0")
+    await guild.create_role(name="D3-2")
+    await guild.create_role(name="D3-1")
+    await guild.create_role(name="D1-3")
+    await guild.create_role(name="D2-3")
+    await guild.create_role(name="D0-3")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Dota Bo5")
+    
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("Value for series length invalid, must be 1 / 2 / 3 / 5, please try again")
   
+
+
+@tree5.command(name="fifabo", description = "Create Fifa roles", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone = 0
+  if(series_length == 1):
+    await guild.create_role(name="F1-0")
+    await guild.create_role(name="F0-1")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Fifa Bo1")
+    
+  if(series_length == 2):
+    await guild.create_role(name="F2-0")
+    await guild.create_role(name="F1-1")
+    await guild.create_role(name="F0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Fifa Bo2")
+    
+  if(series_length==3):
+    await guild.create_role(name="F2-0")
+    await guild.create_role(name="F2-1")
+    await guild.create_role(name="F1-2")
+    await guild.create_role(name="F0-2")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Fifa Bo3")
+    
+  if(series_length==5):
+    await guild.create_role(name="F3-0")
+    await guild.create_role(name="F3-2")
+    await guild.create_role(name="F3-1")
+    await guild.create_role(name="F1-3")
+    await guild.create_role(name="F2-3")
+    await guild.create_role(name="F0-3")
+    isdone=1
+    await interaction.followup.send("I have created the roles for a Fifa Bo5")
+    
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("Value for series length invalid, must be 1 / 2 / 3 / 5, please try again")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @tree.command(name="dotabo", description = "Create Dota roles", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, series_length: int):
@@ -2936,9 +3625,110 @@ async def self(interaction: discord.Interaction, series_length: int):
     
   
 
+@tree5.command(name="deletedotaroles", description = "Delete dota roles for prediction", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone=0
+  if(series_length==1):
+    role_object = discord.utils.get(guild.roles, name="D1-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D0-1")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Dota Bo1")
+    isdone=1
+  if(series_length==2):
+    role_object = discord.utils.get(guild.roles, name="D2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D1-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Dota Bo2")
+    isdone=1
+  if(series_length==3):
+    role_object = discord.utils.get(guild.roles, name="D2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D2-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D1-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Dota Bo3")
+    isdone=1
+  if(series_length==5):
+    role_object = discord.utils.get(guild.roles, name="D3-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D3-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D3-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D1-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D2-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="D0-3")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Dota Bo5")
+    isdone=1
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("I was unable to delete any of the roles please verify series length - 1 / 2 / 3 / 5")
+    
+  
 
-
-
+@tree5.command(name="deletefifaroles", description = "Delete Fifa roles for prediction", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, series_length: int):
+  await interaction.response.defer()
+  guild = interaction.guild
+  isdone=0
+  if(series_length==1):
+    role_object = discord.utils.get(guild.roles, name="F1-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F0-1")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Fifa Bo1")
+    isdone=1
+  if(series_length==2):
+    role_object = discord.utils.get(guild.roles, name="F2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F1-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Fifa Bo2")
+    isdone=1
+  if(series_length==3):
+    role_object = discord.utils.get(guild.roles, name="F2-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F2-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F1-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F0-2")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Fifa Bo3")
+    isdone=1
+  if(series_length==5):
+    role_object = discord.utils.get(guild.roles, name="F3-0")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F3-2")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F3-1")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F1-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F2-3")
+    await role_object.delete()
+    role_object = discord.utils.get(guild.roles, name="F0-3")
+    await role_object.delete()
+    await interaction.followup.send("I have deleted the roles for a Fifa Bo5")
+    isdone=1
+  else:
+    if(isdone== 0):
+      await interaction.followup.send("I was unable to delete any of the roles please verify series length - 1 / 2 / 3 / 5")
+    
 
 
 
@@ -3191,6 +3981,35 @@ async def self(interaction: discord.Interaction):
 
 
 
+
+@tree5.command(name="dotastreams", description = "Get the streams for the next dota series", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  streaminfo = tundraDotaStreams()
+  Teams1 = streaminfo[0]
+  Teams2 = streaminfo[1]
+  flagMessage = streaminfo[2]
+  convertedURL = streaminfo[3]
+
+  if (Teams1 == "No games found"):
+      embed = discord.Embed(title="No Dota streams / games were found",color=0xf10909)
+      embed.add_field(name="What you can try",value="You can try using /nextdota / /nextdota2 to see if there are any games coming up",inline=True)
+      embed.add_field(name="Links",value="https://liquipedia.net/dota2/Tundra_Esports",inline=False)
+      await interaction.followup.send(embed=embed)
+
+  else:
+      embed = discord.Embed(title="Dota streams found!", color=0xf10909)
+      embed.add_field(name="The game found",value=Teams1 + " vs " + Teams2,inline=True)
+    
+      if(interaction.channel_id != 689903856095723569 and interaction.channel_id != 926214194280419368 and interaction.channel_id != 1007303552445726750):
+        embed.add_field(name="Streams / Flags",value="```" + flagMessage + "```",inline=False)
+      embed.add_field(name="Streams available",value=flagMessage,inline=False)
+      embed.add_field(name="Where I found the streams",value=convertedURL,inline=False)
+      await interaction.followup.send(embed=embed)
+
+
+
+
   
 
 @tree.command(name="valoldnstreams", description = "Get the streams for the next Valorant LDN United series", guild = discord.Object(id = IDForServer))
@@ -3296,6 +4115,16 @@ async def self(interaction: discord.Interaction):
   await interaction.followup.send(embed=test)
 
 
+@tree5.command(name="dotastats", description="Get stats for Dota players", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, player: str):
+  await interaction.response.defer()
+  embed = dotaplayerstats(player)
+  await interaction.followup.send(embed=embed)
+
+
+
+
+
 @tree.command(name="dotastats", description="Get stats for Dota players", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, player: str):
   await interaction.response.defer()
@@ -3346,6 +4175,29 @@ async def self(interaction: discord.Interaction, liquipediaurl: str):
   await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
 
 
+
+@tree5.command(name="changedt", description = "Change the Dota tournament tracked", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, liquipediaurl: str):
+  await interaction.response.defer()
+  newlink = liquipediaurl
+  f = open("dotatournament.txt", "w")
+  f.write(newlink)
+  f.close()
+  tundraupload_file('/dropdotatournament.txt', 'dotatournament.txt')
+  await interaction.followup.send("The tournament tracked has been updated to the link you have sent - <"+ newlink +">\n\nIf there is an error in your link, you are able to use /verifydturl to check the link or try changing again!")
+
+
+@tree5.command(name="resetdt", description = "Reset the Dota tournament tracked", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = tundradownload_file('/dropdotatournament.txt','dotatournament.txt')
+  f = open("dotatournament.txt", "w")
+  f.write("none")
+  f.close()
+  tundraupload_file('/dropdotatournament.txt', 'dotatournament.txt')
+  await interaction.followup.send("The tournament currently tracked has been removed")
+
+
 @tree.command(name="resetdt", description = "Reset the Dota tournament tracked", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
@@ -3365,6 +4217,15 @@ async def self(interaction: discord.Interaction):
   await interaction.followup.send("The link currently stored is - <" +link + ">")
 
 
+@tree5.command(name="verifydt", description = "Verify the Dota tournament tracked", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = tundradownload_file('/dropdotatournament.txt','dotatournament.txt')
+  f = open("dotatournament.txt", "r")
+  link = f.read()
+  await interaction.followup.send("The link currently stored is - <" +link + ">")
+
+
 @tree.command(name="nextdt", description = "Next game in the Dota Tournament tracked", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction):
   await interaction.response.defer()
@@ -3372,6 +4233,18 @@ async def self(interaction: discord.Interaction):
   embed = DotaCheckTourni(channelDataID)
   embed = embed[0]
   if ((channelDataID == 689903856095723569) or (channelDataID == 690952309827698749)):
+      await interaction.followup.send(embed)
+  else:
+      await interaction.followup.send(embed=embed)
+
+
+@tree5.command(name="nextdt", description = "Next game in the Dota Tournament tracked", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  channelDataID = interaction.channel_id
+  embed = tundraDotaCheckTourni(channelDataID)
+  embed = embed[0]
+  if ((channelDataID == 867690069981003807) or (channelDataID == 867690069981003807)):
       await interaction.followup.send(embed)
   else:
       await interaction.followup.send(embed=embed)
@@ -3393,6 +4266,26 @@ async def self(interaction: discord.Interaction):
   embed.add_field(name="Streams", value=streamlinks, inline=True)
   embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
   await interaction.followup.send(embed=embed)
+
+
+
+
+@tree5.command(name="dtstreams", description = "Get streams for the Dota tournament tracked", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  data = tundradownload_file('/dropdotatournament.txt','dotatournament.txt')
+  f = open("dotatournament.txt", "r")
+  my_url = f.read()
+  f.close()
+  dtstreaminfo = dtStreams(my_url)
+  streamlinks = dtstreaminfo[0]
+  urloftourni = dtstreaminfo[1]
+
+  embed = discord.Embed(title="Streams for the tournament", color=0x55a7f7)
+  embed.add_field(name="Streams", value=streamlinks, inline=True)
+  embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
+  await interaction.followup.send(embed=embed)
+
 
 
 
@@ -3546,6 +4439,12 @@ async def cleanreminders():
 #Opening the file with last message every 5 mins
 async def openingfile():
     data = download_file('/droplastmessage.txt', 'lastmessage.txt')
+    g = open("lastmessage.txt", "r")
+    g2 = g.read()
+    g.close()
+    print("File opened, value = " + g2)
+
+    data = tundradownload_file('/droplastmessage.txt', 'lastmessage.txt')
     g = open("lastmessage.txt", "r")
     g2 = g.read()
     g.close()
@@ -4489,7 +5388,41 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 
 
 
+@tree5.command(name="getuserlist", description = "Get the list of users in a role", guild = discord.Object(id = IDForServer5))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  guild = interaction.guild
+  server = interaction.guild
+  role_name = discord.utils.get(guild.roles,id=int(role.id))
+  role_name = str(role_name)
 
+  role_id = server.roles[0]
+  display_names = []
+  member_ids = []
+  file = open("filetosend.txt", "w")
+  file.close()
+  for role in server.roles:
+      if role_name == role.name:
+          role_id = role
+          break
+  else:
+      await interaction.followup.send("Role doesn't exist")
+      return
+  for member in server.members:
+      if role_id in member.roles:
+          display_names.append(member.display_name)
+          member_ids.append(member.id)
+
+  i = 0
+  while (i < len(display_names)):
+      f = open("filetosend.txt", "a")
+      f.write("name: " + display_names[i] + " - their id number: " +str(member_ids[i]) + "\n")
+      f.close
+      i = i + 1
+
+  f = open("filetosend.txt", "r")
+  print(f.read())
+  await interaction.followup.send("Role returned: " + role_name + '!',file=discord.File("filetosend.txt"))
 
 
 @tree2.command(name="vtstreams", description = "Get streams for the Valo tournament tracked", guild = discord.Object(id = IDForServer2))
@@ -4614,6 +5547,7 @@ asyncio.set_event_loop(loop)
 loop.create_task(client.start((os.getenv('TOKEN'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
 loop.create_task(client3.start((os.getenv('TOKEN3'))))
+loop.create_task(client5.start((os.getenv('TOKEN5'))))
 loop.create_task(houseclient.start((os.getenv('TOKENHOUSE'))))
 #loop.create_task(client4.start((os.getenv('TOKEN4'))))
 loop.run_forever()

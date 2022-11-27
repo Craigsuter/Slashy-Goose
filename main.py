@@ -277,37 +277,37 @@ IDForServerHouse = int(os.getenv('IDForServerHouse'))
 @client5.event
 async def on_message(message):
   channelDataID = str(message.channel.id)
-    if message.author == client5.user:
-      return
-    if (channelDataID == 980144504000626698):
-        embed = discord.Embed(title="Welcome to the Tundra Tribe!",
-                              color=0xff8800)
-        embed.add_field(
-            name="You seem to be lost, let me help",
-            value=
-            "Do be sure to go through <#867689566572118036> to check out the rules of the server! Follow this up in <#935744075670360064> to get access to the rest of the server! See you in there!",
-            inline=True)
-        embed.set_image(url="https://i.imgur.com/uiNH28L.png")
+  if message.author == client5.user:
+    return
+  if (channelDataID == 980144504000626698):
+      embed = discord.Embed(title="Welcome to the Tundra Tribe!",
+                            color=0xff8800)
+      embed.add_field(
+          name="You seem to be lost, let me help",
+          value=
+          "Do be sure to go through <#867689566572118036> to check out the rules of the server! Follow this up in <#935744075670360064> to get access to the rest of the server! See you in there!",
+          inline=True)
+      embed.set_image(url="https://i.imgur.com/uiNH28L.png")
 
-        data = tundradownload_file('/droplastmessage.txt', 'lastmessage.txt')
-        g = open("lastmessage.txt", "r")
-        g2 = g.read()
-        g.close()
+      data = tundradownload_file('/droplastmessage.txt', 'lastmessage.txt')
+      g = open("lastmessage.txt", "r")
+      g2 = g.read()
+      g.close()
 
-        try:
-            print("Tried to delete message: " + g2)
+      try:
+          print("Tried to delete message: " + g2)
 
-        except:
-            print("Failed to delete any message")
-        try:
-            await client5.http.delete_message(980144504000626698, g2)
-        except:
-            print("Failed to delete any message")
-        message = await message.reply(embed=embed)
-        f = open("lastmessage.txt", "w")
-        f.write(str(message.id))
-        f.close()
-        tundraupload_file('/droplastmessage.txt', 'lastmessage.txt')
+      except:
+          print("Failed to delete any message")
+      try:
+          await client5.http.delete_message(980144504000626698, g2)
+      except:
+          print("Failed to delete any message")
+      message = await message.reply(embed=embed)
+      f = open("lastmessage.txt", "w")
+      f.write(str(message.id))
+      f.close()
+      tundraupload_file('/droplastmessage.txt', 'lastmessage.txt')
 
 
 

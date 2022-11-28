@@ -279,7 +279,7 @@ async def on_message(message):
   channelDataID = str(message.channel.id)
   if message.author == client5.user:
     return
-  if (channelDataID == 980144504000626698):
+  if (int(channelDataID) == 980144504000626698):
       embed = discord.Embed(title="Welcome to the Tundra Tribe!",
                             color=0xff8800)
       embed.add_field(

@@ -1689,7 +1689,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         print("Is a gardener")
       else:
         picked=1
-    value = 165907335795965952
+   
     await interaction.followup.send("The giveaway winner is - <@" + str(value) + ">")
   except:
     print("error")

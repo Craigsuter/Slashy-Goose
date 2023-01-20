@@ -4,7 +4,9 @@ from bs4 import BeautifulSoup as soup
 import discord
 from dotenv import load_dotenv
 load_dotenv()
+import sys, os
 import requests
+import traceback
 
 
 #Gets the streams from OG's Liquipedia
@@ -118,7 +120,8 @@ def DotaStreams():
 
       streamtable = page_soup2.findAll("table",{"style": "text-align:center;margin:0;margin-bottom:1em"})
       
-
+      print(len(streamtable))
+      print(twitch)
 
       while(bigcount < len(streamtable) and foundstream==False):
         test=[]
@@ -134,21 +137,24 @@ def DotaStreams():
         i=0
         streamlinks=[]
         flags=[]
+        print(len(test))
         while (i < len(test)):
           if (i < (len(test) / 2)):
             test2 = test[i].find_all(href=True)
             flag = test2[0].get('href')
             flag2 = flag.rsplit(":")
             flags.append(flag2[(len(flag2)-1)])
+            
           else:
             test2 = test[i].find_all(href=True)
             streamlinks.append(test2[0].get('href'))
-            
-            
-              
-          
+
+
           i=i+1
-        
+
+
+        print(streamlinks)
+        print(flags)
         #Creates the flags into versions that Discord can use
         flagsToSend=[]
         counter3=0
@@ -209,7 +215,10 @@ def DotaStreams():
               foundstream = True
           bigcount = bigcount + 1
   
-    except:
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
         flagMessage="No streams were found for this game"
     
         
@@ -225,7 +234,8 @@ def DotaStreams():
     #await message.channel.send(embed=embed)
 
 
-  except:
+  except ZeroDivisionError:
+    print(traceback.format_exc())
     return("No games found","No games found","No games found","No games found")
 
 

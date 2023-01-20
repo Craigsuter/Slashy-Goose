@@ -19,3 +19,4 @@ def tundraupload_file(filename, localfile):
   
   with open(localfile, "rb") as f:
     dbx.files_upload(f.read(), filename, mode=dropbox.files.WriteMode.overwrite)
+  os.remove(localfile)

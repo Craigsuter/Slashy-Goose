@@ -112,7 +112,7 @@ class aclient(discord.Client):
     #Post on the day of a game
     try:
         scheduler.add_job(testingspam, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
-        scheduler.add_job(testingtundraspam, CronTrigger(minute="15, 25, 35, 45, 55"))
+        scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         print("Daily announcement success")
     except:
         print("Daily announced schedule failed")

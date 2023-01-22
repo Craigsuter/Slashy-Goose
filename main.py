@@ -5469,12 +5469,12 @@ async def self(interaction: discord.Interaction):
 #Daily posts
 async def testingtundraspam():
 
-    c = client.get_channel(839466348970639391)
+    c = client5.get_channel(839466348970639391)
     currenttime = datetime.datetime.now()
 
     #Dota daily
     try:
-        channel = client.get_channel(980148345030987806)
+        channel = client5.get_channel(980148345030987806)
         value = tundraDotaCheck(0, False)
         Teams = value[1]
         name = "Dota 2 game: " + Teams
@@ -5486,7 +5486,7 @@ async def testingtundraspam():
 
         flagMessage = streaminfo[2]
         description = tourniname + "\n" + flagMessage + "\n:mega: https://twitter.com/TundraEsports\n"
-        guild = client.get_guild(798487245920141322)
+        guild = client5.get_guild(798487245920141322)
         linetocheck = Teams + "," + linktogame
 
         try:
@@ -5502,12 +5502,7 @@ async def testingtundraspam():
 
                 pass
             else:
-                eventdata = await guild.create_scheduled_event(
-                    name=name,
-                    description=description,
-                    start_time=time,
-                    end_time=end_time,
-                    entity_type=discord.enums.EntityType(3),
+                eventdata = await guild.create_scheduled_event(name=name,description=description,start_time=time,end_time=end_time, entity_type=discord.enums.EntityType(3),
                     location=linktogame)
                 f = open("dotaevent.txt", "w")
                 f.write(linetocheck)

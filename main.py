@@ -5475,7 +5475,7 @@ async def testingtundraspam():
     #Dota daily
     try:
         channel = client.get_channel(980148345030987806)
-        value = tundraDotaCheck(0)
+        value = tundraDotaCheck(0, False)
         Teams = value[1]
         name = "Dota 2 game: " + Teams
         time = datetime.datetime.now().astimezone() + value[3]

@@ -112,6 +112,7 @@ class aclient(discord.Client):
     #Post on the day of a game
     try:
         scheduler.add_job(testingspam, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
+        scheduler.add_job(testingtundraspam, CronTrigger(minute="15, 25, 35, 45, 55"))
         print("Daily announcement success")
     except:
         print("Daily announced schedule failed")
@@ -5465,6 +5466,74 @@ async def self(interaction: discord.Interaction):
 
 
 
+#Daily posts
+async def testingtundraspam():
+
+    c = client.get_channel(839466348970639391)
+    currenttime = datetime.datetime.now()
+
+    #Dota daily
+    try:
+        channel = client.get_channel(980148345030987806)
+        value = tundraDotaCheck(0)
+        Teams = value[1]
+        name = "Dota 2 game: " + Teams
+        time = datetime.datetime.now().astimezone() + value[3]
+        end_time = time + datetime.timedelta(minutes=10)
+        linktogame = value[7]
+        tourniname = value[6]
+        streaminfo = tundraDotaStreams()
+
+        flagMessage = streaminfo[2]
+        description = tourniname + "\n" + flagMessage + "\n:mega: https://twitter.com/TundraEsports\n"
+        guild = client.get_guild(798487245920141322)
+        linetocheck = Teams + "," + linktogame
+
+        try:
+            tundradownload_file('/dotaevent.txt', 'dotaevent.txt')
+            f = open('dotaevent.txt', 'r')
+            lines = f.readlines()
+            f.close()
+        except:
+            lines = "empty"
+
+        try:
+            if lines[0] == linetocheck:
+
+                pass
+            else:
+                eventdata = await guild.create_scheduled_event(
+                    name=name,
+                    description=description,
+                    start_time=time,
+                    end_time=end_time,
+                    entity_type=discord.enums.EntityType(3),
+                    location=linktogame)
+                f = open("dotaevent.txt", "w")
+                f.write(linetocheck)
+                f.close()
+                tundraupload_file('/dotaevent.txt', 'dotaevent.txt')
+                data2 = await guild.fetch_scheduled_event(eventdata.id)
+                #await channel.send(data2.url)
+
+        except:
+            eventdata = await guild.create_scheduled_event(
+                name=name,
+                description=description,
+                start_time=time,
+                end_time=end_time,
+                entity_type=discord.enums.EntityType(3),
+                location=linktogame)
+            f = open("dotaevent.txt", "w")
+            f.write(linetocheck)
+            f.close()
+            tundraupload_file('/dotaevent.txt', 'dotaevent.txt')
+            data2 = await guild.fetch_scheduled_event(eventdata.id)
+            #await channel.send(data2.url)
+            pass
+
+    except Exception as e:
+        print(e)
 
 
 

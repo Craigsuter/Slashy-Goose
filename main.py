@@ -4,7 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
 from discord.ui import Select, View, Modal, TextInput
 import requests
-import os
+import os, sys
 from time import sleep
 import csv
 import asyncio
@@ -16,7 +16,6 @@ from csv import reader
 import asyncio
 from gamecheckers import CSGOCheck
 from gamecheckers import ValoCheck
-
 from streamcollection import DotaStreams
 from streamcollection import CSGOStreams
 from streamcollection import ValoStreams
@@ -85,7 +84,7 @@ from tundrastreamcollection import tundraValoStreams
 from tundragamecheckers import tundraDotaCheck
 from tundragamecheckers import tundraCSGOCheck
 from tundragamecheckers import tundraValoCheck
-
+from PIL import Image
 
 
 
@@ -563,25 +562,7 @@ async def on_member_update(before, after):
 
 @client.event
 async def on_message(message):
-  try:
-    download_file('/giveawaychanneldoc.txt', 'giveawaychanneldocument.txt')
-    download_file('/giveawayroledoc.txt', 'giveawayroledocument.txt')
-    f=open('giveawaychanneldocument.txt', 'r')
-    g=open('giveawayroledocument.txt', 'r')
-    a=f.read()
-    b=g.read()
-    a=a.split(",")
-    b=b.split(",")
-    c=message.channel.id
-    if(str(c) in a):
-      d = a.index(str(c))
-      e = b[d]
-      member = message.guild.get_member(int(message.author.id))
-      role = discord.utils.get(member.guild.roles, id = int(e))
-      await member.add_roles(role)
-  except:
-    print("Error")
-  
+ 
 
 
 
@@ -732,6 +713,55 @@ async def self(interaction: discord.Interaction, ping: typing.Optional[discord.U
     await interaction.followup.send(ping.avatar)
   except:
     await interaction.followup.send(interaction.user.avatar)
+
+
+
+
+
+
+
+@tree.command(name="imagegentest", description = "test", guild = discord.Object(id = IDForServer))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  try:
+  
+    image1 = Image.open('OGimage.png')
+    image1.show()
+    image2 = Image.open('OGBase.jpg')
+    image2.show()
+    image3 = Image.open('tundralogo.png')
+    image3.show()
+
+    image2=image2.convert("RGBA")
+    image1=image1.convert("RGBA")
+    image3=image3.convert("RGBA")
+  
+    image2_size = image2.size
+    image1_size= image1.size
+    image3_size = image3.size
+  
+    image1 = image1.resize((int(image1_size[0]/2), int(image1_size[1]/2)))
+    image3 = image3.resize((int(image3_size[0]/2), int(image3_size[1]/2)))
+    new_image = Image.new('RGB', (image2_size[0], image2_size[1]), (250,250,250))
+    new_image.paste(image2, (0,0))
+    new_image.paste(image1, (150, 300))
+    new_image.save("saved_image.jpg", "JPEG")
+    new_image.show()
+
+    image2.paste(image1, (150, 300), image1)
+    image2.paste(image3, (675, 300), image3)
+    image2.save("aaa.png", format= "png")
+    
+    channel = interaction.channel
+    await interaction.followup.send(file=discord.File('aaa.png'))
+  except Exception as e:
+    print(e)
+
+
+
+
+
+
 
 
 

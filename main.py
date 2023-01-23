@@ -84,7 +84,7 @@ from tundrastreamcollection import tundraValoStreams
 from tundragamecheckers import tundraDotaCheck
 from tundragamecheckers import tundraCSGOCheck
 from tundragamecheckers import tundraValoCheck
-from PIL import Image
+#from PIL import Image
 
 
 
@@ -720,42 +720,6 @@ async def self(interaction: discord.Interaction, ping: typing.Optional[discord.U
 
 
 
-@tree.command(name="imagegentest", description = "test", guild = discord.Object(id = IDForServer))
-async def self(interaction: discord.Interaction):
-  await interaction.response.defer()
-  try:
-  
-    image1 = Image.open('OGimage.png')
-    image1.show()
-    image2 = Image.open('OGBase.jpg')
-    image2.show()
-    image3 = Image.open('tundralogo.png')
-    image3.show()
-
-    image2=image2.convert("RGBA")
-    image1=image1.convert("RGBA")
-    image3=image3.convert("RGBA")
-  
-    image2_size = image2.size
-    image1_size= image1.size
-    image3_size = image3.size
-  
-    image1 = image1.resize((int(image1_size[0]/2), int(image1_size[1]/2)))
-    image3 = image3.resize((int(image3_size[0]/2), int(image3_size[1]/2)))
-    new_image = Image.new('RGB', (image2_size[0], image2_size[1]), (250,250,250))
-    new_image.paste(image2, (0,0))
-    new_image.paste(image1, (150, 300))
-    new_image.save("saved_image.jpg", "JPEG")
-    new_image.show()
-
-    image2.paste(image1, (150, 300), image1)
-    image2.paste(image3, (675, 300), image3)
-    image2.save("aaa.png", format= "png")
-    
-    channel = interaction.channel
-    await interaction.followup.send(file=discord.File('aaa.png'))
-  except Exception as e:
-    print(e)
 
 
 

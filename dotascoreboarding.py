@@ -14,20 +14,20 @@ def dotascoreboarding():
   
   
   
-  f = open('Scoreboard4.csv', 'w+')
+  f = open('Scoreboard44.csv', 'w+')
   
  
   f.close()
-  upload_file('/dotascoreboard.csv', 'Scoreboard4.csv')
+  upload_file('/dotascoreboard.csv', 'Scoreboard44.csv')
   
 
 
 
 def dotascoreboardreader(pagenumber):
   #opens the scoreboard file + generates a file to store a sorted list for leaderboard
-  download_file('/dotascoreboard.csv', 'scoreboard5.csv')
-  f = open('scoreboard5.csv', 'r') 
-  f2 = open('scoreboard6.csv', 'w') 
+  download_file('/dotascoreboard.csv', 'scoreboard45.csv')
+  f = open('scoreboard45.csv', 'r') 
+  f2 = open('scoreboard46.csv', 'w') 
   table = BeautifulTable()
   table.set_style(BeautifulTable.STYLE_MARKDOWN)
   table.maxwidth = 30
@@ -45,7 +45,7 @@ def dotascoreboardreader(pagenumber):
   for row in sortedList:
     writer.writerow(row)
   f2.close()
-  f3 = open('scoreboard6.csv', 'r')
+  f3 = open('scoreboard46.csv', 'r')
 
   messagetosend=""
   csv_reader2 = csv.reader(f3)
@@ -99,9 +99,9 @@ def dotascoreboardsingle(userID):
   filenames = ["accountname", "userIDs", "score"]
   try:
     #downloads CSV file from dropbox 
-    download_file('/dotascoreboard.csv', 'scoreboard5.csv')
-    f2 = open('scoreboard6.csv', 'w') 
-    f=open('scoreboard5.csv', 'r')
+    download_file('/dotascoreboard.csv', 'scoreboard45.csv')
+    f2 = open('scoreboard46.csv', 'w') 
+    f=open('scoreboard45.csv', 'r')
   
     reader = csv.reader(f, delimiter=',')
     sortedList = sorted(reader, key=lambda row: int(row[2]), reverse = True)
@@ -110,7 +110,7 @@ def dotascoreboardsingle(userID):
     for row in sortedList:
       writer.writerow(row)
     f2.close()
-    f3 = open('scoreboard6.csv', 'r')
+    f3 = open('scoreboard46.csv', 'r')
     reader = csv.DictReader(f3, fieldnames=filenames)
     i=0
     j=0
@@ -136,9 +136,9 @@ def dotascoreboardadder(usersname, userID, scoretoadd, counter):
 
   try:
     if(counter == 1):
-      table = BeautifulTable().from_csv('scoreboard5.csv', header=False)
+      table = BeautifulTable().from_csv('scoreboard45.csv', header=False)
     else:
-      table = BeautifulTable().from_csv('scoreboard6.csv', header=False)
+      table = BeautifulTable().from_csv('scoreboard46.csv', header=False)
       
   except Exception as e:
     print(e)
@@ -162,7 +162,7 @@ def dotascoreboardadder(usersname, userID, scoretoadd, counter):
  
   
   try:
-    table.to_csv('scoreboard6.csv')
+    table.to_csv('scoreboard46.csv')
   except Exception as e:
     print(e)
 

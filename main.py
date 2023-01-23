@@ -1860,7 +1860,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 @tree.command(name="dotaremove", description = "Remove 1 point from the Dota scoreboard", guild = discord.Object(id = IDForServer))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
-  download_file('/dotascoreboard.csv', 'scoreboard5.csv')
+  download_file('/dotascoreboard.csv', 'scoreboard45.csv')
   try:
     server = interaction.guild
     guild = interaction.guild
@@ -1888,7 +1888,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     if (i == 0):
         await interaction.followup.send("No one was found in that role!")
     else:
-        upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        upload_file('/dotascoreboard.csv', 'scoreboard46.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
     await interaction.followup.send("You need to tag the winning role: example /dotaremove @D9-0")
@@ -1899,7 +1899,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
 @tree5.command(name="dotaremove", description = "Remove 1 point from the Dota scoreboard", guild = discord.Object(id = IDForServer5))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
-  tundradownload_file('/dotascoreboard.csv', 'scoreboard5.csv')
+  tundradownload_file('/dotascoreboard.csv', 'scoreboard25.csv')
   try:
     server = interaction.guild
     guild = interaction.guild
@@ -1927,7 +1927,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     if (i == 0):
         await interaction.followup.send("No one was found in that role!")
     else:
-        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard26.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
   except:
     await interaction.followup.send("You need to tag the winning role: example /dotaremove @D9-0")
@@ -2347,7 +2347,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
       if (i == 0):
           await interaction.followup.send("No one was found in that role!")
       else:
-        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard26.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
     except:
       await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
@@ -2380,7 +2380,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
       if (i == 0):
           await interaction.followup.send("No one was found in that role!")
       else:
-        tundraupload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        tundraupload_file('/dotascoreboard.csv', 'scoreboard26.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
     except:
       await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
@@ -2500,7 +2500,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
       if (i == 0):
           await interaction.followup.send("No one was found in that role!")
       else:
-        upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        upload_file('/dotascoreboard.csv', 'scoreboard46.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
     except:
       await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )
@@ -2533,7 +2533,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
       if (i == 0):
           await interaction.followup.send("No one was found in that role!")
       else:
-        upload_file('/dotascoreboard.csv', 'scoreboard6.csv')
+        upload_file('/dotascoreboard.csv', 'scoreboard46.csv')
         await interaction.followup.send("I have added the results! This affected: " +str(i) + " users")
     except:
       await interaction.followup.send("You need to tag the winning role: example /dotaadd @D9-0" )

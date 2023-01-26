@@ -74,6 +74,7 @@ def DotaStreams():
       pass
                   #Adds game to containers - dota
     try:
+        
         team1 = containers[0]
         team2 = containers2[0]
       
@@ -137,13 +138,26 @@ def DotaStreams():
         i=0
         streamlinks=[]
         flags=[]
-        print(len(test))
+        #print(len(test))
+        #print(test)
         while (i < len(test)):
-          if (i < (len(test) / 2)):
-            test2 = test[i].find_all(href=True)
-            flag = test2[0].get('href')
-            flag2 = flag.rsplit(":")
+          if (float(i) < (float(len(test)) / 2)):
+            #print(test[0])
+            
+            test2 = test[i].find_all(href=False)
+            
+            #print(test2)
+            
+            #flag = test2[0].get('src')
+            test3 = test2[0]
+            print(test3)
+            #flag = test3.get('src')
+            flag = test3.find('img').attrs['src']
+            print(flag)
+            flag2 = flag.rsplit("/")
             flags.append(flag2[(len(flag2)-1)])
+            print(flags)
+            #print(flag & "t")
             
           else:
             test2 = test[i].find_all(href=True)
@@ -160,7 +174,11 @@ def DotaStreams():
         counter3=0
         if (len(streamlinks) == len(flags)):
           while counter3 < (len(flags)):
-            if (flags[counter3] == "Indonesia"):
+            if (flags[counter3] == "Ua_hd.png"):
+              flagsToSend.append(':flag_ua:')
+            elif (flags[counter3] == "Ru_hd.png"):
+              flagsToSend.append(':flag_ru:')
+            elif (flags[counter3] == "Indonesia"):
               flagsToSend.append(':flag_id:')
             elif (flags[counter3] == "Ukraine"):
               flagsToSend.append(':flag_ua:')

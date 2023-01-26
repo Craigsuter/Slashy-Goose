@@ -150,13 +150,13 @@ def DotaStreams():
             
             #flag = test2[0].get('src')
             test3 = test2[0]
-            print(test3)
+            #print(test3)
             #flag = test3.get('src')
             flag = test3.find('img').attrs['src']
-            print(flag)
+            #print(flag)
             flag2 = flag.rsplit("/")
             flags.append(flag2[(len(flag2)-1)])
-            print(flags)
+            #print(flags)
             #print(flag & "t")
             
           else:

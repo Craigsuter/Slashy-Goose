@@ -2321,6 +2321,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
   if(str(points_to_add)=="None"):
     await interaction.response.defer()
     try:
+      tundradownload_file('/dotascoreboard.csv', 'scoreboard25.csv')
       guild = interaction.guild
       server = interaction.guild
       role_name = discord.utils.get(guild.roles, id=int(role.id))
@@ -2484,6 +2485,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, points_to_a
       member_ids = []
       file = open("filetosend.txt", "w")
       file.close()
+      download_file('/dotascoreboard.csv', 'scoreboard45.csv')
       for role in server.roles:
           if role_name == role.name:
               role_id = role

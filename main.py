@@ -113,6 +113,7 @@ class aclient(discord.Client):
     try:
         scheduler.add_job(testingspam, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
+        scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
         print("Daily announcement success")
     except:
         print("Daily announced schedule failed")
@@ -187,10 +188,9 @@ class sentinelclient(discord.Client):
       await tree2.sync(guild=discord.Object(id = int(os.getenv('IDForServer2'))))
       self.synced = True
     print(f"We have logged in as {self.user}")
-    schedulersentinel = AsyncIOScheduler()
+    #schedulersentinel = AsyncIOScheduler()
 
     try:
-        schedulersentinel.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
         print("Daily announcement success")
     except:
         print("Daily announced schedule failed")

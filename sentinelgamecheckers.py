@@ -146,7 +146,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
 
     UTCTime = timeOfGame.rsplit(":")
     UTCTime2 = timeOfGame.rsplit(":")
-    UTCBC = int(UTCTime[0]) - 1
+    UTCBC = int(UTCTime[0])
     
     if UTCBC > 12:
       if prefixOfTime == "am":

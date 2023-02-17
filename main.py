@@ -1090,7 +1090,7 @@ async def self(interaction: discord.Interaction):
             f.close()
             sentinelupload_file('/valoevent.txt', 'valoevent.txt')
             data2= await guild.fetch_scheduled_event(eventdata.id)
-            await channel.send(data2.url)
+            #await channel.send(data2.url)
 
           else:
             print("Valo Enemy = TBD")
@@ -1103,7 +1103,7 @@ async def self(interaction: discord.Interaction):
           f.close()
           sentinelupload_file('/valoevent.txt', 'valoevent.txt')
           data2= await guild.fetch_scheduled_event(eventdata.id)
-          await channel.send(data2.url)
+          #await channel.send(data2.url)
           pass
         else:
           print("Valo enemy = TBD")

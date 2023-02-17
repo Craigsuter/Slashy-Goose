@@ -73,6 +73,7 @@ def SentinelValoStreams(pageURL):
 
 
       flaglen = len(flags)
+      print(flags)
 
       flagdata=[]
       k=0
@@ -80,14 +81,21 @@ def SentinelValoStreams(pageURL):
         try:
 
           data = flags[k][1]
+          #print(data)
           datasplit = data.rsplit("-")
-          flagdata.append(datasplit[1])
+          #print(datasplit)
+          if(str(datasplit[1])!= "external"):
+            flagdata.append(datasplit[1])
+            k=k+1
+          else:
+            k=k+1
 
         except:
           pass
-        k=k+2
+       # k=k+2
 
       actualflags=[]
+      print(flagdata)
       o=0
       while ((o < len(flagdata)) or (o == 0)):
         try:

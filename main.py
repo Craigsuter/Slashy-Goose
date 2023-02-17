@@ -1048,6 +1048,70 @@ async def self(interaction: discord.Interaction, delay: str, remindertosave: str
 
 
 
+@tree2.command(name="valodiscordevent", description = "Create a discord event for the next Valorant game", guild = discord.Object(id = IDForServer2))
+async def self(interaction: discord.Interaction):
+    try:
+      guild = interaction.guild
+      await interaction.response.defer()  
+      guild = interaction.guild
+      value = SentinelsValoCheck(0, 'https://www.vlr.gg/team/2/sentinels', False)
+      teams = value[1]
+      enemyteam = value[10]
+      time = datetime.datetime.now().astimezone() + value[3]
+      streaminfo = SentinelValoStreams('https://www.vlr.gg/team/2/sentinels')
+      linktogame = value[4]
+      linktogame = "https://www.vlr.gg/team/2/sentinels"
+      gamepos = value[6]
+      serieslength = value[8]
+      epoch = value[9]
+      name= "Valorant game: " + teams
+      tourniname = value[7]
+      description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
+      end_time=time+datetime.timedelta(minutes=30)
+      #guild = client.get_guild(423635651339223041)
+      linetocheck = teams + "," + gamepos +"," +tourniname
+      try:
+        sentineldownload_file('/valoevent.txt', 'valoevent.txt')
+        f=open('valoevent.txt', 'r')
+        lines=f.readlines()
+        f.close()
+      except:
+        lines="empty"
+      
+      try:
+        if lines[0] == linetocheck:
+          
+          pass
+        else:
+          if(str(enemyteam) != "TBD"):
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            f = open("valoevent.txt", "w")
+            f.write(linetocheck)
+            f.close()
+            sentinelupload_file('/valoevent.txt', 'valoevent.txt')
+            data2= await guild.fetch_scheduled_event(eventdata.id)
+            await channel.send(data2.url)
+
+          else:
+            print("Valo Enemy = TBD")
+          
+      except:
+        if(str(enemyteam) != "TBD"):
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+          f = open("valoevent.txt", "w")
+          f.write(linetocheck)
+          f.close()
+          sentinelupload_file('/valoevent.txt', 'valoevent.txt')
+          data2= await guild.fetch_scheduled_event(eventdata.id)
+          await channel.send(data2.url)
+          pass
+        else:
+          print("Valo enemy = TBD")
+
+      
+      
+    except Exception as e:
+      print(e)
 
 
 @tree.command(name="valoldndiscordevent", description = "Create a discord event for the next Valorant game", guild = discord.Object(id = IDForServer))
@@ -5566,7 +5630,7 @@ async def testingtundraspam():
 async def testingspamsentinels():
   try:
       #emote = client.get_emoji(730890894814740541)
-      channel = client.get_channel(1011742847013245008)
+      channel = client2.get_channel(1011742847013245008)
       #channel2 = client.get_channel(1011742847013245008)
       value = SentinelsValoCheck(0, 'https://www.vlr.gg/team/2/sentinels', False)
       teams = value[1]
@@ -5582,7 +5646,7 @@ async def testingspamsentinels():
       tourniname = value[7]
       description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
       end_time=time+datetime.timedelta(minutes=30)
-      guild = client.get_guild(423635651339223041)
+      guild = client2.get_guild(423635651339223041)
       linetocheck = teams + "," + gamepos +"," +tourniname
       try:
         sentineldownload_file('/valoevent.txt', 'valoevent.txt')

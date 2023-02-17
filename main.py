@@ -4844,7 +4844,7 @@ async def testingspam():
       guild = client.get_guild(689865753662455829)
       if(len(gamepage) > 99):
         gamepage=gamepage
-       else:
+      else:
         gamepage = "https://www.hltv.org/team/10503/og#tab-matchesBox"
       linetocheck= teams+","+gamepage
 

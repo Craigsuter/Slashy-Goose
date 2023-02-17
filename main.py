@@ -745,7 +745,10 @@ async def self(interaction: discord.Interaction):
     streaminfo = CSGOStreams('https://www.hltv.org/team/10503/og#tab-matchesBox')
     streamdata = streaminfo[3]
     description = tourniname + "\n" + streamdata + "\n:mega: https://twitter.com/OGcsgo\n"
-    
+    if(len(gamepage) > 99):
+      gamepage=gamepage
+    else:
+      gamepage = "https://www.hltv.org/team/10503/og#tab-matchesBox"
     linetocheck= teams+","+gamepage
     lines= "empty"
 
@@ -4839,6 +4842,10 @@ async def testingspam():
       streamdata = streaminfo[3]
       description = tourniname + "\n" + streamdata + "\n:mega: https://twitter.com/OGcsgo\n"
       guild = client.get_guild(689865753662455829)
+      if(len(gamepage) > 99):
+        gamepage=gamepage
+       else:
+        gamepage = "https://www.hltv.org/team/10503/og#tab-matchesBox"
       linetocheck= teams+","+gamepage
 
 

@@ -1,4 +1,5 @@
 import discord
+from requests.auth import HTTPBasicAuth
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from discord import app_commands
@@ -170,7 +171,7 @@ class houseclient(discord.Client):
     if not self.synced:
       await treehouse.sync(guild=discord.Object(id = int(os.getenv('IDForServerHouse'))))
       self.synced = True
-    print(f"We have logged in as {self.user}")
+    print(f"We have logged in as t {self.user}")
 
 
     
@@ -754,7 +755,10 @@ async def self(interaction: discord.Interaction):
         await interaction.followup.send("Event has already been added")
         pass
       else:
-        await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+        if(len(gamepage) > 99):
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+        else:
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
         f = open("csgoevent.txt", "w")
         f.write(linetocheck)
         f.close()
@@ -762,7 +766,10 @@ async def self(interaction: discord.Interaction):
         await interaction.followup.send("Event made - you will need to share this in the event channel")
         
     except:
-      await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+      if(len(gamepage) > 99):
+        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+      else:
+        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
       f = open("csgoevent.txt", "w")
       f.write(linetocheck)
       f.close()
@@ -4284,7 +4291,18 @@ async def self(interaction: discord.Interaction):
   embed.add_field(name="Where I found the streams",value=urloftourni,inline=False)
   await interaction.followup.send(embed=embed)
 
-
+@treehouse.command(name="powerstuff", description = "huuhuh", guild = discord.Object(id = IDForServerHouse))
+async def self(interaction: discord.Interaction):
+  await interaction.response.defer()
+  api_url = 'https://api.octopus.energy/v1/electricity-meter-points/1100770774030/meters/19M0031156/consumption/'
+  api_key = str(os.getenv('apiforocto'))
+  header = {'Content-type': 'application/json','Authorization': api_key}
+  method ="get"
+  auth = HTTPBasicAuth('apikey', api_key)
+  #response = requests.get(api_url)
+  #rsp = requests.request(method, api_url, headers=headers)
+  rsp = requests.get(api_url, headers=header)
+  print(rsp)
 
 
 
@@ -4847,7 +4865,10 @@ async def testingspam():
         if lines[0] == linetocheck or counter > 0:
           pass
         else:
-          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+          if(len(gamepage) > 99):
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+          else:
+            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
           f = open("csgoevent.txt", "w")
           f.write(linetocheck)
           f.close()
@@ -4862,7 +4883,10 @@ async def testingspam():
           upload_file('/csgoeventsignup.txt', 'csgoeventsign.txt')
           
       except:
-        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
+        if(len(gamepage) > 99):
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+        else:
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
         f = open("csgoevent.txt", "w")
         f.write(linetocheck)
         f.close()
@@ -5606,10 +5630,10 @@ asyncio.set_event_loop(loop)
 
 
 loop.create_task(client.start((os.getenv('TOKEN'))))
+loop.create_task(houseclient.start((os.getenv('TOKENHOUSE'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
 loop.create_task(client3.start((os.getenv('TOKEN3'))))
 loop.create_task(client5.start((os.getenv('TOKEN5'))))
-loop.create_task(houseclient.start((os.getenv('TOKENHOUSE'))))
 #loop.create_task(client4.start((os.getenv('TOKEN4'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

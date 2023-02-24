@@ -1,0 +1,3 @@
+name: Dyno - their id number: 155149108183695360
+name: OGooseBot - their id number: 825467569800347649
+<@155149108183695360>, <@825467569800347649>, 

@@ -2882,7 +2882,9 @@ async def self(interaction: discord.Interaction, role: discord.Role):
   j=0
   while(j < len(display_names)):
     f = open("filetosend.txt", "a")
-    f.write("<@" + str(member_ids[j] + ">"))
+    f.write("<@" + str(member_ids[j]) + ">, ")
+    f.close
+    j=j+1
   f = open("filetosend.txt", "r")
   print(f.read())
   await interaction.followup.send("Role returned: " + role_name + '!',file=discord.File("filetosend.txt"))

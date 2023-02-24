@@ -1071,6 +1071,13 @@ async def self(interaction: discord.Interaction):
       #guild = client.get_guild(423635651339223041)
       linetocheck = teams + "," + gamepos +"," +tourniname
       try:
+        sentineldownload_file('/sen.png', 'sen.png')
+        with open('./sen.png', 'rb') as fp:
+          image_bytes = fp.read()
+      except Exception as e:
+        print("LOL")
+        print(e)
+      try:
         sentineldownload_file('/valoevent.txt', 'valoevent.txt')
         f=open('valoevent.txt', 'r')
         lines=f.readlines()
@@ -1084,7 +1091,7 @@ async def self(interaction: discord.Interaction):
           pass
         else:
           if(str(enemyteam) != "TBD"):
-            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            eventdata = await guild.create_scheduled_event(name=name, image = image_bytes, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
             f = open("valoevent.txt", "w")
             f.write(linetocheck)
             f.close()
@@ -1111,7 +1118,9 @@ async def self(interaction: discord.Interaction):
       
       
     except Exception as e:
-      print(e)
+      exc_type, exc_obj, exc_tb = sys.exc_info()
+      fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+      print(exc_type, fname, exc_tb.tb_lineno)
 
 
 @tree.command(name="valoldndiscordevent", description = "Create a discord event for the next Valorant game", guild = discord.Object(id = IDForServer))
@@ -5648,6 +5657,9 @@ async def testingspamsentinels():
       end_time=time+datetime.timedelta(minutes=30)
       guild = client2.get_guild(423635651339223041)
       linetocheck = teams + "," + gamepos +"," +tourniname
+      sentineldownload_file('/sen.png', 'sen.png')
+      with open('./sen.png', 'rb') as fp:
+        image_bytes = fp.read()
       try:
         sentineldownload_file('/valoevent.txt', 'valoevent.txt')
         f=open('valoevent.txt', 'r')
@@ -5662,7 +5674,7 @@ async def testingspamsentinels():
           pass
         else:
           if(str(enemyteam) != "TBD"):
-            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            eventdata = await guild.create_scheduled_event(name=name, image = image_bytes, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
             f = open("valoevent.txt", "w")
             f.write(linetocheck)
             f.close()

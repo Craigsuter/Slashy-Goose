@@ -220,6 +220,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
         embed.add_field(name="Links", value="[Sentinels VLR](https://www.vlr.gg/team/2/sentinels) / [Sentinels Valorant Liquipedia](https://liquipedia.net/valorant/Sentinels)", inline=False)
  
     #return(embed)
+    print(c)
     return (embed, valorantTeams, valorantTeamTime, c, matchlink, dayofgame2, gameposition, tourniname, serieslength, epoch, nameOfEnemy)
 
   except Exception as e:

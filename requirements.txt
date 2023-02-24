@@ -19,3 +19,4 @@ fake_useragent
 python-dateutil
 BeautifulTable
 requests
+aiohttp

@@ -2805,7 +2805,7 @@ async def self(interaction: discord.Interaction):
         pass
       else:
         
-        await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time,entity_type=discord.enums.EntityType(3), location=linktogame)
+        await guild.create_scheduled_event(name=name, description=description, start_time=time,privacy_level = 'guild_only', end_time=end_time,entity_type=discord.enums.EntityType(3), location=linktogame)
         f = open("dotaevent.txt", "w")
         f.write(linetocheck)
         f.close()
@@ -2813,7 +2813,7 @@ async def self(interaction: discord.Interaction):
         await interaction.followup.send("Event made - you will need to share this in the event channel")
         
     except:
-      await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+      await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time,privacy_level = 'guild_only', entity_type=discord.enums.EntityType(3), location=linktogame)
       f = open("dotaevent.txt", "w")
       f.write(linetocheck)
       f.close()
@@ -4608,7 +4608,7 @@ async def testingspam():
           if(Teams == "OG vs TBD" or Teams == "TBD vs OG"):
             print("TBD")
           else:
-            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            eventdata = await guild.create_scheduled_event(name=name, description=description,privacy_level = 'guild_only', start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
             data2= await guild.fetch_scheduled_event(eventdata.id)
             await channel.send(data2.url)
             test = await channel2.send(str(gardenerinfo))
@@ -4629,7 +4629,7 @@ async def testingspam():
         if(Teams == "OG vs TBD" or Teams == "TBD vs OG"):
             print("TBD")
         else:
-            eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            eventdata = await guild.create_scheduled_event(name=name, description=description,privacy_level = 'guild_only', start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
             data2= await guild.fetch_scheduled_event(eventdata.id)
             await channel.send(data2.url)
             test = await channel2.send(str(gardenerinfo))

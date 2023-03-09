@@ -7,6 +7,7 @@ load_dotenv()
 import sys, os
 import requests
 import traceback
+import urllib.parse
 
 
 #Gets the streams from OG's Liquipedia
@@ -281,7 +282,13 @@ def CSGOStreams(page):
       linkinfo.append(a['href'])
 
     matchlink = "https://www.hltv.org" + linkinfo[0]  
-    r = requests.get(matchlink , headers=headers)
+    sa_key = os.getenv('sa_key') # paste here
+    sa_api = 'https://api.scrapingant.com/v2/general'
+    qParams = {'url': matchlink, 'x-api-key': sa_key}
+    reqUrl = f'{sa_api}?{urllib.parse.urlencode(qParams)}'  
+    
+    r = requests.get(reqUrl)
+    #r = requests.get(matchlink , headers=headers)
     try:
       #Opens the page for the game and gets the values from it that are needed
       page_soup = soup(r.text, "html.parser")

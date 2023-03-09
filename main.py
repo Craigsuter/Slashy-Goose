@@ -759,7 +759,7 @@ async def self(interaction: discord.Interaction):
         pass
       else:
         if(len(gamepage) > 99):
-          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(2), location=731631690249666615)
         else:
           eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
         f = open("csgoevent.txt", "w")
@@ -770,7 +770,7 @@ async def self(interaction: discord.Interaction):
         
     except:
       if(len(gamepage) > 99):
-        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location="https://www.hltv.org/team/10503/og#tab-matchesBox")
+        eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(2), location=731631690249666615)
       else:
         eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=gamepage)
       f = open("csgoevent.txt", "w")
@@ -2804,7 +2804,8 @@ async def self(interaction: discord.Interaction):
         await interaction.followup.send("Event has already been added")
         pass
       else:
-        await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+        
+        await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time,entity_type=discord.enums.EntityType(3), location=linktogame)
         f = open("dotaevent.txt", "w")
         f.write(linetocheck)
         f.close()
@@ -5646,6 +5647,7 @@ async def testingspamsentinels():
   try:
       #emote = client.get_emoji(730890894814740541)
       channel = client2.get_channel(1011742847013245008)
+      voice = client2.get_channel(845041197776109589)
       #channel2 = client.get_channel(1011742847013245008)
       value = SentinelsValoCheck(0, 'https://www.vlr.gg/team/2/sentinels', False)
       teams = value[1]
@@ -5659,7 +5661,7 @@ async def testingspamsentinels():
       epoch = value[9]
       name= "Valorant game: " + teams
       tourniname = value[7]
-      description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/OGvalorant\n" 
+      description = tourniname + "\n" + str(value[4]) + "\n" + gamepos + "\n" + streaminfo[1] + "\n:mega: https://twitter.com/Sentinels\n" 
       end_time=time+datetime.timedelta(minutes=30)
       guild = client2.get_guild(423635651339223041)
       linetocheck = teams + "," + gamepos +"," +tourniname
@@ -5680,7 +5682,7 @@ async def testingspamsentinels():
           pass
         else:
           if(str(enemyteam) != "TBD"):
-            eventdata = await guild.create_scheduled_event(name=name, image = image_bytes, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+            eventdata = await guild.create_scheduled_event(name=name, channel=voice, image = image_bytes, description=description, start_time=time, end_time=end_time)
             f = open("valoevent.txt", "w")
             f.write(linetocheck)
             f.close()
@@ -5693,7 +5695,7 @@ async def testingspamsentinels():
           
       except:
         if(str(enemyteam) != "TBD"):
-          eventdata = await guild.create_scheduled_event(name=name, description=description, start_time=time, end_time=end_time, entity_type=discord.enums.EntityType(3), location=linktogame)
+          eventdata = await guild.create_scheduled_event(name=name, channel=voice, description=description, start_time=time, end_time=end_time)
           f = open("valoevent.txt", "w")
           f.write(linetocheck)
           f.close()

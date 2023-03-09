@@ -5609,7 +5609,7 @@ async def testingtundraspam():
 
                 pass
             else:
-                eventdata = await guild.create_scheduled_event(name=name,description=description,start_time=time,end_time=end_time, entity_type=discord.enums.EntityType(3),
+                eventdata = await guild.create_scheduled_event(name=name,privacy_level = discord.PrivacyLevel.guild_only, description=description,start_time=time,end_time=end_time, entity_type=discord.enums.EntityType(3),
                     location=linktogame)
                 f = open("dotaevent.txt", "w")
                 f.write(linetocheck)
@@ -5625,7 +5625,7 @@ async def testingtundraspam():
                 start_time=time,
                 end_time=end_time,
                 entity_type=discord.enums.EntityType(3),
-                location=linktogame)
+                location=linktogame, privacy_level = discord.PrivacyLevel.guild_only)
             f = open("dotaevent.txt", "w")
             f.write(linetocheck)
             f.close()
@@ -5682,7 +5682,7 @@ async def testingspamsentinels():
           pass
         else:
           if(str(enemyteam) != "TBD"):
-            eventdata = await guild.create_scheduled_event(name=name, channel=voice, image = image_bytes, description=description, start_time=time, end_time=end_time)
+            eventdata = await guild.create_scheduled_event(name=name, privacy_level = discord.PrivacyLevel.guild_only, channel=voice, image = image_bytes, description=description, start_time=time, end_time=end_time)
             f = open("valoevent.txt", "w")
             f.write(linetocheck)
             f.close()
@@ -5695,7 +5695,7 @@ async def testingspamsentinels():
           
       except:
         if(str(enemyteam) != "TBD"):
-          eventdata = await guild.create_scheduled_event(name=name, channel=voice, description=description, start_time=time, end_time=end_time)
+          eventdata = await guild.create_scheduled_event(name=name,privacy_level = discord.PrivacyLevel.guild_only, channel=voice, description=description, start_time=time, end_time=end_time)
           f = open("valoevent.txt", "w")
           f.write(linetocheck)
           f.close()

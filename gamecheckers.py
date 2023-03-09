@@ -6,8 +6,11 @@ import discord
 #load_dotenv()
 import datetime
 from time import strptime
+import time
 import requests
 from datetime import timedelta
+import sys, os
+import urllib.parse
 
 
 
@@ -16,7 +19,7 @@ def DotaCheck(channelDataID, isShort):
       
       headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
-
+      print("test")
       OGpage = 'https://liquipedia.net/dota2/OG'
       my_url = OGpage
       r2 = requests.get(OGpage, headers=headers)
@@ -47,10 +50,24 @@ def DotaCheck(channelDataID, isShort):
       containers3 = page_soup2.findAll(
           "span", {"class": "timer-object timer-object-countdown-only"})
       containers4 = page_soup2.findAll("div", {"style" : "font-size:75%; padding-bottom:2px"})
+      print("HMMMM")
+      #print(page_soup2)
+      
+      containers6 = page_soup2.findAll("a", {"class": "image"})
+      print(containers6[0])
+      containers6 = containers6[0]
+      images = containers6.findAll('img')
+      print(images)
+      for image in images:
+        print("https://liquipedia.net" + image['src'])
+
+    
+      #containers6 = "https://liquipedia.net" +  str(containers6['src'])
       serieslength= containers4[0].text
       serieslength = serieslength[1:-1]
+      
       containers5 = page_soup2.findAll("div", {"style": "overflow:hidden; text-overflow:ellipsis; max-width: 170px; vertical-align:middle; white-space:nowrap; font-size:11px; height:16px; margin-top:3px;"})
-
+      
       try:
         v_table = page_soup2.find("table", attrs={"class": "wikitable wikitable-striped infobox_matches_content"})
         tabledata = v_table.tbody.find_all("tr")
@@ -206,16 +223,16 @@ def DotaCheck(channelDataID, isShort):
 def CSGOCheck(channelDataID, page, isShort):
   try:
     #Loading HLTV of OG
-    headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
-
+    headers=headers={'User-Agent': "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25"}
     #change url
     OGpage = str(page)
     #'https://www.hltv.org/team/10503/og#tab-matchesBox'
     #https://www.hltv.org/team/11672/og-academy#tab-matchesBox
-    
-    
+       
     
     r2 = requests.get(OGpage, headers=headers)
+    print(r2)
+    
 
     page_soup2 = soup(r2.text, "html.parser")
     dataofpage = page_soup2.findAll("td", {"class":"matchpage-button-cell"})
@@ -228,15 +245,28 @@ def CSGOCheck(channelDataID, page, isShort):
       linkinfo.append(a['href'])
 
     matchlink = "https://www.hltv.org" + linkinfo[0]
-
+    print(matchlink)
   
+
+    
+    #headers = requests.utils.default_headers()
+    #headers.update({'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0',})
    
     
-    r = requests.get(matchlink , headers=headers)
+    #r = requests.get(matchlink , headers=headers)
+    sa_key = os.getenv('sa_key') # paste here
+    sa_api = 'https://api.scrapingant.com/v2/general'
+    qParams = {'url': matchlink, 'x-api-key': sa_key}
+    reqUrl = f'{sa_api}?{urllib.parse.urlencode(qParams)}'  
+    
+    r = requests.get(reqUrl)
+    
     
     #Load the page of the match
+    print(r)
     page_soup = soup(r.text, "html.parser")
     test = page_soup.findAll("div", {"class":"teamName"})
+    print(test)
     test2 = page_soup.findAll("div", {"class": "padding preformatted-text"})
     team1= test[0].text
     team2 = test[1].text
@@ -373,14 +403,19 @@ def CSGOCheck(channelDataID, page, isShort):
         embed.add_field(name="Links", value="[OG Academy Liquipedia](https://liquipedia.net/counterstrike/OG_Academy)\n[OG CSGO Academy HLTV](https://www.hltv.org/team/11672/og-academy#tab-matchesBox)\n[Game page](" + matchlink +")\n[Tournament](" + link4tourni+")", inline=False)
         
     if timetoadd >0:
+      print("return2")
       return(teams, timeofgame, datep3, time2, matchlink, link4tourni, embed, timetoadd, tourniname, serieslength, test)
     else:
+      print("return3")
       timetoadd=0
       return(teams, timeofgame, datep3, time2, matchlink, link4tourni, embed, timetoadd, tourniname, serieslength, test)
 
 
 
   except Exception as e: 
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+    print(exc_type, fname, exc_tb.tb_lineno)
     print(e)
     if(isShort == True):
       embed= "There is currently no games planned for OG, for more information use /nextcsgo in <#721391448812945480>"

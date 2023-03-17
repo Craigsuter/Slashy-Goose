@@ -139,7 +139,7 @@ def DotaStreams():
         i=0
         streamlinks=[]
         flags=[]
-      
+        countingerror=0
         #print(len(test))
         #print(test)
         while (i < len(test)):
@@ -166,8 +166,10 @@ def DotaStreams():
               test2 = test[i].find_all(href=True)
               print(test2)
               streamlinks.append(test2[0].get('href'))
+              countingerror+=1
             except:
-              streamlinks.append("No URL for this flag")
+              flags.pop(countingerror)
+              #streamlinks.append("No URL for this flag")
 
 
           i=i+1

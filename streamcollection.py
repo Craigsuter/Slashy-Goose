@@ -547,3 +547,257 @@ def ValoStreams(pageURL):
     #embed.add_field(name="What you can try", value="You can try using !nextvalo / !nextvalorant to see if there are any games coming up", inline=True)
     #embed.add_field(name="Links", value="https://www.vlr.gg/team/2965/og / https://liquipedia.net/valorant/OG", inline=False)
     #await message.channel.send(embed=embed)
+
+
+def OldDotaStreams():
+  headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
+  try:
+    my_url10 = "https://liquipedia.net/dota2/OG"
+
+    my_url10 = str(my_url10)
+    uClient10 = uReq(my_url10)
+    page_html10 = uClient10.read()
+    uClient10.close()
+    page_soup10 = soup(page_html10, "html.parser")
+
+    #Web scrapes for the first game and finds its url
+    v_table = page_soup10.find("table", attrs={"class": "wikitable wikitable-striped infobox_matches_content"})
+    tabledata = v_table.tbody.find_all("tr")
+    #for td in tabledata[1].find_all('a', href=True):
+      #print ("Found the URL:", td['href'])
+
+    #puts that URL into the new webscraping
+    tablestorage = tabledata[1].find_all('a', href=True)
+    URL = tablestorage[0]['href']
+    extendedURL = "https://liquipedia.net" + URL
+
+
+    #Parses the HTML data - Dota
+    containers = page_soup10.findAll(
+        "span", {"class": "team-template-team2-short"})
+    containers2 = page_soup10.findAll(
+        "span", {"class": "team-template-team-short"})
+
+    container3 = page_soup10.findAll("span", {"class": "timer-object timer-object-countdown-only"})
+    
+    #finds twitch stream
+    try:
+      twitch = container3[0].get('data-stream-twitch')
+      if(twitch == 'ESL_Dota_2_B'):
+        twitch = "https://www.twitch.tv/esl_dota2b"
+      elif(twitch == 'ESL_Dota_2'):
+        twitch = "https://www.twitch.tv/esl_dota2"
+      elif(twitch=='Gamers8GG'):
+        twitch = "https://www.twitch.tv/gamers8gg" 
+      elif(twitch== 'Gamers8GG_B'):
+        twitch =  "https://www.twitch.tv/gamers8gg_b"
+      elif(twitch=='PGL_Dota_2'):
+        twitch = "https://www.twitch.tv/pgl_dota2"
+      elif(twitch=='PGL_Dota2_EN2'):
+        twitch = "https://www.twitch.tv/pgl_dota2en2"
+      elif(twitch=='PGL_Dota2_EN3'):
+        twitch = "https://www.twitch.tv/pgl_dota2en3"
+      elif(twitch=='PGL_Dota2_EN4'):
+        twitch = "https://www.twitch.tv/pgl_dota2en4"
+      else:
+        twitch = "https://www.twitch.tv/" + twitch
+        
+      
+        
+
+      
+      
+     
+    except:
+      twitch="None"
+      pass
+                  #Adds game to containers - dota
+    try:
+        
+        team1 = containers[0]
+        team2 = containers2[0]
+      
+    except:
+        pass
+
+    #Grabbing 1st team - Dota 2
+    try:
+
+        Teams1 = team1.a["title"]
+    except:
+        try:
+
+            Teams1 = team1["data-highlightingclass"]
+
+        except:
+            pass
+
+    #Grabbing 2nd team - Dota 2
+    try:
+
+        Teams2 = team2.a["title"]
+
+    except:
+        try:
+
+            Teams2 = team2["data-highlightingclass"]
+
+        except:
+            pass
+
+  
+    
+    
+    bigcount=0
+    foundstream = False
+    #Opens the new page, and checks for the stream table
+    page=extendedURL
+    r3 = requests.get(page,headers=headers)
+    try:
+      page_soup2 = soup(r3.text,"html.parser")
+      #streamtable = page_soup2.find("table",{"style": "text-align:center;margin:0;margin-bottom:1em"})
+      #table_body = streamtable.find('tbody')
+
+      streamtable = page_soup2.findAll("table",{"style": "text-align:center;margin:0;margin-bottom:1em"})
+      
+      print(len(streamtable))
+      print(twitch)
+
+      while(bigcount < len(streamtable) and foundstream==False):
+        test=[]
+        testingtable = streamtable[bigcount]
+        
+        for tr in testingtable.findAll('tr'):
+          #print("hi")
+          for td in tr.findAll('td'):
+            #print(td)
+            test.append(td)
+            
+        #appends flags / links to their array to match up
+        i=0
+        streamlinks=[]
+        flags=[]
+        countingerror=0
+        #print(len(test))
+        #print(test)
+        while (i < len(test)):
+          if (float(i) < (float(len(test)) / 2)):
+            #print(test[0])
+            
+            test2 = test[i].find_all(href=False)
+            
+            #print(test2)
+            
+            #flag = test2[0].get('src')
+            test3 = test2[0]
+            #print(test3)
+            #flag = test3.get('src')
+            flag = test3.find('img').attrs['src']
+            #print(flag)
+            flag2 = flag.rsplit("/")
+            flags.append(flag2[(len(flag2)-1)])
+            #print(flags)
+            #print(flag & "t")
+            
+          else:
+            try:
+              test2 = test[i].find_all(href=True)
+              print(test2)
+              streamlinks.append(test2[0].get('href'))
+              countingerror+=1
+            except:
+              flags.pop(countingerror)
+              #streamlinks.append("No URL for this flag")
+
+
+          i=i+1
+
+
+        print(streamlinks)
+        print(flags)
+        #Creates the flags into versions that Discord can use
+        flagsToSend=[]
+        counter3=0
+        if (len(streamlinks) == len(flags)):
+          while counter3 < (len(flags)):
+            if (flags[counter3] == "Ua_hd.png"):
+              flagsToSend.append(':flag_ua:')
+            elif (flags[counter3] == "Ru_hd.png"):
+              flagsToSend.append(':flag_ru:')
+            elif (flags[counter3] == "Indonesia"):
+              flagsToSend.append(':flag_id:')
+            elif (flags[counter3] == "Ukraine"):
+              flagsToSend.append(':flag_ua:')
+            elif(flags[counter3] == "Philippines"):
+              flagsToSend.append(':flag_ph:')
+            elif(flags[counter3]=="DeAt_hd.png"):
+              flagsToSend.append(':flag_de:')
+            elif (flags[counter3] == "UsGb_hd.png"):
+              flagsToSend.append(':flag_gb:')
+            elif (flags[counter3] == 'Russia'):
+              flagsToSend.append(':flag_ru:')
+            elif (flags[counter3] == 'Spain'):
+              flagsToSend.append(':flag_es:')
+            elif (flags[counter3] == 'France'):
+              flagsToSend.append(':flag_fr:')
+            elif (flags[counter3]=='Pl_hd.png'):
+              flagsToSend.append(':flag_pl:')
+            elif(flags[counter3]=='Cn_hd.png'):
+              flagsToSend.append(':flag_cn:')
+            elif(flags[counter3]=='China'):
+              flagsToSend.append(':flag_cn:')
+            elif(flags[counter3]=='EsMx_hd.png'):
+              flagsToSend.append(':flag_es:')
+            elif(flags[counter3]=='PtBr_hd.png'):
+              flagsToSend.append(':flag_br:')
+            elif(flags[counter3]=='Ph_hd.png'):
+              flagsToSend.append(':flag_ph:')
+            elif(flags[counter3]=='Germany'):
+              flagsToSend.append(':flag_de:')
+            elif(flags[counter3]=='Thailand'):
+              flagsToSend.append(':flag_th:')
+            elif(flags[counter3]=='Serbia'):
+              flagsToSend.append(':flag_rs:')
+            elif(flags[counter3]=='Vietnam'):
+              flagsToSend.append(':flag_vn:')
+            elif(flags[counter3]=="Saudi_Arabia"):
+              flagsToSend.append(':flag_sa:')
+            else:
+              flagsToSend.append(':pirate_flag:')
+            counter3 += 1
+  
+          #Creates the text that goes into the message attached the flags + streams together 
+          counter4=0
+          flagMessage=""
+          while counter4 < (len(flagsToSend)):
+            flagadd = str(flagsToSend[counter4])
+            streamsAdd = str(streamlinks[counter4])
+            flagMessage = flagMessage + flagadd + " <" + streamsAdd + ">\n"
+            counter4 += 1  
+          for item in streamlinks:
+            if item == twitch:
+              foundstream = True
+          bigcount = bigcount + 1
+  
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+        flagMessage="No streams were found for this game"
+    
+        
+    convertedURL = "<" + extendedURL + ">"
+
+    
+
+    return(Teams1, Teams2, flagMessage, convertedURL)
+    #embed=discord.Embed(title="Dota streams found!", color=0xf10909)
+    #embed.add_field(name="The game found", value= Teams1 + " vs " + Teams2, inline=True)
+    #embed.add_field(name="Streams available", value=flagMessage, inline=False)
+    #embed.add_field(name="Where I found the streams", value= convertedURL, inline=False)
+    #await message.channel.send(embed=embed)
+
+
+  except ZeroDivisionError:
+    print(traceback.format_exc())
+    return("No games found","No games found","No games found","No games found")

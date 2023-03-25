@@ -3198,10 +3198,11 @@ async def self(interaction: discord.Interaction):
                    ])
 
     async def my_callback(interaction):
-      
+      await interaction.response.defer()
       value = select.values[0]
+      channelDataID = int(interaction.channel_id)
       if(value=="OG"):
-        await interaction.response.defer()
+        await client.http.delete_message(int(channelDataID), g.id)
         streaminfo = DotaStreams()
         Teams1 = streaminfo[0]
         Teams2 = streaminfo[1]
@@ -3224,7 +3225,8 @@ async def self(interaction: discord.Interaction):
             embed.add_field(name="Where I found the streams",value=convertedURL,inline=False)
             await interaction.followup.send(embed=embed)
       if(value=="Ol'G"):
-        await interaction.response.defer()
+        
+        await client.http.delete_message(int(channelDataID), g.id)
         streaminfo = OldDotaStreams()
         Teams1 = streaminfo[0]
         Teams2 = streaminfo[1]
@@ -3251,7 +3253,8 @@ async def self(interaction: discord.Interaction):
     view = View()
     view.add_item(select)
     
-    await interaction.followup.send("Choose a squad", view=view)
+    g = await interaction.followup.send("Choose a squad", view=view)
+    
   except Exception as e:
     print(e)
 
@@ -3269,13 +3272,15 @@ async def self(interaction: discord.Interaction):
                    ])
 
     async def my_callback(interaction):
+      await interaction.response.defer()
       
       value = select.values[0]
       if(value == "OG"):
-        await interaction.response.defer()
+        
         channelDataID = int(interaction.channel_id)
         userID = int(interaction.user.id)
         try:
+          await client.http.delete_message(int(channelDataID), g.id)
           if(channelDataID in ShortList):
             embed = DotaCheck(channelDataID, True)
           else:
@@ -3291,18 +3296,21 @@ async def self(interaction: discord.Interaction):
             #await message.reply("No games planned currently - For more information use /nextdota in <#721391448812945480>")
             await interaction.followup.send("No games planned currently - For more information use /nextdota in <#721391448812945480>")
           else:
-            embed=discord.Embed(title="OG Dota's next game", url="https://liquipedia.net/dota2/OG", color=0xf10909)
+            embed=discord.Embed(title="OaG Dota's next game", url="https://liquipedia.net/dota2/OG", color=0xf10909)
             embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
             embed.add_field(name="Time remaining", value = "No games currently planned" , inline=False)
             embed.add_field(name="Notice",value="Please check Liquipedia by clicking the title of this embed for more information as the time might not be accurate", inline=False)
             embed.add_field(name="Links", value="OG Liquipedia: https://liquipedia.net/dota2/OG", inline=False)
             #await message.reply(embed=embed)
             await interaction.followup.send(embed=embed)
+            
+            
       if (value=="Ol'G"):
-        await interaction.response.defer()
+        
         channelDataID = int(interaction.channel_id)
         userID = int(interaction.user.id)
         try:
+          await client.http.delete_message(int(channelDataID), g.id)
           if(channelDataID in ShortList):
             embed = OlGDotaCheck(channelDataID, True)
           else:
@@ -3318,13 +3326,14 @@ async def self(interaction: discord.Interaction):
             #await message.reply("No games planned currently - For more information use /nextdota in <#721391448812945480>")
             await interaction.followup.send("No games planned currently - For more information use /nextdota in <#721391448812945480>")
           else:
-            embed=discord.Embed(title="Ol'G Dota's next game", url="https://liquipedia.net/dota2/OG", color=0xf10909)
+            embed=discord.Embed(title="Oal'G Dota's next game", url="https://liquipedia.net/dota2/OG", color=0xf10909)
             embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
             embed.add_field(name="Time remaining", value = "No games currently planned" , inline=False)
             embed.add_field(name="Notice",value="Please check Liquipedia by clicking the title of this embed for more information as the time might not be accurate", inline=False)
             embed.add_field(name="Links", value="Ol'GG Liquipedia: https://liquipedia.net/dota2/OG", inline=False)
             #await message.reply(embed=embed)
             await interaction.followup.send(embed=embed)
+            
       
       
 
@@ -3332,7 +3341,7 @@ async def self(interaction: discord.Interaction):
     view = View()
     view.add_item(select)
     
-    await interaction.followup.send("Choose a squad", view=view)
+    g = await interaction.followup.send("Choose a squad", view=view)
   except Exception as e:
     print(e)
 

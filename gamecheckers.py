@@ -245,7 +245,7 @@ def CSGOCheck(channelDataID, page, isShort):
       linkinfo.append(a['href'])
 
     matchlink = "https://www.hltv.org" + linkinfo[0]
-    print(matchlink)
+    #print(matchlink)
   
 
     
@@ -266,7 +266,7 @@ def CSGOCheck(channelDataID, page, isShort):
     print(r)
     page_soup = soup(r.text, "html.parser")
     test = page_soup.findAll("div", {"class":"teamName"})
-    print(test)
+    #print(test)
     test2 = page_soup.findAll("div", {"class": "padding preformatted-text"})
     team1= test[0].text
     team2 = test[1].text
@@ -282,18 +282,20 @@ def CSGOCheck(channelDataID, page, isShort):
     
     #Time till game count down via HLTV value
     test4 = page_soup.findAll("div", {"class":"countdown"})
-    print("hi")
     time1 = test4[0].text
     time2 = time1.replace(" ","")
 
     try:
+      print("we are here")
       testlink = matchlink
       r3 = requests.get(testlink, headers=headers)
   
       page_soup2 = soup(r3.text, "html.parser")
-
+      print(page_soup2)
       tabledata2 = page_soup2.findAll("div", {"class":"event text-ellipsis"})
+      print(tabledata2)
       tourniname= tabledata2[0].text
+      print(tourniname)
       
       
     

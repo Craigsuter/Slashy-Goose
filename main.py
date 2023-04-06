@@ -113,7 +113,7 @@ class aclient(discord.Client):
     scheduler = AsyncIOScheduler()
     #Post on the day of a game
     try:
-        testingspam()
+        await testingspam()
         scheduler.add_job(testingspam, CronTrigger(minute="15, 22, 27, 45"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))

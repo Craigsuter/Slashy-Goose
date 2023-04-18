@@ -114,7 +114,7 @@ class aclient(discord.Client):
     #Post on the day of a game
     try:
         await testingspam()
-        scheduler.add_job(testingspam, CronTrigger(minute="15, 22, 27, 45"))
+        scheduler.add_job(testingspam, CronTrigger(minute="15, 45"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
         print("Daily announcement success")
@@ -4758,7 +4758,7 @@ async def testingspam():
         lines=f.readlines()
         f.close()
       except:
-        lines="empty"
+        lines=linetocheck
 
       try:
         if lines[0] == linetocheck:
@@ -4848,7 +4848,7 @@ async def testingspam():
         lines=f.readlines()
         f.close()
       except:
-        lines="empty"
+        lines=linetocheck
       
       try:
         if lines[0] == linetocheck:
@@ -4924,7 +4924,7 @@ async def testingspam():
         lines=f.readlines()
         f.close()
       except:
-        lines="empty"
+        lines=linetocheck
       
       try:
         if lines[0] == linetocheck:
@@ -5013,7 +5013,7 @@ async def testingspam():
         lines=f.readlines()
         f.close()
       except:
-        lines= "empty"
+        lines= linetocheck
 
       try:
         counter = teams.count('/')
@@ -5105,7 +5105,7 @@ async def testingspam():
         lines=f.readlines()
         f.close()
       except:
-        lines= "empty"
+        lines= linetocheck
 
       try:
         counter = teams.count('/')

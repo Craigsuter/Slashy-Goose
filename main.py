@@ -87,10 +87,11 @@ from tundrastreamcollection import tundraValoStreams
 from tundragamecheckers import tundraDotaCheck
 from tundragamecheckers import tundraCSGOCheck
 from tundragamecheckers import tundraValoCheck
+import openai
 #from PIL import Image
 
 
-
+openai.api_key = os.getenv("OPENAI_API")
 
 class aclient(discord.Client):
   def __init__(self):
@@ -113,7 +114,7 @@ class aclient(discord.Client):
     scheduler = AsyncIOScheduler()
     #Post on the day of a game
     try:
-        await testingspam()
+        #await testingspam()
         scheduler.add_job(testingspam, CronTrigger(minute="15, 45"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
@@ -567,6 +568,18 @@ async def on_member_update(before, after):
 async def on_message(message):
  
 
+  if client.user.mentioned_in(message):
+    try:
+      print("Im here")
+      #test = openai.Model.list()
+      #print(test)
+      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "user", "content": str(message.content)}])
+      text=completion.choices[0].message
+      print(text)
+      await message.channel.send(text.content)
+    except Exception as e:
+      print(e)
+    
 
 
   

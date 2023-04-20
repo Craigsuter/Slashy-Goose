@@ -23,6 +23,7 @@ Pillow = "^9.4.0"
 cloudscraper = "^1.2.69"
 cfscrape = "^2.1.1"
 undetected-chromedriver = "^3.4.6"
+openai = "^0.27.4"
 
 
 

@@ -4776,7 +4776,7 @@ async def testingspam():
         lines=linetocheck
 
       try:
-        if lines[0] == linetocheck:
+        if lines[0] == linetocheck  or len(lines) < 10:
           
           pass
         else:
@@ -4866,7 +4866,7 @@ async def testingspam():
         lines=linetocheck
       
       try:
-        if lines[0] == linetocheck:
+        if lines[0] == linetocheck  or len(lines) < 10:
           
           pass
         else:
@@ -4942,7 +4942,7 @@ async def testingspam():
         lines=linetocheck
       
       try:
-        if lines[0] == linetocheck:
+        if lines[0] == linetocheck  or len(lines) < 10 :
           
           pass
         else:
@@ -5032,7 +5032,7 @@ async def testingspam():
 
       try:
         counter = teams.count('/')
-        if lines[0] == linetocheck or counter > 0:
+        if lines[0] == linetocheck or counter > 0  or len(lines) < 10:
           pass
         else:
           try:
@@ -5124,7 +5124,7 @@ async def testingspam():
 
       try:
         counter = teams.count('/')
-        if lines[0] == linetocheck or counter > 0:
+        if lines[0] == linetocheck or counter > 0 or len(lines) < 10:
           pass
         else:
           if(len(gamepage) > 99):

@@ -570,12 +570,12 @@ async def on_message(message):
 
   if client.user.mentioned_in(message):
     try:
-      print("Im here")
-      #test = openai.Model.list()
-      #print(test)
-      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "user", "content": str(message.content)}])
+      test = message.content
+      test = test.replace('<@825467569800347649>','')
+    
+      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "user", "content": str(test)}])
       text=completion.choices[0].message
-      print(text)
+      
       await message.channel.send(text.content)
     except Exception as e:
       print(e)

@@ -573,7 +573,9 @@ async def on_message(message):
       test = message.content
       test = test.replace('<@825467569800347649>','')
     
-      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "user", "content": str(test)}])
+      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
+                                                                                 "content":"You are GooseBot, working in OG Esports Discord, answer as concisely as possible"}, 
+                                                                                 {"role": "user", "content": str(test)}])
       text=completion.choices[0].message
       
       await message.channel.send(text.content)

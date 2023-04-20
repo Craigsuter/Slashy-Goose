@@ -132,7 +132,7 @@ class aclient(discord.Client):
         scheduler.add_job(cleanreminders, CronTrigger(minute="0, 30"))
         print("Clean reminder file success")
     except:
-        print("Clear reminders file schedule failed")
+        print("Clear reminders file schedule failed!")
     scheduler.start()
 
     data = download_file('/dropreminders.txt', 'reminders.txt')

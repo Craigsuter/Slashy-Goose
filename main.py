@@ -574,7 +574,7 @@ async def on_message(message):
       test = test.replace('<@825467569800347649>','')
     
       completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
-                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human"}, 
+                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human, if you want to use an emote use this exact text instead without the apostrophe's  - '<:OGooseDance:746620693147549726>'"}, 
                                                                                  {"role": "user", "content": str(test)}])
       text=completion.choices[0].message
       

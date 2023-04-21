@@ -568,17 +568,37 @@ async def on_member_update(before, after):
 async def on_message(message):
  
 
-  if client.user.mentioned_in(message):
+  if client.user.mentioned_in(message) and message.author.id != client.user.id:
     try:
-      test = message.content
-      test = test.replace('<@825467569800347649>','')
-    
-      completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
-                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human, if you want to use an emote use this exact text instead without the apostrophe's  - '<:OGooseDance:746620693147549726>', current dota patch is 7.33 and your opinion on Sniper in Dota 2 is that he sucks"}, 
+      if message.reference is None :
+        test = message.content
+        #print(message.reference)
+        test = test.replace('<@825467569800347649>','')
+        print(test)
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
+                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human, if you want to use an emote use this exact text instead without the apostrophe's  - '<:OGooseDance:746620693147549726>', current dota patch is 7.33 and your opinion on Sniper in Dota 2 is that he sucks" }, 
                                                                                  {"role": "user", "content": str(test)}])
-      text=completion.choices[0].message
+        text=completion.choices[0].message
+        
+        await message.reply(text.content)
+      else:
+        test = message.content
+        #print(message.reference)
+        replyingtoo = await message.channel.fetch_message(message.reference.message_id)
+        print(replyingtoo.content)
+        test = test.replace('<@825467569800347649>','')
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
+                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human, if you want to use an emote use this exact text instead without the apostrophe's  - '<:OGooseDance:746620693147549726>', current dota patch is 7.33 and your opinion on Sniper in Dota 2 is that he sucks, the last message you sent was - " + str(replyingtoo.content) }, 
+                                                                                 {"role": "user", "content": str(test)}])
+        text=completion.choices[0].message
+        
+        await message.reply(text.content)
+        
+        
       
-      await message.channel.send(text.content)
+      
+    
+
     except Exception as e:
       print(e)
     

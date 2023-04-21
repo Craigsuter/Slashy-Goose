@@ -114,7 +114,7 @@ class aclient(discord.Client):
     scheduler = AsyncIOScheduler()
     #Post on the day of a game
     try:
-        await testingspam()
+        #await testingspam()
         scheduler.add_job(testingspam, CronTrigger(minute="15, 45"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
@@ -574,7 +574,7 @@ async def on_message(message):
       test = test.replace('<@825467569800347649>','')
     
       completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",messages=[{"role": "system",
-                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible"}, 
+                                                                                 "content":"You are Goose, you help users in the OG Esports Discord, answer as concisely as possible, you're happy and postive, and won't reference that you're an AI, but you are a Discord Bot, act human"}, 
                                                                                  {"role": "user", "content": str(test)}])
       text=completion.choices[0].message
       

@@ -45,8 +45,15 @@ def DotaStreams():
     #finds twitch stream
     try:
       twitch = container3[0].get('data-stream-twitch')
+      print(twitch)
       if(twitch == 'ESL_Dota_2_B'):
         twitch = "https://www.twitch.tv/esl_dota2b"
+      elif(twitch=='ESL_Dota2_Storm'):
+        twitch = "https://www.twitch.tv/esl_dota2storm"
+      elif(twitch=='ESL_Dota2_Ember'):
+        twitch = "https://www.twitch.tv/esl_dota2ember"
+      elif(twitch=='ESL_Dota2_Earth'):
+        twitch = "https://www.twitch.tv/esl_dota2earth"
       elif(twitch == 'ESL_Dota_2'):
         twitch = "https://www.twitch.tv/esl_dota2"
       elif(twitch=='Gamers8GG'):

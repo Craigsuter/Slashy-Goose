@@ -5143,6 +5143,14 @@ async def testingspam():
         lines= linetocheck
 
       try:
+        f2=open('error.txt', 'w')
+        f2.write(lines + "," + linetocheck)
+        f2.close()
+        upload_file('/error.txt', 'error.txt')
+      except:
+        print("Test upload error")
+      
+      try:
         counter = teams.count('/')
         if lines[0] == linetocheck or counter > 0 or len(lines) < 10:
           pass

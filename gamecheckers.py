@@ -19,7 +19,7 @@ def DotaCheck(channelDataID, isShort):
       
       headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
-      print("test")
+      #print("test")
       OGpage = 'https://liquipedia.net/dota2/OG'
       my_url = OGpage
       r2 = requests.get(OGpage, headers=headers)
@@ -50,14 +50,14 @@ def DotaCheck(channelDataID, isShort):
       containers3 = page_soup2.findAll(
           "span", {"class": "timer-object timer-object-countdown-only"})
       containers4 = page_soup2.findAll("div", {"style" : "font-size:75%; padding-bottom:2px"})
-      print("HMMMM")
+      #print("HMMMM")
       #print(page_soup2)
       
       containers6 = page_soup2.findAll("a", {"class": "image"})
-      print(containers6[0])
+      #print(containers6[0])
       containers6 = containers6[0]
       images = containers6.findAll('img')
-      print(images)
+      #print(images)
       for image in images:
         print("https://liquipedia.net" + image['src'])
 
@@ -202,7 +202,7 @@ def DotaCheck(channelDataID, isShort):
 
       #Creates the embed with all the details
       else:
-        print(c)
+        #print(c)
         embed=discord.Embed(title="OG Dota's next game - " + str(tournamentname), url="https://liquipedia.net/dota2/OG", color=0xf10909)
         embed.set_thumbnail(url="https://liquipedia.net/commons/images/thumb/0/00/OG_RB_Logo.png/600px-OG_RB_Logo.png")
         if(str(epoch) != "No games planned"):
@@ -231,12 +231,12 @@ def CSGOCheck(channelDataID, page, isShort):
        
     
     r2 = requests.get(OGpage, headers=headers)
-    print(r2)
+    #print(r2)
     
 
     page_soup2 = soup(r2.text, "html.parser")
     dataofpage = page_soup2.findAll("td", {"class":"matchpage-button-cell"})
-
+    
 
     linkinfo = []
     #If game found - open the page via the href / link info
@@ -263,7 +263,7 @@ def CSGOCheck(channelDataID, page, isShort):
     
     
     #Load the page of the match
-    print(r)
+    #print(r)
     page_soup = soup(r.text, "html.parser")
     test = page_soup.findAll("div", {"class":"teamName"})
     #print(test)
@@ -286,21 +286,21 @@ def CSGOCheck(channelDataID, page, isShort):
     time2 = time1.replace(" ","")
 
     try:
-      print("we are here")
+      #print("we are here")
       testlink = matchlink
       r3 = requests.get(testlink, headers=headers)
   
       page_soup2 = soup(r3.text, "html.parser")
-      print(page_soup2)
+      #print(page_soup2)
       tabledata2 = page_soup2.findAll("div", {"class":"event text-ellipsis"})
-      print(tabledata2)
+      #print(tabledata2)
       tourniname= tabledata2[0].text
-      print(tourniname)
+      #print(tourniname)
       
       
     
     except Exception as e:
-      print(e)
+      #print(e)
       tourniname="No tourni found"
       pass
 
@@ -356,7 +356,7 @@ def CSGOCheck(channelDataID, page, isShort):
     
     
     
-    print("hi2")
+    #print("hi2")
     #Link to the tournament page
     link4tourni = page_soup.findAll("div", {"class":"event text-ellipsis"})
 
@@ -372,12 +372,12 @@ def CSGOCheck(channelDataID, page, isShort):
     #change datep2 on the -1 to fit timezone, since scan is based off UK timezone, once UK is behind UTC make -2
     datep2 = int(datep1[0]) - 1
     if(datep2 < 10):
-      print("help")
+      #print("help")
       datep3 = "0" + str(datep2) + ":" + datep1[1]
       
 
     else:
-      print("hello")
+      #print("hello")
       datep3 = str(datep2) + ":" + datep1[1]
       
 
@@ -405,10 +405,10 @@ def CSGOCheck(channelDataID, page, isShort):
         embed.add_field(name="Links", value="[OG Academy Liquipedia](https://liquipedia.net/counterstrike/OG_Academy)\n[OG CSGO Academy HLTV](https://www.hltv.org/team/11672/og-academy#tab-matchesBox)\n[Game page](" + matchlink +")\n[Tournament](" + link4tourni+")", inline=False)
         
     if timetoadd >0:
-      print("return2")
+      #print("return2")
       return(teams, timeofgame, datep3, time2, matchlink, link4tourni, embed, timetoadd, tourniname, serieslength, test)
     else:
-      print("return3")
+      #print("return3")
       timetoadd=0
       return(teams, timeofgame, datep3, time2, matchlink, link4tourni, embed, timetoadd, tourniname, serieslength, test)
 
@@ -418,7 +418,7 @@ def CSGOCheck(channelDataID, page, isShort):
     exc_type, exc_obj, exc_tb = sys.exc_info()
     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
     print(exc_type, fname, exc_tb.tb_lineno)
-    print(e)
+    #print(e)
     if(isShort == True):
       embed= "There is currently no games planned for OG, for more information use /nextcsgo in <#721391448812945480>"
     else:

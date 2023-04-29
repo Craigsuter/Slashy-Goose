@@ -5144,10 +5144,11 @@ async def testingspam():
 
       try:
         print(1)
-        print(lines)
+        print(lines[0])
         print(linetocheck)
+        errortxt = lines[0] + "," + linetocheck
         f2=open('error.txt', 'w')
-        f2.write(lines & "," & linetocheck)
+        f2.write(errortxt)
         f2.close()
         upload_file('/error.txt', 'error.txt')
       except:

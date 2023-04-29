@@ -114,7 +114,7 @@ class aclient(discord.Client):
     scheduler = AsyncIOScheduler()
     #Post on the day of a game
     try:
-        #await testingspam()
+        await testingspam()
         scheduler.add_job(testingspam, CronTrigger(minute="15, 45"))
         scheduler.add_job(testingtundraspam, CronTrigger(minute="5, 10, 15, 25, 35, 45, 55"))
         scheduler.add_job(testingspamsentinels, CronTrigger(minute="10, 20, 30, 40, 50, 0"))
@@ -5142,6 +5142,14 @@ async def testingspam():
       except:
         lines= linetocheck
 
+      try:
+        f2=open('error.txt', 'w')
+        f2.write(lines + "," + linetocheck)
+        f2.close()
+        upload_file('/error.txt', 'error.txt')
+      except:
+        print("Test upload error")
+      
       try:
         counter = teams.count('/')
         if lines[0] == linetocheck or counter > 0 or len(lines) < 10:

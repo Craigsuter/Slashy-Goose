@@ -911,6 +911,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         chosenone= (random.randint(0, len(member_ids)-1))
         newlist.append(member_ids[chosenone])
         member_ids.pop(chosenone)
+        z=z+1
     else:
       newlist = member_ids
       

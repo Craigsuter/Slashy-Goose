@@ -849,21 +849,21 @@ async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
   try:
     server = interaction.guild
-    role_name = "ViewingPermitted"
+    role_name2 = "ViewingPermitted"
     i = 0
-    role_id = server.roles[0]
+    role_id2 = server.roles[0]
     display_names = []
     member_ids = []
     for role in server.roles:
-        if role_name == role.name:
-            role_id = role
+        if role_name2 == role.name:
+            role_id2 = role
             break
     else:
         await interaction.followup.send("Role doesn't exist")
         return
 
     for member in server.members:
-        if role_id in member.roles:
+        if role_id2 in member.roles:
             i = i + 1
             display_names.append(member.display_name)
             member_ids.append(member.id)
@@ -889,8 +889,6 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     display_names = []
     member_ids = []
     newlist=[]
-    file = open("filetosend.txt", "w")
-    file.close()
     for role in server.roles:
         if role_name == role.name:
             role_id = role
@@ -902,8 +900,7 @@ async def self(interaction: discord.Interaction, role: discord.Role):
         if role_id in member.roles:
             display_names.append(member.display_name)
             member_ids.append(member.id)
-    if (i == 0):
-        await interaction.followup.send("No one was found in that role!")
+
   except:
     print("Error")
   print(member_ids)

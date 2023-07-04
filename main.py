@@ -239,7 +239,7 @@ class tundraclient(discord.Client):
 
 
 
-class Baliclient(discord.Client):
+class baliclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
     super().__init__(intents=intents)
@@ -844,7 +844,7 @@ async def self(interaction: discord.Interaction):
 
 
 
-@tree.command(name="balipicker", description = "Pick the viewers for Bali", guild = discord.Object(id = IDForBali))
+@treebali.command(name="balipicker", description = "Pick the viewers for Bali", guild = discord.Object(id = IDForBali))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
   try:

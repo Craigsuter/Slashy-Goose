@@ -276,6 +276,7 @@ IDForServer3 = int(os.getenv('IDForServer3'))
 IDForServer4 = int(os.getenv('IDForServer4'))
 IDForServer5 = int(os.getenv('IDForServer5'))
 IDForServerHouse = int(os.getenv('IDForServerHouse'))
+IDForBali = int(os.getenv('IDForBali'))
 
 
 
@@ -823,6 +824,102 @@ async def self(interaction: discord.Interaction):
     await interaction.followup.send("An error was hit during this process - there may be no game available")
     print(e)
                 
+
+
+
+@tree.command(name="balipicker", description = "Update the CSGO event sign up message ID", guild = discord.Object(id = IDForBali))
+async def self(interaction: discord.Interaction, role: discord.Role):
+  await interaction.response.defer()
+  try:
+    server = interaction.guild
+    role_name = "ViewingPermitted"
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+
+    for member in server.members:
+        if role_id in member.roles:
+            i = i + 1
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    
+    j=0
+    for id in member_ids:
+      user = interaction.guild.get_member(id)
+      role = discord.utils.get(user.guild.roles, id=1125778717659111465)
+      await user.remove_roles(role)
+      j=j+1
+  except:
+    print("cleaning up error")
+
+
+  
+  try:
+    server = interaction.guild
+    guild=interaction.guild
+    role_name = discord.utils.get(guild.roles,id=int(role.id))
+    role_name = str(role_name)
+    i = 0
+    role_id = server.roles[0]
+    display_names = []
+    member_ids = []
+    newlist=[]
+    file = open("filetosend.txt", "w")
+    file.close()
+    for role in server.roles:
+        if role_name == role.name:
+            role_id = role
+            break
+    else:
+        await interaction.followup.send("Role doesn't exist")
+        return
+    for member in server.members:
+        if role_id in member.roles:
+            display_names.append(member.display_name)
+            member_ids.append(member.id)
+    if (i == 0):
+        await interaction.followup.send("No one was found in that role!")
+  except:
+    print("Error")
+  print(member_ids)
+  try:
+    z=0
+    if len(member_ids) > 128:
+      while(z < 128):
+        chosenone= (random.randint(0, len(member_ids)-1))
+        newlist.append(member_ids[chosenone])
+        member_ids.pop(chosenone)
+    else:
+      newlist = member_ids
+      
+    role_name="ViewingPermitted"
+    for role in server.roles:
+          if role_name == role.name:
+              role_id = role
+
+    for user_id in newlist:
+      user = interaction.guild.get_member(int(user_id))
+      role = discord.utils.get(user.guild.roles, id =1125778717659111465)
+      await user.add_roles(role)
+  except:
+    print("Error in 2nd try")
+  
+        
+  await interaction.followup.send("I have added all the users to the role")
+
+
+
+
+
+
 
 
 @tree.command(name="manualcsgoevent", description = "Update the CSGO event sign up message ID", guild = discord.Object(id = IDForServer))

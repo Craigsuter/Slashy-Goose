@@ -248,7 +248,7 @@ class baliclient(discord.Client):
   async def on_ready(self):
     await self.wait_until_ready()
     if not self.synced:
-      await tree5.sync(guild=discord.Object(id = int(os.getenv('IDForBali'))))
+      await treebali.sync(guild=discord.Object(id = int(os.getenv('IDForBali'))))
       self.synced = True
     print(f"We have logged in as {self.user}")
 

@@ -239,6 +239,21 @@ class tundraclient(discord.Client):
 
 
 
+class Baliclient(discord.Client):
+  def __init__(self):
+    intents = discord.Intents().all()
+    super().__init__(intents=intents)
+    self.synced = False
+
+  async def on_ready(self):
+    await self.wait_until_ready()
+    if not self.synced:
+      await tree5.sync(guild=discord.Object(id = int(os.getenv('IDForBali'))))
+      self.synced = True
+    print(f"We have logged in as {self.user}")
+
+
+
 class testbotclient(discord.Client):
   def __init__(self):
     intents = discord.Intents().all()
@@ -261,7 +276,9 @@ client3 = ldnutdclient()
 client4 = testbotclient()
 client5 = tundraclient()
 houseclient= houseclient()
+baliclient= baliclient()
 #trees
+treebali=app_commands.CommandTree(baliclient)
 treehouse = app_commands.CommandTree(houseclient)
 tree5 = app_commands.CommandTree(client5)
 tree4 = app_commands.CommandTree(client4)
@@ -827,7 +844,7 @@ async def self(interaction: discord.Interaction):
 
 
 
-@tree.command(name="balipicker", description = "Update the CSGO event sign up message ID", guild = discord.Object(id = IDForBali))
+@tree.command(name="balipicker", description = "Pick the viewers for Bali", guild = discord.Object(id = IDForBali))
 async def self(interaction: discord.Interaction, role: discord.Role):
   await interaction.response.defer()
   try:
@@ -6030,6 +6047,7 @@ loop.create_task(houseclient.start((os.getenv('TOKENHOUSE'))))
 loop.create_task(client2.start((os.getenv('TOKEN2'))))
 loop.create_task(client3.start((os.getenv('TOKEN3'))))
 loop.create_task(client5.start((os.getenv('TOKEN5'))))
+loop.create_tast(baliclient.start((os.getevn('BALITOKEN'))))
 #loop.create_task(client4.start((os.getenv('TOKEN4'))))
 loop.run_forever()
 #client.run(os.getenv('TOKEN'))

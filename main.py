@@ -845,7 +845,7 @@ async def self(interaction: discord.Interaction):
 
 
 @treebali.command(name="balipicker", description = "Pick the viewers for Bali", guild = discord.Object(id = IDForBali))
-async def self(interaction: discord.Interaction, role: discord.Role):
+async def self(interaction: discord.Interaction, role: discord.Role, seatcount: int):
   await interaction.response.defer()
   try:
     server = interaction.guild
@@ -906,8 +906,8 @@ async def self(interaction: discord.Interaction, role: discord.Role):
   print(member_ids)
   try:
     z=0
-    if len(member_ids) > 128:
-      while(z < 128):
+    if len(member_ids) > seatcount:
+      while(z < seatcount):
         chosenone= (random.randint(0, len(member_ids)-1))
         newlist.append(member_ids[chosenone])
         member_ids.pop(chosenone)

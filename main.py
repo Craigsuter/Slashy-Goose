@@ -854,9 +854,9 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     role_id2 = server.roles[0]
     display_names = []
     member_ids = []
-    for role in server.roles:
-        if role_name2 == role.name:
-            role_id2 = role
+    for role2 in server.roles:
+        if role_name2 == role2.name:
+            role_id2 = role2
             break
     else:
         await interaction.followup.send("Role doesn't exist")
@@ -871,8 +871,8 @@ async def self(interaction: discord.Interaction, role: discord.Role):
     j=0
     for id in member_ids:
       user = interaction.guild.get_member(id)
-      role = discord.utils.get(user.guild.roles, id=1125778717659111465)
-      await user.remove_roles(role)
+      role2 = discord.utils.get(user.guild.roles, id=1125778717659111465)
+      await user.remove_roles(role2)
       j=j+1
   except:
     print("cleaning up error")

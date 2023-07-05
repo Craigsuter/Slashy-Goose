@@ -849,7 +849,8 @@ async def self(interaction: discord.Interaction, role: discord.Role, seatcount: 
   await interaction.response.defer()
   try:
     server = interaction.guild
-    role_name2 = "ViewingPermitted"
+    role_name2 = discord.utils.get(guild.roles,id=int(roletogive.id))
+    role_name2 = str(role_name2)
     i = 0
     role_id2 = server.roles[0]
     display_names = []

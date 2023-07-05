@@ -845,7 +845,7 @@ async def self(interaction: discord.Interaction):
 
 
 @treebali.command(name="balipicker", description = "Pick the viewers for Bali", guild = discord.Object(id = IDForBali))
-async def self(interaction: discord.Interaction, role: discord.Role, seatcount: int):
+async def self(interaction: discord.Interaction, role: discord.Role, seatcount: int, roletogive: discord.Role):
   await interaction.response.defer()
   try:
     server = interaction.guild
@@ -871,7 +871,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, seatcount: 
     j=0
     for id in member_ids:
       user = interaction.guild.get_member(id)
-      role2 = discord.utils.get(user.guild.roles, id=1125778717659111465)
+      role2 = discord.utils.get(user.guild.roles, id=int(roletogive.id))
       await user.remove_roles(role2)
       j=j+1
   except:
@@ -922,7 +922,7 @@ async def self(interaction: discord.Interaction, role: discord.Role, seatcount: 
 
     for user_id in newlist:
       user = interaction.guild.get_member(int(user_id))
-      role = discord.utils.get(user.guild.roles, id =1125778717659111465)
+      role = discord.utils.get(user.guild.roles, id =int(roletogive.id))
       await user.add_roles(role)
   except:
     print("Error in 2nd try")

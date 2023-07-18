@@ -183,7 +183,9 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     dt_string_year = "20" + str(dt_string_year)
     a = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), (int(hourofvalo)) , int(minuteofgame), 0)
     if(str(timecheckingdevice) == "12" and prefixOfTime =="am"):
-      a = a.timedelta(-39600)
+      print("in here")
+      a = a - datetime.timedelta(hours=11)
+      print("error")
     b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
 
 

@@ -184,12 +184,15 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     a = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), (int(hourofvalo)) , int(minuteofgame), 0)
     if(str(timecheckingdevice) == "12" and prefixOfTime =="am"):
       print("in here")
-      a = a - datetime.timedelta(hours=5)
+      a = a - datetime.timedelta(hours=12)
+      epochtest = datetime.timestamp(a)
       print("error")
+    else:
+      epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofvalo), int(minuteofgame), 0).timestamp()
     b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
 
 
-    epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofvalo), int(minuteofgame), 0).timestamp()
+    #epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofvalo), int(minuteofgame), 0).timestamp()
     
     lenofepoch = len(str(epochtest))
     epoch = str(epochtest)[:lenofepoch - 2]

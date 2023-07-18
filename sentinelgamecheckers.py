@@ -166,7 +166,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     #date/time comparisions to get a countdown
     
     
-    
+    print(prefixOfTime)
     if prefixOfTime == "pm" and hourofvalo != 12:
       hourofvalo = int(hourofvalo) + 12
       

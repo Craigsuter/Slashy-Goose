@@ -11,6 +11,7 @@ from datetime import timedelta
 
 
 
+
 def SentinelsValoCheck(channelDataID, pageURL, isShort):
   try:
     #Loads OG VLR page
@@ -185,7 +186,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     if(str(timecheckingdevice) == "12" and prefixOfTime =="am"):
       print("in here")
       a = a - datetime.timedelta(hours=12)
-      epochtest = datetime.timestamp(a)
+      epochtest = datetime.datetime.timestamp(a)
       print("error")
     else:
       epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofvalo), int(minuteofgame), 0).timestamp()

@@ -92,7 +92,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     monthnumber = datep2
     dayofgame2 = datep3
 
-
+    print(datesections)
 
     try:
       tags = page_soup.findAll("a", {"class":"wf-card fc-flex m-item", 'href':True })
@@ -146,7 +146,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
 
     UTCTime = timeOfGame.rsplit(":")
     UTCTime2 = timeOfGame.rsplit(":")
-    UTCBC = int(UTCTime[0])
+    UTCBC = int(UTCTime[0])-1
     print(UTCBC)
     
     if UTCBC > 12:

@@ -148,6 +148,9 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
 
     UTCTime = timeOfGame.rsplit(":")
     UTCTime2 = timeOfGame.rsplit(":")
+    timecheckingdevice = UTCTIME[0]
+    
+      
     UTCBC = int(UTCTime[0])-1
     print(UTCBC)
     
@@ -179,7 +182,8 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     minuteofgame = UTCTime2[1]
     dt_string_year = "20" + str(dt_string_year)
     a = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), (int(hourofvalo)) , int(minuteofgame), 0)
-    
+    if(timecheckingdevice == 12):
+      a = a.timedelta(hour=-12)
     b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
 
 

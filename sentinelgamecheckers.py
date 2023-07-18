@@ -145,10 +145,10 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
       tourniname = "No game found"
       pass
     
-
+    #
     UTCTime = timeOfGame.rsplit(":")
     UTCTime2 = timeOfGame.rsplit(":")
-    timecheckingdevice = UTCTIME[0]
+    timecheckingdevice = UTCTime[0]
     
       
     UTCBC = int(UTCTime[0])-1

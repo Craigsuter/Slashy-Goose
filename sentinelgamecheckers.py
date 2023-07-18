@@ -73,6 +73,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     hourofgame = timeOfGame[0]
     hourofgame = int(hourofgame)
     minuteofgame = timeOfGame[1]
+    print(timeOfGame)
 
 
     hourofgame = hourofgame

@@ -146,7 +146,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
 
     UTCTime = timeOfGame.rsplit(":")
     UTCTime2 = timeOfGame.rsplit(":")
-    UTCBC = int(UTCTime[0]) - 1
+    UTCBC = int(UTCTime[0])
     print(UTCBC)
     
     if UTCBC > 12:
@@ -164,7 +164,7 @@ def SentinelsValoCheck(channelDataID, pageURL, isShort):
     
     #date/time comparisions to get a countdown
     
-
+    
     
     if prefixOfTime == "pm" and hourofvalo != 12:
       hourofvalo = int(hourofvalo) + 12

@@ -65,7 +65,7 @@ def DotaCheck(channelDataID, isShort):
       #containers6 = "https://liquipedia.net" +  str(containers6['src'])
       #serieslength= containers4[0].text
       #serieslength = serieslength[1:-1]
-      serieslength = "Bo1"
+      serieslength = "error - unknown length"
       print("hi")
       
       containers5 = page_soup2.findAll("div", {"style": "overflow:hidden; text-overflow:ellipsis; max-width: 170px; vertical-align:middle; white-space:nowrap; font-size:11px; height:16px; margin-top:3px;"})

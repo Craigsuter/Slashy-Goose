@@ -8,6 +8,8 @@ import datetime
 from time import strptime
 import requests
 from datetime import timedelta
+import os
+import sys
 
 
 
@@ -24,7 +26,7 @@ def tundraDotaCheck(channelDataID, isShort):
       page_soup2 = soup(r2.text, "html.parser")
 
 
-
+      print("heyz")
       
       links = "[Tundra's Liquipedia Page](https://liquipedia.net/dota2/Tundra_Esports)"
 
@@ -40,17 +42,23 @@ def tundraDotaCheck(channelDataID, isShort):
 
 
       #Parses the HTML data - Dota - grabbing time / both team HTML
-      containers = page_soup2.findAll(
-          "span", {"class": "team-template-team2-short"})
-      containers2 = page_soup2.findAll(
-          "span", {"class": "team-template-team-short"})
-      containers3 = page_soup2.findAll(
-          "span", {"class": "timer-object timer-object-countdown-only"})
-      containers4 = page_soup2.findAll("div", {"style" : "font-size:75%; padding-bottom:2px"})
-      serieslength= containers4[0].text
-      serieslength = serieslength[1:-1]
-      containers5 = page_soup2.findAll("div", {"style": "overflow:hidden; text-overflow:ellipsis; max-width: 170px; vertical-align:middle; white-space:nowrap; font-size:11px; height:16px; margin-top:3px;"})
-
+      try:
+        containers = page_soup2.findAll(
+            "span", {"class": "team-template-team2-short"})
+        containers2 = page_soup2.findAll(
+            "span", {"class": "team-template-team-short"})
+        containers3 = page_soup2.findAll(
+            "span", {"class": "timer-object timer-object-countdown-only"})
+        #containers4 = page_soup2.findAll("div", {"style" : "font-size:75%; padding-bottom:2px"})
+        #serieslength= containers4[0].text
+        #serieslength = serieslength[1:-1]
+        serieslength = "Bo1"
+        containers5 = page_soup2.findAll("div", {"style": "overflow:hidden; text-overflow:ellipsis; max-width: 170px; vertical-align:middle; white-space:nowrap; font-size:11px; height:16px; margin-top:3px;"})
+        print("Test")
+      except Exception as e: 
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
       try:
         v_table = page_soup2.find("table", attrs={"class": "wikitable wikitable-striped infobox_matches_content"})
         tabledata = v_table.tbody.find_all("tr")
@@ -68,6 +76,7 @@ def tundraDotaCheck(channelDataID, isShort):
 
 
       try:
+        print("Test2")
         testlink = extendedURL
         uClient = uReq(testlink)
         page_html2 = uClient.read()
@@ -92,6 +101,7 @@ def tundraDotaCheck(channelDataID, isShort):
 
       #Adds game to containers - dota
       try:
+          print("hoqwd")
           team1 = containers[0]
           team2 = containers2[0]
       except:
@@ -125,6 +135,7 @@ def tundraDotaCheck(channelDataID, isShort):
       #prints next dota 2 game
       try:
           Teams = (Teams1 + " vs " + Teams2)
+          print("Hey")
           nextdotagame = ("<:OGpeepoThumbsUp:734000712169553951> " + Teams1 + " vs " + Teams2 + " on " +
                           nextgametime +
                           ", more information can be found at - " +
@@ -169,6 +180,7 @@ def tundraDotaCheck(channelDataID, isShort):
 
       except:
         #If no game available - will tell user
+          print("in here")
           Teams = 'No games planned'
           nextgametime = 'No games planned'
           dayofgame2 = 'no games planned'

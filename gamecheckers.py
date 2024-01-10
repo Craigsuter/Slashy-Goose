@@ -16,7 +16,7 @@ import urllib.parse
 
 def DotaCheck(channelDataID, isShort):
     #Opening OG's Liquipedia page
-      
+      print("whta?")
       headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'}
 
       #print("test")
@@ -61,10 +61,12 @@ def DotaCheck(channelDataID, isShort):
       for image in images:
         print("https://liquipedia.net" + image['src'])
 
-    
+      
       #containers6 = "https://liquipedia.net" +  str(containers6['src'])
-      serieslength= containers4[0].text
-      serieslength = serieslength[1:-1]
+      #serieslength= containers4[0].text
+      #serieslength = serieslength[1:-1]
+      serieslength = "Bo1"
+      print("hi")
       
       containers5 = page_soup2.findAll("div", {"style": "overflow:hidden; text-overflow:ellipsis; max-width: 170px; vertical-align:middle; white-space:nowrap; font-size:11px; height:16px; margin-top:3px;"})
       
@@ -102,84 +104,89 @@ def DotaCheck(channelDataID, isShort):
       
       #This finds the next match time - Dota
       try:
-          nextgametime = containers3[0].text
+        try:
+            nextgametime = containers3[0].text
           
-      except:
-          pass
-
-      #Adds game to containers - dota
-      try:
-          team1 = containers[0]
-          team2 = containers2[0]
-      except:
-          pass
-
-      #Grabbing 1st team - Dota 2
-      try:
-
-          Teams1 = team1.a["title"]
-      except:
-          try:
-
-              Teams1 = team1["data-highlightingclass"]
-
-          except:
-              pass
-
-      #Grabbing 2nd team - Dota 2
-      try:
-
-          Teams2 = team2.a["title"]
-
-      except:
-          try:
-
-              Teams2 = team2["data-highlightingclass"]
-
-          except:
-              pass
-
-      #prints next dota 2 game
-      try:
-          Teams = (Teams1 + " vs " + Teams2)
-          nextdotagame = ("<:OGpeepoThumbsUp:734000712169553951> " + Teams1 + " vs " + Teams2 + " on " +
-                          nextgametime +
-                          ", more information can be found at - " +
-                          my_url)
-          datetimesplit = nextgametime.rsplit(" ")
-          monthofgame = datetimesplit[0]
-          dayofgame1 = datetimesplit[1]
-          dayofgame2 = dayofgame1[:-1]
-          yearofgame = datetimesplit[2]
-          timeofgame = datetimesplit[4]
-          timesplit = timeofgame.rsplit(":")
-          hourofgame = timesplit[0]
-          minuteofgame = timesplit[1]
-          dt_string_year = "20" + str(dt_string_year)
-
-          try:
-            monthnumber = strptime(monthofgame,'%B').tm_mon
-          except:
-            monthnumber = strptime(monthofgame,'%b').tm_mon
-          
-          #Compares the time between current  time and when game starts 
-          a = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0)
-
-          b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
-
-          epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0).timestamp()
-          
-          lenofepoch = len(str(epochtest))
-          epoch = str(epochtest)[:lenofepoch - 2]
-          
-
-          c = a-b
-               
-          #Verifies if the game has begun
-          if (c.days < 0):
             
-            c = "The game is meant to have begun!"
-
+        except:
+            pass
+  
+        #Adds game to containers - dota
+        try:
+            team1 = containers[0]
+            team2 = containers2[0]
+        except:
+            pass
+  
+        #Grabbing 1st team - Dota 2
+        try:
+  
+            Teams1 = team1.a["title"]
+        except:
+            try:
+  
+                Teams1 = team1["data-highlightingclass"]
+  
+            except:
+                pass
+  
+        #Grabbing 2nd team - Dota 2
+        try:
+  
+            Teams2 = team2.a["title"]
+  
+        except:
+            try:
+  
+                Teams2 = team2["data-highlightingclass"]
+  
+            except:
+                pass
+  
+        #prints next dota 2 game
+        try:
+          try:
+            Teams = (Teams1 + " vs " + Teams2)
+            nextdotagame = ("<:OGpeepoThumbsUp:734000712169553951> " + Teams1 + " vs " + Teams2 + " on " +
+                            nextgametime +
+                            ", more information can be found at - " +
+                            my_url)
+            datetimesplit = nextgametime.rsplit(" ")
+            monthofgame = datetimesplit[0]
+            dayofgame1 = datetimesplit[1]
+            dayofgame2 = dayofgame1[:-1]
+            yearofgame = datetimesplit[2]
+            timeofgame = datetimesplit[4]
+            timesplit = timeofgame.rsplit(":")
+            hourofgame = timesplit[0]
+            minuteofgame = timesplit[1]
+            dt_string_year = "20" + str(dt_string_year)
+          except Exception as e:
+            print(e)
+  
+            try:
+              monthnumber = strptime(monthofgame,'%B').tm_mon
+            except:
+              monthnumber = strptime(monthofgame,'%b').tm_mon
+            
+            #Compares the time between current  time and when game starts 
+            a = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0)
+  
+            b = datetime.datetime(int(dt_string_year), int(dt_string_month), int(dt_string_day), int(dt_string_hour), int(dt_string_minute), int(dt_string_second))
+  
+            epochtest = datetime.datetime(int(yearofgame), int(monthnumber), int(dayofgame2), int(hourofgame), int(minuteofgame), 0).timestamp()
+            
+            lenofepoch = len(str(epochtest))
+            epoch = str(epochtest)[:lenofepoch - 2]
+            
+  
+            c = a-b
+                 
+            #Verifies if the game has begun
+            if (c.days < 0):
+              
+              c = "The game is meant to have begun!"
+        except Exception as e: print(e)
   
 
 

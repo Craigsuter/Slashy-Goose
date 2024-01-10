@@ -1,5 +1,7 @@
 { pkgs }: {
   deps = [
+    pkgs.geckodriver
+    pkgs.libiconv
     pkgs.python38Full
   ];
   env = {
